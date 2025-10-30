@@ -62,7 +62,7 @@ sys/language_packs/
 ## 3. Language Switching
 - Use the “i18n” or “Language” menu to switch at runtime
 - Selection saved in `praat_language_preference.txt`
-- If not effective try restarting the program
+- After selecting the language, you need to restart the program for the changes to take effect.
 
 ---
 
