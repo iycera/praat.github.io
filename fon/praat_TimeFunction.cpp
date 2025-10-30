@@ -17,6 +17,7 @@
  */
 
 #include "praat_TimeFunction.h"
+#include "../sys/i18n_simple.h"
 
 // MARK: - TIMEFUNCTION
 
@@ -42,8 +43,8 @@ DIRECT (REAL_TimeFunction_getTotalDuration) {
 
 // MARK: Modify
 
-FORM (MODIFY_TimeFunction_shiftTimesBy, U"Shift times by", nullptr) {
-	REAL (shift, U"Shift (s)", U"0.5")
+FORM (MODIFY_TimeFunction_shiftTimesBy, I18n_translate("form.shift_times_by"), nullptr) {
+	REAL (shift, I18n_translate("form.shift_s"), U"0.5")
 	OK
 DO
 	MODIFY_EACH (Function)
@@ -51,12 +52,12 @@ DO
 	MODIFY_EACH_END
 }
 
-FORM (MODIFY_TimeFunction_shiftTimesTo, U"Shift times to", nullptr) {
-	CHOICE (shift, U"Shift", 1)
-		OPTION (U"start time")
-		OPTION (U"centre time")
-		OPTION (U"end time")
-	REAL (toTime, U"To time (s)", U"0.0")
+FORM (MODIFY_TimeFunction_shiftTimesTo, I18n_translate("form.shift_times_to"), nullptr) {
+	CHOICE (shift, I18n_translate("form.shift"), 1)
+		OPTION (I18n_translate("form.start_time"))
+		OPTION (I18n_translate("form.centre_time"))
+		OPTION (I18n_translate("form.end_time"))
+	REAL (toTime, I18n_translate("form.to_time_s"), U"0.0")
 	OK
 DO
 	MODIFY_EACH (Function)
@@ -70,8 +71,8 @@ DIRECT (MODIFY_TimeFunction_shiftToZero) {
 	MODIFY_EACH_END
 }
 
-FORM (MODIFY_TimeFunction_scaleTimesBy, U"Scale times by", nullptr) {
-	POSITIVE (factor, U"Factor", U"2.0")
+FORM (MODIFY_TimeFunction_scaleTimesBy, I18n_translate("form.scale_times_by"), nullptr) {
+	POSITIVE (factor, I18n_translate("form.factor"), U"2.0")
 	OK
 DO
 	MODIFY_EACH (Function)
@@ -79,12 +80,12 @@ DO
 	MODIFY_EACH_END
 }
 
-FORM (MODIFY_TimeFunction_scaleTimesTo, U"Scale times to", nullptr) {
-	REAL (newStartTime, U"New start time (s)", U"0.0")
-	REAL (newEndTime, U"New end time (s)", U"1.0")
+FORM (MODIFY_TimeFunction_scaleTimesTo, I18n_translate("form.scale_times_to"), nullptr) {
+	REAL (newStartTime, I18n_translate("form.new_start_time_s"), U"0.0")
+	REAL (newEndTime, I18n_translate("form.new_end_time_s"), U"1.0")
 	OK
 DO
-	if (newStartTime >= newEndTime) Melder_throw (U"New end time should be greater than new start time.");
+	if (newStartTime >= newEndTime) Melder_throw (I18n_translate("error.new_end_time_should_be_greater_than_new_start_time"));
 	MODIFY_EACH (Function)
 		Function_scaleXTo (me, newStartTime, newEndTime);
 	MODIFY_EACH_END
@@ -93,23 +94,20 @@ DO
 // MARK: - buttons
 
 void praat_TimeFunction_query_init (ClassInfo klas) {
-	praat_addAction1 (klas, 1, U"Query time domain", nullptr, 1, nullptr);
-	praat_addAction1 (klas, 1, U"Get start time || Get starting time", nullptr, 2, REAL_TimeFunction_getStartTime);
-			// alternatives COMPATIBILITY <= 2006
-	praat_addAction1 (klas, 1, U"Get end time || Get finishing time", nullptr, 2, REAL_TimeFunction_getEndTime);
-			// alternatives COMPATIBILITY <= 2006
-	praat_addAction1 (klas, 1, U"Get total duration || Get duration", nullptr, 2, REAL_TimeFunction_getTotalDuration);
-			// alternatives COMPATIBILITY <= 2004
+	praat_addAction1 (klas, 1, I18n_translate("menu.query_time_domain"), nullptr, 1, nullptr);
+	praat_addAction1 (klas, 1, I18n_translate("menu.get_start_time"), nullptr, 2, REAL_TimeFunction_getStartTime);
+	praat_addAction1 (klas, 1, I18n_translate("menu.get_end_time"), nullptr, 2, REAL_TimeFunction_getEndTime);
+	praat_addAction1 (klas, 1, I18n_translate("menu.get_total_duration"), nullptr, 2, REAL_TimeFunction_getTotalDuration);
 }
 
 void praat_TimeFunction_modify_init (ClassInfo klas) {
-	praat_addAction1 (klas, 0, U"Modify times", nullptr, 1, nullptr);
-	praat_addAction1 (klas, 0, U"Shift times by...", nullptr, 2, MODIFY_TimeFunction_shiftTimesBy);
-	praat_addAction1 (klas, 0, U"Shift times to...", nullptr, 2, MODIFY_TimeFunction_shiftTimesTo);
+	praat_addAction1 (klas, 0, I18n_translate("menu.modify_times"), nullptr, 1, nullptr);
+	praat_addAction1 (klas, 0, I18n_translate("menu.shift_times_by"), nullptr, 2, MODIFY_TimeFunction_shiftTimesBy);
+	praat_addAction1 (klas, 0, I18n_translate("menu.shift_times_to"), nullptr, 2, MODIFY_TimeFunction_shiftTimesTo);
 	praat_addAction1 (klas, 0,   U"Shift to zero", nullptr, GuiMenu_DEPTH_2 | GuiMenu_DEPRECATED_2008, MODIFY_TimeFunction_shiftToZero);
 			// replace with "Shift times to..."
-	praat_addAction1 (klas, 0, U"Scale times by...", nullptr, 2, MODIFY_TimeFunction_scaleTimesBy);
-	praat_addAction1 (klas, 0, U"Scale times to... || Scale times...", nullptr, 2, MODIFY_TimeFunction_scaleTimesTo);
+	praat_addAction1 (klas, 0, I18n_translate("menu.scale_times_by"), nullptr, 2, MODIFY_TimeFunction_scaleTimesBy);
+	praat_addAction1 (klas, 0, I18n_translate("menu.scale_times_to"), nullptr, 2, MODIFY_TimeFunction_scaleTimesTo);
 			// alternatives COMPATIBILITY <= 2008
 }
 

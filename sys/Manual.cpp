@@ -17,6 +17,7 @@
  */
 
 #include "Manual.h"
+#include "i18n_simple.h"
 #include "Printer.h"
 #include "machine.h"
 #include "site.h"
@@ -35,7 +36,7 @@ void structManual :: v9_destroy () noexcept {
 #define SEARCH_PAGE  0
 
 static void menu_cb_writeOneToHtmlFile (Manual me, EDITOR_ARGS) {
-	EDITOR_FORM_SAVE (U"Save as HTML file", nullptr)
+	EDITOR_FORM_SAVE (I18n_translate ("form.save_as_html_file"), nullptr)
 		autoMelderString buffer;
 		MelderString_copy (& buffer, my manPages() -> pages.at [my visiblePageNumber] -> title.get());
 		char32 *p = buffer.string;
@@ -52,8 +53,8 @@ static void menu_cb_writeOneToHtmlFile (Manual me, EDITOR_ARGS) {
 }
 
 static void menu_cb_writeAllToHtmlFolder (Manual me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Save all pages as HTML files", nullptr)
-		FOLDER (folder, U"Folder", U"")
+	EDITOR_FORM (I18n_translate ("form.save_all_pages_as_html_files"), nullptr)
+		FOLDER (folder, I18n_translate ("form.folder"), U"")
 	EDITOR_OK
 		SET_STRING (folder, MelderFolder_peekPath (& my rootDirectory))
 	EDITOR_DO
@@ -62,8 +63,8 @@ static void menu_cb_writeAllToHtmlFolder (Manual me, EDITOR_ARGS) {
 }
 
 static void menu_cb_searchForPageList (Manual me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Search for page", nullptr)
-		LIST (page, U"Page", ManPages_getTitles (my manPages()), 1)
+	EDITOR_FORM (I18n_translate ("form.search_for_page"), nullptr)
+		LIST (page, I18n_translate ("form.page"), ManPages_getTitles (my manPages()), 1)
 	EDITOR_OK
 	EDITOR_DO
 		HyperPage_goToPage_number (me, page);
@@ -89,8 +90,8 @@ static void Manual_runAllChunksToCache (Manual me, ManPage page) {
 void structManual :: v_draw () {
 	//TRACE
 	if (our visiblePageNumber == SEARCH_PAGE) {
-		HyperPage_pageTitle (this, U"Best matches");
-		HyperPage_intro (this, U"The best matches to your query seem to be:");
+		HyperPage_pageTitle (this, I18n_translate ("form.best_matches"));
+		HyperPage_intro (this, I18n_translate ("form.the_best_matches_to_your_query"));
 		for (int i = 1; i <= our numberOfMatches; i ++) {
 			char32 link [300];
 			const ManPage page = our manPages() -> pages.at [matches [i]];
@@ -204,7 +205,7 @@ static void print (void *void_me, Graphics graphics) {
 }
 
 static void menu_cb_printRange (Manual me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Print range", nullptr)
+	EDITOR_FORM (I18n_translate("form.print_range"), nullptr)
 		SENTENCE (leftOrInsideHeader, U"Left or inside header", U"")
 		SENTENCE (middleHeader, U"Middle header", U"")
 		SENTENCE (rightOrOutsideHeader, U"Right or outside header", U"Manual")
@@ -406,11 +407,11 @@ static void menu_cb_help (Manual me, EDITOR_ARGS) { HyperPage_goToPage (me, U"Ma
 void structManual :: v_createMenus () {
 	Manual_Parent :: v_createMenus ();
 
-	Editor_addCommand (this, U"File", U"Print manual...", 0, menu_cb_printRange);
-	Editor_addCommand (this, U"File", U"Save page as HTML file...", 'S', menu_cb_writeOneToHtmlFile);
-	Editor_addCommand (this, U"File", U"Save manual to HTML folder...", 0, menu_cb_writeAllToHtmlFolder);
-	Editor_addCommand (this, U"File", U"Save manual to HTML directory...", GuiMenu_DEPRECATED_2020, menu_cb_writeAllToHtmlFolder);
-	Editor_addCommand (this, U"File", U"-- close --", 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"Print manual...", 0, menu_cb_printRange);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"Save page as HTML file...", 'S', menu_cb_writeOneToHtmlFile);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"Save manual to HTML folder...", 0, menu_cb_writeAllToHtmlFolder);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"Save manual to HTML directory...", GuiMenu_DEPRECATED_2020, menu_cb_writeAllToHtmlFolder);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"-- close --", 0, nullptr);
 
 	Editor_addCommand (this, U"Go to", U"Search for page (list)...", 0, menu_cb_searchForPageList);
 }

@@ -17,16 +17,17 @@
  */
 
 #include "melder.h"
+#include "../sys/i18n_simple.h"
 
 /* global */ std::mutex theMelder_error_mutex;
 
 static void defaultErrorProc (conststring32 message) {
-	MelderConsole::write (str32str (message, U"You interrupted ") ? U"User interrupt: " : U"Error: ", true);
+	MelderConsole::write (str32str (message, I18n_translate("error.you_interrupted")) ? I18n_translate("error.user_interrupt") : I18n_translate("error.error"), true);
 	MelderConsole::write (message, true);
 	MelderConsole::write (U"\n", true);
 }
 static void defaultCrashProc (conststring32 message) {
-	MelderConsole::write (U"Crashing bug: ", true);
+	MelderConsole::write (I18n_translate("error.crashing_bug"), true);
 	MelderConsole::write (message, true);
 	MelderConsole::write (U"\n", true);
 }

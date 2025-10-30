@@ -18,6 +18,7 @@
 
 #include "ManPage.h"
 #include "praat.h"
+#include "i18n_simple.h"
 
 #include "enums_getText.h"
 #include "ManPage_enums.h"
@@ -140,8 +141,8 @@ void ManPage_runAllChunksToCache (ManPage me, Interpreter optionalInterpreterRef
 		Graphics_setViewport (paragraph -> cacheGraphics.get(),
 				theCurrentPraatPicture -> x1NDC, theCurrentPraatPicture -> x2NDC, theCurrentPraatPicture -> y1NDC, theCurrentPraatPicture -> y2NDC);
 		if (anErrorHasOccurred) {
-			trace (U"Chunk ", chunkNumber, U" not run, because of an earlier error.");
-			MelderInfo_writeLine (U"\\#{**ERROR** This code chunk was not run,}\n    because an error occurred in an earlier chunk.");
+			trace (I18n_translate("debug.chunk_not_run_because_of_earlier_error"), U" ", chunkNumber, U".");
+			MelderInfo_writeLine (I18n_translate("error.code_chunk_not_run_because_of_earlier_error"));
 			MelderInfo_close ();
 		} else {
 			autoMelderProgressOff progress;
@@ -158,9 +159,9 @@ void ManPage_runAllChunksToCache (ManPage me, Interpreter optionalInterpreterRef
 				anErrorHasOccurred = true;
 				errorChunk = chunkNumber;
 				theErrorThatOccurred = Melder_dup (Melder_getError ());
-				trace (U"Error in chunk ", chunkNumber, U".");
+				trace (I18n_translate("debug.error_in_chunk"), U" ", chunkNumber, U".");
 				Melder_clearError ();
-				MelderInfo_writeLine (U"\\#{**AN ERROR OCCURRED IN THIS CODE CHUNK:**\n", theErrorThatOccurred.get());
+				MelderInfo_writeLine (I18n_translate("error.an_error_occurred_in_this_code_chunk"), U"\n", theErrorThatOccurred.get());
 				MelderInfo_close ();
 			}
 		}
@@ -185,7 +186,7 @@ void ManPage_runAllChunksToCache (ManPage me, Interpreter optionalInterpreterRef
 	theCurrentPraatObjects = & theForegroundPraatObjects;
 	theCurrentPraatPicture = & theForegroundPraatPicture;
 	if (anErrorHasOccurred)
-		Melder_flushError (U"Error in code chunk ", errorChunk, U".\n", theErrorThatOccurred.get());
+		Melder_flushError (I18n_translate("error.error_in_code_chunk"), U" ", errorChunk, U".\n", theErrorThatOccurred.get());
 	praatObjects -> reset();
 }
 

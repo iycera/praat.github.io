@@ -18,6 +18,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 #include "praatP.h"   // BUG
 #include "../kar/UnicodeData.h"
 
@@ -27,7 +28,7 @@ Thing_implement (GuiMenu, GuiThing, 0);
 	static void _guiGtkMenu_destroyCallback (GuiObject widget, gpointer void_me) {
 		(void) void_me;
 		GuiMenu me = (GuiMenu) _GuiObject_getUserData (widget);
-		trace (U"destroying GuiMenu ", Melder_pointer (me));
+		trace (I18n_translate("debug.destroying_guimenu"), U" ", Melder_pointer (me));
 		if (! me)
 			return;   // we could be destroying me
 		my d_widget = nullptr;   // undangle
@@ -42,7 +43,7 @@ Thing_implement (GuiMenu, GuiThing, 0);
 		GuiMenu me = (GuiMenu) _GuiObject_getUserData (widget);
 		if (! me)
 			return;
-		trace (U"destroying GuiButton ", Melder_pointer (my d_cascadeButton.get()));
+		trace (I18n_translate("debug.destroying_guibutton"), U" ", Melder_pointer (my d_cascadeButton.get()));
 		gtk_widget_destroy (GTK_WIDGET (my d_widget));
 	}
 	static gint _guiGtkMenuCascadeButton_buttonCallback (GtkWidget *gtkMenu, GdkEvent *gdkEvent) {
@@ -59,7 +60,7 @@ Thing_implement (GuiMenu, GuiThing, 0);
 		(void) void_me;
 		(void) call;
 		GuiMenu me = (GuiMenu) _GuiObject_getUserData (widget);
-		trace (U"destroying GuiMenu ", Melder_pointer (me));
+		trace (I18n_translate("debug.destroying_guimenu"), U" ", Melder_pointer (me));
 		if (! me)
 			return;   // we could be destroying me
 		my d_widget = nullptr;   // undangle
@@ -98,9 +99,9 @@ Thing_implement (GuiMenu, GuiThing, 0);
 			if (Melder_isTracingGlobally) {
 				for (NSUInteger i = 0; i < [characters length]; i ++) {
 					unichar kar = [characters characterAtIndex: 0];
-					trace (U"character [", i, U"]: ", (int) kar);
+					trace (I18n_translate("debug.character"), U" [", i, U"]: ", (int) kar);
 				}
-				trace (U"modifiers: ", [nsEvent modifierFlags]);
+				trace (I18n_translate("debug.modifiers"), U": ", [nsEvent modifierFlags]);
 			}
 			if (character == NSTabCharacter) {
 				NSWindow *cocoaKeyWindow = [NSApp keyWindow];
@@ -113,7 +114,7 @@ Thing_implement (GuiMenu, GuiThing, 0);
 								structGuiMenuItemEvent event { nullptr, false, false, false };
 								window -> d_tabCallback (window -> d_tabBoss, & event);
 							} catch (MelderError) {
-								Melder_flushError (U"Tab key not completely handled.");
+								Melder_flushError (I18n_translate("error.tab_key_not_completely_handled"));
 							}
 							return;
 						}
@@ -145,7 +146,7 @@ Thing_implement (GuiMenu, GuiThing, 0);
 									structGuiMenuItemEvent event { nullptr, false, false, false };
 									window -> d_shiftTabCallback (window -> d_shiftTabBoss, & event);
 								} catch (MelderError) {
-									Melder_flushError (U"Shift-Tab not completely handled.");
+									Melder_flushError (I18n_translate("error.shift_tab_not_completely_handled"));
 								}
 								return;
 							}
@@ -192,7 +193,7 @@ Thing_implement (GuiMenu, GuiThing, 0);
 								structGuiMenuItemEvent event { nullptr, false, false, false };
 								window -> d_optionBackspaceCallback (window -> d_optionBackspaceBoss, & event);
 							} catch (MelderError) {
-								Melder_flushError (U"Option-Backspace not completely handled.");
+								Melder_flushError (I18n_translate("error.option_backspace_not_completely_handled"));
 							}
 							return;
 						}
@@ -211,8 +212,8 @@ Thing_implement (GuiMenu, GuiThing, 0);
 	*/
 	- (void) applicationWillFinishLaunching: (NSNotification *) note
 	{
-		trace (U"application will finish launching: ", Melder_pointer (self));
-		trace (U"application is running: ", [NSApp isRunning]);
+		trace (I18n_translate("debug.application_will_finish_launching"), U" ", Melder_pointer (self));
+		trace (I18n_translate("debug.application_is_running"), U" ", [NSApp isRunning]);
 		(void) note;
 		for (int imenu = 1; imenu <= theNumberOfMenuBarItems; imenu ++) {
 			[[NSApp mainMenu] addItem: theMenuBarItems [imenu]];   // the menu will retain the item...
@@ -221,8 +222,8 @@ Thing_implement (GuiMenu, GuiThing, 0);
 	}
 	- (void) applicationDidFinishLaunching: (NSNotification *) note
 	{
-		trace (U"application did finish launching: ", Melder_pointer (self));
-		trace (U"application is running: ", [NSApp isRunning]);
+		trace (I18n_translate("debug.application_did_finish_launching"), U" ", Melder_pointer (self));
+		trace (I18n_translate("debug.application_is_running"), U" ", [NSApp isRunning]);
 		(void) note;
 		praatP.hasFinishedLaunching = true;
 	}
@@ -240,8 +241,8 @@ Thing_implement (GuiMenu, GuiThing, 0);
 			applicationWillFinishLaunching and applicationDidFinishLaunching.
 		*/
 		(void) sender;
-		trace (U"application (", Melder_pointer (self), U", ", Melder_pointer (sender), U") open files: ", [fileNames count]);
-		trace (U"application is running: ", [NSApp isRunning]);
+		trace (I18n_translate("debug.application_open_files"), U" (", Melder_pointer (self), U", ", Melder_pointer (sender), U") open files: ", [fileNames count]);
+		trace (I18n_translate("debug.application_is_running"), U" ", [NSApp isRunning]);
 		const bool filesArrivedHereFromTheCommandLine = ! praatP.hasFinishedLaunching && (praatP.foundTheOpenSwitch || praatP.foundTheSendSwitch || praatP.foundTheSendOrFormSwitch);
 		if (filesArrivedHereFromTheCommandLine)
 			return;   // otherwise, those files will be opened twice
@@ -250,11 +251,11 @@ Thing_implement (GuiMenu, GuiThing, 0);
 				NSString *cocoaFileName = [fileNames objectAtIndex: i - 1];
 				structMelderFile file { };
 				Melder_8bitFileRepresentationToStr32_inplace ([cocoaFileName UTF8String], file. path);
-				trace (U"Opening file ", MelderFile_peekPath (& file));
+				trace (I18n_translate("debug.opening_file"), U" ", MelderFile_peekPath (& file));
 				if (theOpenDocumentCallback)
 					theOpenDocumentCallback (& file);
 			} catch (MelderError) {
-				Melder_throw (U"Cannot open dropped file.");
+				Melder_throw (I18n_translate("error.cannot_open_dropped_file"));
 			}
 		}
 		if (theFinishedOpeningDocumentsCallback)
@@ -291,20 +292,20 @@ void structGuiMenu :: v_setSensitive (bool sensitive) {
 		gtk_widget_set_sensitive (GTK_WIDGET (our d_gtkMenuTitle), sensitive);
 	#elif motif
 		//TRACE
-		trace (U"entry");
-		trace (U"widget ", Melder_pointer (our d_widget));
-		trace (U"widget class ", our d_widget -> widgetClass, U", name ", our d_widget -> name.get());
-		trace (U"parent widget class ", our d_widget -> parent -> widgetClass, U", name ", our d_widget -> parent -> name.get());
-		trace (U"title ", Melder_pointer (our d_xmMenuTitle));
-		trace (U"title widget class ", our d_xmMenuTitle -> widgetClass, U", name ", our d_xmMenuTitle -> name.get(), U", ", sensitive);
-		trace (U"title parent ", Melder_pointer (our d_xmMenuTitle -> parent));
-		trace (U"title parent widget class ", our d_xmMenuTitle -> parent -> widgetClass, U", name ", our d_xmMenuTitle -> parent -> name.get());
+		trace (I18n_translate("debug.entry"));
+		trace (I18n_translate("debug.widget"), U" ", Melder_pointer (our d_widget));
+		trace (I18n_translate("debug.widget_class"), U" ", our d_widget -> widgetClass, U", ", I18n_translate("debug.name"), U" ", our d_widget -> name.get());
+		trace (I18n_translate("debug.parent_widget_class"), U" ", our d_widget -> parent -> widgetClass, U", ", I18n_translate("debug.name"), U" ", our d_widget -> parent -> name.get());
+		trace (I18n_translate("debug.title"), U" ", Melder_pointer (our d_xmMenuTitle));
+		trace (I18n_translate("debug.title_widget_class"), U" ", our d_xmMenuTitle -> widgetClass, U", ", I18n_translate("debug.name"), U" ", our d_xmMenuTitle -> name.get(), U", ", sensitive);
+		trace (I18n_translate("debug.title_parent"), U" ", Melder_pointer (our d_xmMenuTitle -> parent));
+		trace (I18n_translate("debug.title_parent_widget_class"), U" ", our d_xmMenuTitle -> parent -> widgetClass, U", ", I18n_translate("debug.name"), U" ", our d_xmMenuTitle -> parent -> name.get());
 		if (our d_widget -> parent -> widgetClass == xmMenuBarWidgetClass) {
-			trace (U"in menu bar");
+			trace (I18n_translate("debug.in_menu_bar"));
 			EnableMenuItem (our d_widget -> parent -> nat.menu.handle, our d_widget -> nat.menu.id, MF_BYCOMMAND | ( sensitive ? MF_ENABLED : MF_GRAYED ));
 			DrawMenuBar (our d_widget -> shell -> window);
 		} else {
-			trace (U"not in menu bar?");
+			trace (I18n_translate("debug.not_in_menu_bar"));
 			XtSetSensitive (our d_xmMenuTitle, sensitive);
 		}
 	#elif cocoa
@@ -313,7 +314,7 @@ void structGuiMenu :: v_setSensitive (bool sensitive) {
 }
 
 void structGuiMenu :: v_show () {
-	trace (U"begin");
+	trace (I18n_translate("debug.begin"));
 	#if gtk
 		gtk_widget_show (GTK_WIDGET (our d_gtkMenuTitle));
 	#elif motif
@@ -321,12 +322,12 @@ void structGuiMenu :: v_show () {
 	#elif cocoa
 		[our d_cocoaMenuButton   setHidden: NO];
 	#endif
-	trace (U"end");
+	trace (I18n_translate("debug.end"));
 }
 
 void GuiMenu_empty (GuiMenu me) {
 	#if gtk
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		Melder_assert (my d_widget);
 		/*
 			Destroy my widget, but prevent forgetting me.

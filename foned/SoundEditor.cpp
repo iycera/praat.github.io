@@ -18,16 +18,17 @@
 
 #include "SoundEditor.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (SoundEditor, FunctionEditor, 0);
 
-static void menu_cb_SoundEditorHelp (SoundEditor, EDITOR_ARGS) { Melder_help (U"SoundEditor"); }
-static void menu_cb_LongSoundEditorHelp (SoundEditor, EDITOR_ARGS) { Melder_help (U"LongSoundEditor"); }
+static void menu_cb_SoundEditorHelp (SoundEditor, EDITOR_ARGS) { Melder_help (I18n_translate("help.soundeditor")); }
+static void menu_cb_LongSoundEditorHelp (SoundEditor, EDITOR_ARGS) { Melder_help (I18n_translate("help.longsoundeditor")); }
 
 void structSoundEditor :: v_createMenuItems_help (EditorMenu menu) {
 	structFunctionEditor :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"SoundEditor help", '?', menu_cb_SoundEditorHelp);
-	EditorMenu_addCommand (menu, U"LongSoundEditor help", 0, menu_cb_LongSoundEditorHelp);
+	EditorMenu_addCommand (menu, I18n_translate("menu.soundeditor_help"), '?', menu_cb_SoundEditorHelp);
+	EditorMenu_addCommand (menu, I18n_translate("menu.longsoundeditor_help"), 0, menu_cb_LongSoundEditorHelp);
 	// BUG: add help on Sound area and Sound analysis area
 }
 
@@ -44,7 +45,7 @@ autoSoundEditor SoundEditor_create (conststring32 title, SampledXY soundOrLongSo
 		FunctionEditor_init (me.get(), title, soundOrLongSound);
 		return me;
 	} catch (MelderError) {
-		Melder_throw (U"Sound window not created.");
+		Melder_throw (I18n_translate("error.sound_window_not_created"));
 	}
 }
 

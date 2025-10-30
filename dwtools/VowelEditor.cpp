@@ -53,6 +53,7 @@ trajectory --> path ????
 #include "VowelEditor.h"   // this includes windows.h
 #include "EditorM.h"   // include this *after* including windows.h (it redefines BOOLEAN)
 #include "machine.h"
+#include "../sys/i18n_simple.h"
 #include <time.h>
 
 #if defined (macintosh)
@@ -1198,50 +1199,50 @@ static void updateWidgets (void *void_me) {
 void structVowelEditor :: v_createMenus () {
 	VowelEditor_Parent :: v_createMenus ();
 
-	Editor_addCommand (this, U"File", U"Settings...", 0, menu_cb_settings);
-	Editor_addCommand (this, U"File", U"-- publish data --", 0, nullptr);
-	Editor_addCommand (this, U"File", U"Publish Sound", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.vowel_editor_settings"), 0, menu_cb_settings);
+	Editor_addCommand (this, U"File", I18n_translate("menu.publish_data"), 0, nullptr);
+	Editor_addCommand (this, U"File", I18n_translate("menu.publish_sound"), 0,
 			CREATE_ONE__publishSound);
-	Editor_addCommand (this, U"File", U"Extract KlattGrid", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_klattgrid"), 0,
 			CREATE_ONE__Extract_KlattGrid);
-	Editor_addCommand (this, U"File", U"Extract FormantGrid", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_formantgrid"), 0,
 			CREATE_ONE__Extract_FormantGrid);
-	Editor_addCommand (this, U"File", U"Extract PitchTier", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_pitchtier"), 0,
 			CREATE_ONE__Extract_PitchTier);
-	Editor_addCommand (this, U"File", U"Extract Trajectory as Table", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_trajectory_as_table"), 0,
 			CREATE_ONE__Extract_TrajectoryAsTable);
-	Editor_addCommand (this, U"File", U"-- drawing --", 0, nullptr);
-	Editor_addCommand (this, U"File", U"Draw trajectory...", 0, menu_cb_drawTrajectory);
-	Editor_addCommand (this, U"File", U"-- scripting --", 0, nullptr);
+	Editor_addCommand (this, U"File", I18n_translate("menu.drawing"), 0, nullptr);
+	Editor_addCommand (this, U"File", I18n_translate("menu.draw_trajectory"), 0, menu_cb_drawTrajectory);
+	Editor_addCommand (this, U"File", I18n_translate("menu.scripting"), 0, nullptr);
 
-	Editor_addCommand (this, U"Edit", U"-- f0 --", 0, nullptr);
-	Editor_addCommand (this, U"Edit", U"Set f0...", 0, menu_cb_setF0);
-	Editor_addCommand (this, U"Edit", U"Set F3 & F4...", GuiMenu_HIDDEN, menu_cb_setF3F4);
-	Editor_addCommand (this, U"Edit", U"-- trajectory commands --", 0, nullptr);
-	Editor_addCommand (this, U"Edit", U"Reverse trajectory", 0, menu_cb_reverseTrajectory);
-	Editor_addCommand (this, U"Edit", U"Modify trajectory duration...", 0, menu_cb_modifyTrajectoryDuration);
-	Editor_addCommand (this, U"Edit", U"New trajectory...", 0, menu_cb_newTrajectory);
-	Editor_addCommand (this, U"Edit", U"Extend trajectory...", 0, menu_cb_extendTrajectory);
-	Editor_addCommand (this, U"Edit", U"Shift trajectory...", 0, menu_cb_shiftTrajectory);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.f0"), 0, nullptr);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.set_f0"), 0, menu_cb_setF0);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.set_f3_f4"), GuiMenu_HIDDEN, menu_cb_setF3F4);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.trajectory_commands"), 0, nullptr);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.reverse_trajectory"), 0, menu_cb_reverseTrajectory);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.modify_trajectory_duration"), 0, menu_cb_modifyTrajectoryDuration);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.new_trajectory"), 0, menu_cb_newTrajectory);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.extend_trajectory"), 0, menu_cb_extendTrajectory);
+	Editor_addCommand (this, U"Edit", I18n_translate("menu.shift_trajectory"), 0, menu_cb_shiftTrajectory);
 
 	Editor_addMenu (this, U"Query", 0);
-	Editor_addCommand (this, U"Query", U"Trajectory info", 0, menu_cb_trajectoryInfo);
+	Editor_addCommand (this, U"Query", I18n_translate("menu.trajectory_info"), 0, menu_cb_trajectoryInfo);
 
 	Editor_addMenu (this, U"View", 0);
-	Editor_addCommand (this, U"View", U"F1 & F2 range...", 0, menu_cb_ranges_f1f2);
-	Editor_addCommand (this, U"View", U"--show vowel marks--", 0, nullptr);
-	Editor_addCommand (this, U"View", U"Show one vowel mark...", GuiMenu_HIDDEN, menu_cb_showOneVowelMark);
-	Editor_addCommand (this, U"View", U"Vowel marks...", GuiMenu_HIDDEN, menu_cb_vowelMarks);
-	Editor_addCommand (this, U"View", U"Vowel marks from fixed set...", 0, menu_cb_vowelMarks);
-	Editor_addCommand (this, U"View", U"Show vowel marks from Table file...", 0, menu_cb_vowelMarksFromTableFile);
-	Editor_addCommand (this, U"View", U"--show trajectory settings--", 0, nullptr);
-	Editor_addCommand (this, U"View", U"Trajectory colour...", 0, menu_cb_trajectory_colour);
-	Editor_addCommand (this, U"View", U"Trajectory time marks every...", 0, menu_cb_trajectoryTimeMarksEvery);
+	Editor_addCommand (this, U"View", I18n_translate("menu.f1_f2_range"), 0, menu_cb_ranges_f1f2);
+	Editor_addCommand (this, U"View", I18n_translate("menu.show_vowel_marks"), 0, nullptr);
+	Editor_addCommand (this, U"View", I18n_translate("menu.show_one_vowel_mark"), GuiMenu_HIDDEN, menu_cb_showOneVowelMark);
+	Editor_addCommand (this, U"View", I18n_translate("menu.vowel_marks"), GuiMenu_HIDDEN, menu_cb_vowelMarks);
+	Editor_addCommand (this, U"View", I18n_translate("menu.vowel_marks_from_fixed_set"), 0, menu_cb_vowelMarks);
+	Editor_addCommand (this, U"View", I18n_translate("menu.show_vowel_marks_from_table_file"), 0, menu_cb_vowelMarksFromTableFile);
+	Editor_addCommand (this, U"View", I18n_translate("menu.show_trajectory_settings"), 0, nullptr);
+	Editor_addCommand (this, U"View", I18n_translate("menu.trajectory_colour"), 0, menu_cb_trajectory_colour);
+	Editor_addCommand (this, U"View", I18n_translate("menu.trajectory_time_marks_every"), 0, menu_cb_trajectoryTimeMarksEvery);
 }
 
 void structVowelEditor :: v_createMenuItems_help (EditorMenu menu) {
 	VowelEditor_Parent :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"VowelEditor help", '?', menu_cb_help);
+	EditorMenu_addCommand (menu, I18n_translate("menu.vowel_editor_help"), '?', menu_cb_help);
 }
 
 void structVowelEditor :: v_createChildren ()

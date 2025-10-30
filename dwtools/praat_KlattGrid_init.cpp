@@ -23,6 +23,7 @@
 #include "IntensityTierEditor.h"
 #include "KlattGridEditors.h"
 #include "KlattTable.h"
+#include "../sys/i18n_simple.h"
 
 #include "praat_TimeFunction.h"
 
@@ -903,15 +904,15 @@ void praat_KlattGrid_init () {
 	structKlattGrid_SpectralTiltTierArea    :: f_preferences();
 	structKlattGrid_FricationBypassTierArea :: f_preferences();
 
-	praat_addMenuCommand (U"Objects", U"New", U"Acoustic synthesis (Klatt)", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"KlattGrid help", nullptr, GuiMenu_DEPTH_1 | GuiMenu_NO_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.acoustic_synthesis_klatt"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.klattgrid_help"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_NO_API,
 			HELP__KlattGrid_help);
 	praat_addMenuCommand (U"Objects", U"New", U"-- the synthesizer grid --", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create KlattGrid...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_klattgrid"), nullptr, 1,
 			CREATE_ONE__KlattGrid_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create KlattGrid from vowel...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_klattgrid_from_vowel"), nullptr, 1,
 			CREATE_ONE__KlattGrid_createFromVowel);
-	praat_addMenuCommand (U"Objects", U"New", U"Create KlattGrid example", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_klattgrid_example"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CREATE_ONE__KlattGrid_createExample);
 
 	/*

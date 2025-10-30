@@ -18,6 +18,7 @@
 
 #include "SpectrumArea.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (SpectrumArea, FunctionArea, 0);
 
@@ -164,26 +165,26 @@ static void CONVERT_DATA_TO_ONE__PublishSound (SpectrumArea me, EDITOR_ARGS) {
 #pragma mark - SpectrumArea all menus?
 
 void structSpectrumArea :: v_createMenus () {
-	EditorMenu menu = Editor_addMenu (our functionEditor(), U"Spectrum", 0);
+	EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.spectrum"), 0);
 
-	FunctionAreaMenu_addCommand (menu, U"Power density range:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Set dynamic range...", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.power_density_range"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.set_dynamic_range"), 1,
 			menu_cb_setDynamicRange, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Modify spectrum:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Pass band...", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.modify_spectrum"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pass_band"), 1,
 			menu_cb_passBand, this);
-	FunctionAreaMenu_addCommand (menu, U"Stop band...", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.stop_band"), 1,
 			menu_cb_stopBand, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Select by spectrum:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Move cursor to nearest peak", 'K' | GuiMenu_DEPTH_1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_by_spectrum"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_cursor_to_nearest_peak"), 'K' | GuiMenu_DEPTH_1,
 			menu_cb_moveCursorToPeak, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Extract spectrum:", 0, nullptr, this);
-	our publishBandButton = FunctionAreaMenu_addCommand (menu, U"Publish band", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_spectrum"), 0, nullptr, this);
+	our publishBandButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.publish_band"), 1,
 			CONVERT_DATA_TO_ONE__PublishBand, this);
-	our publishSoundButton = FunctionAreaMenu_addCommand (menu, U"Publish band-filtered sound", 1,
+	our publishSoundButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.publish_band_filtered_sound"), 1,
 			CONVERT_DATA_TO_ONE__PublishSound, this);
 }
 

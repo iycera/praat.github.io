@@ -22,6 +22,7 @@
 #include "SpectrumEditor.h"
 
 #include "praat_TimeTier.h"
+#include "../sys/i18n_simple.h"
 
 // MARK: - EEG
 
@@ -750,13 +751,13 @@ void praat_EEG_init () {
 		praat_addAction1 (classEEG, 0, U"Extract channel...", nullptr, 0, NEW_EEG_extractChannel);
 		praat_addAction1 (classEEG, 0, U"Extract channels...", nullptr, 0, NEW_EEG_extractChannels);
 		praat_addAction1 (classEEG, 0, U"Extract part...", nullptr, 0, NEW_EEG_extractPart);
-		praat_addAction1 (classEEG, 0, U"To ERPTier -", nullptr, 0, nullptr);
-		praat_addAction1 (classEEG, 0, U"To ERPTier (bit)...", nullptr, 1, NEW_EEG_to_ERPTier_bit);
-		praat_addAction1 (classEEG, 0, U"To ERPTier (marker)...", nullptr, 1, NEW_EEG_to_ERPTier_marker);
-		praat_addAction1 (classEEG, 0, U"To ERPTier (triggers)...", nullptr, 1, NEW_EEG_to_ERPTier_triggers);
-		praat_addAction1 (classEEG, 0, U"To ERPTier (triggers, preceded)...", nullptr, 1, NEW_EEG_to_ERPTier_triggers_preceded);
-		praat_addAction1 (classEEG, 0, U"To ERPTier...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, NEW_EEG_to_ERPTier_bit);
-		praat_addAction1 (classEEG, 0, U"To MixingMatrix...", nullptr, 0, NEW_EEG_to_MixingMatrix);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_erptier"), nullptr, 0, nullptr);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_erptier_bit"), nullptr, 1, NEW_EEG_to_ERPTier_bit);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_erptier_marker"), nullptr, 1, NEW_EEG_to_ERPTier_marker);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_erptier_triggers"), nullptr, 1, NEW_EEG_to_ERPTier_triggers);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_erptier_triggers_preceded"), nullptr, 1, NEW_EEG_to_ERPTier_triggers_preceded);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_erptier"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, NEW_EEG_to_ERPTier_bit);
+	praat_addAction1 (classEEG, 0, I18n_translate("menu.to_mixingmatrix_eeg"), nullptr, 0, NEW_EEG_to_MixingMatrix);
 	praat_addAction1 (classEEG, 0, U"Synthesize", nullptr, 0, nullptr);
 		praat_addAction1 (classEEG, 0, U"Concatenate", nullptr, 0, NEW1_EEGs_concatenate);
 	praat_addAction1 (classEEG, 0, U"Hack -", nullptr, 0, nullptr);
@@ -806,11 +807,11 @@ void praat_EEG_init () {
 		praat_addAction1 (classERPTier, 0, U"-- structure --", nullptr, 1, nullptr);
 		praat_addAction1 (classERPTier, 0, U"Remove events between...", nullptr, 1, MODIFY_ERPTier_removeEventsBetween);
 	praat_addAction1 (classERPTier, 0, U"Analyse", nullptr, 0, nullptr);
-		praat_addAction1 (classERPTier, 0, U"Extract ERP...", nullptr, 0, NEW_ERPTier_to_ERP);
-		praat_addAction1 (classERPTier, 0, U"To ERP (mean)", nullptr, 0, NEW_ERPTier_to_ERP_mean);
+	praat_addAction1 (classERPTier, 0, I18n_translate("menu.to_erp_mean_erptier"), nullptr, 0, NEW_ERPTier_to_ERP);
+	praat_addAction1 (classERPTier, 0, I18n_translate("menu.to_erp_mean_erptier"), nullptr, 0, NEW_ERPTier_to_ERP_mean);
 
-	praat_addAction2 (classEEG, 1, classMixingMatrix, 1, U"To EEG (unmix)", nullptr, 0, NEW_EEG_MixingMatrix_to_EEG_unmix);
-	praat_addAction2 (classEEG, 1, classMixingMatrix, 1, U"To EEG (mix)", nullptr, 0, NEW_EEG_MixingMatrix_to_EEG_mix);
+	praat_addAction2 (classEEG, 1, classMixingMatrix, 1, I18n_translate("menu.to_eeg_unmix"), nullptr, 0, NEW_EEG_MixingMatrix_to_EEG_unmix);
+	praat_addAction2 (classEEG, 1, classMixingMatrix, 1, I18n_translate("menu.to_eeg_mix"), nullptr, 0, NEW_EEG_MixingMatrix_to_EEG_mix);
 	praat_addAction2 (classEEG, 1, classTextGrid, 1, U"Replace TextGrid", nullptr, 0, MODIFY_EEG_TextGrid_replaceTextGrid);
 	praat_addAction2 (classERPTier, 1, classTable, 1, U"Extract -", nullptr, 0, nullptr);
 	praat_addAction2 (classERPTier, 1, classTable, 1, U"Extract events where column (number)...", nullptr, 1, NEW1_ERPTier_Table_extractEventsWhereColumn_number);

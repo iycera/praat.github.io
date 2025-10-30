@@ -65,6 +65,7 @@
 
 #include "NUMcomplex.h"
 #include "NUMmachar.h"
+#include "../sys/i18n_simple.h"
 
 #include "ActivationList.h"
 #include "AmplitudeTier.h"
@@ -7998,7 +7999,7 @@ DO
 void praat_TableOfReal_init3 (ClassInfo klas);
 void praat_TableOfReal_init3 (ClassInfo klas) {
 	praat_TableOfReal_init (klas);
-	praat_addAction1 (klas, 2, U"To TableOfReal (cross-correlations)...", 0, 0, 
+	praat_addAction1 (klas, 2, I18n_translate("menu.to_tableofreal_cross_correlations"), 0, 0, 
 			CONVERT_TWO_TO_ONE__TableOfReal_TableOfReal_crossCorrelations);
 }
 
@@ -8656,9 +8657,9 @@ void praat_CC_init (ClassInfo klas) {
 			QUERY_ONE_FOR_REAL__CC_getC0ValueInFrame);
 	praat_addAction1 (klas, 1, U"Get value...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			QUERY_ONE_FOR_REAL__CC_getValue);
-	praat_addAction1 (klas, 0, U"To Matrix", nullptr, 0, 
+	praat_addAction1 (klas, 0, I18n_translate("menu.to_matrix_cc"), U"Get value...", 0, 
 			CONVERT_EACH_TO_ONE__CC_to_Matrix);
-	praat_addAction1 (klas, 2, U"To DTW...", nullptr, 0, 
+	praat_addAction1 (klas, 2, I18n_translate("menu.to_dtw_ccs"), I18n_translate("menu.to_matrix_cc"), 0, 
 			CONVERT_TWO_TO_ONE__CCs_to_DTW);
 }
 
@@ -8666,7 +8667,7 @@ static void praat_Eigen_Matrix_project (ClassInfo klase, ClassInfo klasm); // de
 static void praat_Eigen_Matrix_project (ClassInfo klase, ClassInfo klasm) {
 	praat_addAction2 (klase, 1, klasm, 1, U"Project...", nullptr, GuiMenu_HIDDEN,
 			CONVERT_ONE_AND_ONE_TO_ONE__Eigen_Matrix_projectColumns);
-	praat_addAction2 (klase, 1, klasm, 1, U"To Matrix (project columns)...", nullptr, GuiMenu_HIDDEN,
+	praat_addAction2 (klase, 1, klasm, 1, I18n_translate("menu.to_matrix_project_columns"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_ONE_AND_ONE_TO_ONE__Eigen_Matrix_projectColumns);
 }
 
@@ -8674,7 +8675,7 @@ static void praat_Eigen_Spectrogram_project (ClassInfo klase, ClassInfo klasm);
 static void praat_Eigen_Spectrogram_project (ClassInfo klase, ClassInfo klasm) {
 	praat_addAction2 (klase, 1, klasm, 1, U"Project...", nullptr, GuiMenu_HIDDEN,
 			CONVERT_ONE_AND_ONE_TO_ONE__Eigen_Matrix_projectColumns);
-	praat_addAction2 (klase, 1, klasm, 1, U"To Matrix (project columns)...", nullptr, 0, 
+	praat_addAction2 (klase, 1, klasm, 1, I18n_translate("menu.to_matrix_project_columns"), U"Project...", 0, 
 			CONVERT_ONE_AND_ONE_TO_ONE__Eigen_Matrix_projectColumns);
 }
 
@@ -8777,9 +8778,9 @@ static void praat_FilterBank_all_init (ClassInfo klas) {
 	praat_FilterBank_draw_init (klas);
 	praat_FilterBank_query_init (klas);
 	praat_FilterBank_modify_init (klas);
-	praat_addAction1 (klas, 0, U"To Intensity", nullptr, GuiMenu_DEPRECATED_2014,
+	praat_addAction1 (klas, 0, I18n_translate("menu.to_intensity_filterbank"), nullptr, GuiMenu_DEPRECATED_2014,
 			CONVERT_EACH_TO_ONE__FilterBank_to_Intensity);
-	praat_addAction1 (klas, 0, U"To Matrix", nullptr, GuiMenu_DEPRECATED_2014,
+	praat_addAction1 (klas, 0, I18n_translate("menu.to_matrix_filterbank"), nullptr, GuiMenu_DEPRECATED_2014,
 			CONVERT_EACH_TO_ONE__FilterBank_to_Matrix);
 	praat_addAction1 (klas, 2, U"Cross-correlate...", nullptr, GuiMenu_DEPRECATED_2014,
 			CONVERT_TWO_TO_ONE__FilterBanks_crossCorrelate);
@@ -8854,28 +8855,28 @@ static void praat_PatternList_query_init (ClassInfo klas) {
 
 static void praat_Spline_init (ClassInfo klas) {
 	praat_FunctionSeries_init (klas);
-	praat_addAction1 (klas, 0, U"Draw knots...", U"Draw basis function...", 1, 
+	praat_addAction1 (klas, 0, U"Draw knots...", nullptr, 1, 
 			GRAPHICS_EACH__Spline_drawKnots);
-	praat_addAction1 (klas, 1, U"Get order", U"Get degree", 1, 
+	praat_addAction1 (klas, 1, U"Get order", nullptr, 1, 
 		QUERY_ONE_FOR_INTEGER__Spline_getOrder);
-	praat_addAction1 (klas, 1, U"Scale x...", U"Analyse", 0, 
+	praat_addAction1 (klas, 1, U"Scale x...", nullptr, 0, 
 			CONVERT_EACH_TO_ONE__Spline_scaleX);
 }
 
 static void praat_SSCP_query_init (ClassInfo klas) {
-	praat_addAction1 (klas, 1, U"-- statistics --", U"Get value...", 1, 0);
-	praat_addAction1 (klas, 1, U"Get number of observations", U"-- statistics --", 1, 
+	praat_addAction1 (klas, 1, U"-- statistics --", nullptr, 1, 0);
+	praat_addAction1 (klas, 1, U"Get number of observations", nullptr, 1, 
 		QUERY_ONE_FOR_INTEGER__SSCP_getNumberOfObservations);
-	praat_addAction1 (klas, 1, U"Get degrees of freedom", U"Get number of observations", 1, 
+	praat_addAction1 (klas, 1, U"Get degrees of freedom", nullptr, 1, 
 			QUERY_ONE_FOR_REAL__SSCP_getDegreesOfFreedom);
-	praat_addAction1 (klas, 1, U"Get centroid element...", U"Get degrees of freedom", 1, 
+	praat_addAction1 (klas, 1, U"Get centroid element...", nullptr, 1, 
 			QUERY_ONE_FOR_REAL__SSCP_getCentroidElement);
-	praat_addAction1 (klas, 1, U"Get ln(determinant)", U"Get centroid element...", 1, 
+	praat_addAction1 (klas, 1, U"Get ln(determinant)", nullptr, 1, 
 			QUERY_ONE_FOR_REAL__SSCP_getLnDeterminant);
 }
 
 static void praat_SSCP_extract_init (ClassInfo klas) {
-	praat_addAction1 (klas, 1, U"Extract centroid", U"Extract -", 1, 
+	praat_addAction1 (klas, 1, U"Extract centroid", nullptr, 1, 
 			CONVERT_EACH_TO_ONE__SSCP_extractCentroid);
 }
 
@@ -8903,28 +8904,28 @@ DO
 void praat_SSCP_as_TableOfReal_init (ClassInfo klas) {
 	praat_TableOfReal_init (klas);
 	praat_removeAction (klas, nullptr, nullptr, U"Set value...");
-	praat_addAction1 (klas, 1, U"Set centroid...", U"Formula...", 1, 
+	praat_addAction1 (klas, 1, U"Set centroid...", nullptr, 1, 
 			MODIFY_SSCP_setCentroid);
-	praat_addAction1 (klas, 1, U"Set value...", U"Formula...", 1, 
+	praat_addAction1 (klas, 1, U"Set value...", nullptr, 1, 
 			MODIFY_SSCP_setValue);
-	praat_addAction1 (klas, 0, U"To TableOfReal", U"To Matrix", 1,
+	praat_addAction1 (klas, 0, I18n_translate("menu.to_tableofreal_sscp"), U"Set value...", 1,
 			CONVERT_EACH_TO_ONE__TableOfReal_to_TableOfReal);
 }
 
 void praat_TableOfReal_init2 (ClassInfo klas) {
 	praat_TableOfReal_init (klas);
-	praat_addAction1 (klas, 0, U"To TableOfReal", U"To Matrix", 1, 
+	praat_addAction1 (klas, 0, I18n_translate("menu.to_tableofreal_klas"), nullptr, 1, 
 			CONVERT_EACH_TO_ONE__TableOfReal_to_TableOfReal);
 }
 
 void praat_EditDistanceTable_as_TableOfReal_init (ClassInfo klas) {
 	praat_TableOfReal_init (klas);
-	praat_addAction1 (klas, 0, U"Set default costs...", U"Formula...", 1, 
+	praat_addAction1 (klas, 0, U"Set default costs...", nullptr, 1, 
 			MODIFY_EditDistanceTable_setDefaultCosts);
 	praat_removeAction (klas, nullptr, nullptr, U"Draw as numbers...");
-	praat_addAction1 (klas, 0, U"Draw...", U"Draw -", 1, 
+	praat_addAction1 (klas, 0, U"Draw...", nullptr, 1, 
 			GRAPHICS_EACH__EditDistanceTable_draw);
-	praat_addAction1 (klas, 0, U"Draw edit operations", U"Draw...", 1, 
+	praat_addAction1 (klas, 0, U"Draw edit operations", nullptr, 1, 
 			GRAPHICS_EACH__EditDistanceTable_drawEditOperations);
 	praat_removeAction (klas, nullptr, nullptr, U"Draw as numbers if...");
 	praat_removeAction (klas, nullptr, nullptr, U"Draw as squares...");
@@ -8944,24 +8945,24 @@ void praat_David_generics_new_init () {
 		nullptr
 	);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Create Permutation...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_permutation"), nullptr, 1,
 						  CREATE_ONE__Permutation_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple Permutation...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_permutation"), nullptr, 1,
 						  CREATE_ONE__Permutation_createSimplePermutation);
-	praat_addMenuCommand (U"Objects", U"New", U"Polynomial", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Polynomial...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.polynomial"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_polynomial"), nullptr, 2,
 			CREATE_ONE__Polynomial_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Polynomial from product terms...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_polynomial_from_product_terms"), nullptr, 2,
 			CREATE_ONE__Polynomial_createFromProductTerms);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Polynomial from real zeros...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_polynomial_from_real_zeros"), nullptr, 2,
 			CREATE_ONE__Polynomial_createFromRealZeros);
-	praat_addMenuCommand (U"Objects", U"New", U"Create LegendreSeries...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_legendreseries"), nullptr, 2,
 			CREATE_ONE__LegendreSeries_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create ChebyshevSeries...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_chebyshevseries"), nullptr, 2,
 			CREATE_ONE__ChebyshevSeries_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create MSpline...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_mspline"), nullptr, 2,
 			CREATE_ONE__MSpline_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create ISpline...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_ispline"), nullptr, 2,
 			CREATE_ONE__ISpline_create);
 }
 
@@ -9006,13 +9007,13 @@ void praat_David_init () {
 	praat_addMenuCommand (U"Objects", U"Goodies", U"Get incomplete gamma...", 0, GuiMenu_HIDDEN,
 			QUERY_NONE_FOR_COMPLEX__Praat_getIncompleteGamma);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Create Sound as gammatone... || Create Sound from gammatone...", U"Create Sound as tone complex...", 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound_as_gammatone"), nullptr, 1,
 			CREATE_ONE__Sound_createAsGammaTone);   // alternative COMPATIBILITY <= 2016
-	praat_addMenuCommand (U"Objects", U"New", U"Create Sound as Shepard tone... || Create Sound from Shepard tone...", U"Create Sound as gammatone...", GuiMenu_DEPTH_1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound_as_shepard_tone"), nullptr, GuiMenu_DEPTH_1,
 			CREATE_ONE__Sound_createAsShepardTone);   // alternative COMPATIBILITY <= 2016
-	praat_addMenuCommand (U"Objects", U"New", U"Create Sound from VowelEditor...", U"Create Sound as Shepard tone...", GuiMenu_DEPTH_1 | GuiMenu_NO_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound_from_voweleditor"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_NO_API,
 			CREATION_WINDOW__VowelEditor_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create TextGridNavigator...", U"Create Corpus...", GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_textgridnavigator"), nullptr, GuiMenu_HIDDEN,
 			CREATE_ONE__TextGridNavigator_createSimple);
 
 	/*
@@ -9020,107 +9021,107 @@ void praat_David_init () {
 		because `praat_David_init()` is called between `praat_uvafon_Artsynth_init()` and `praat_uvafon_gram_init()`.
 		(last checked 2024-09-07)
 	*/
-	praat_addMenuCommand (U"Objects", U"New", U"Text-to-speech synthesis", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"SpeechSynthesizer help", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.text_to_speech_synthesis"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.speechsynthesizer_help"), nullptr, 1,
 			HELP__SpeechSynthesizer_help);
-	praat_addMenuCommand (U"Objects", U"New", U"    (more info)", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Tabulate SpeechSynthesizer language properties", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.more_info"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.tabulate_speechsynthesizer_language_properties"), nullptr, 2,
 			CREATE_ONE__TabulateSpeechSynthesizerLanguageProperties);
-	praat_addMenuCommand (U"Objects", U"New", U"Tabulate SpeechSynthesizer voice properties", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.tabulate_speechsynthesizer_voice_properties"), nullptr, 2,
 			CREATE_ONE__TabulateSpeechSynthesizerVoiceProperties);
-	praat_addMenuCommand (U"Objects", U"New", U"-- new SpeechSynthesizer --", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create SpeechSynthesizer...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.separator_new_speechsynthesizer"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_speechsynthesizer"), nullptr, 1,
 			CREATE_ONE__SpeechSynthesizer_create);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Data sets from the literature", U"Create Table without column names...", 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create formant table (Peterson & Barney 1952)", U"Data sets from the literature", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.data_sets_from_literature"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_formant_table_peterson_barney_1952"), I18n_translate("menu.data_sets_from_literature"), 2,
 			CREATE_ONE__Table_create_petersonBarney1952);
-	praat_addMenuCommand (U"Objects", U"New", U"Create formant table (Hillenbrand et al. 1995)", U"Data sets from the literature",
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_formant_table_hillenbrand_1995"), I18n_translate("menu.data_sets_from_literature"),
 		GuiMenu_HIDDEN + GuiMenu_DEPTH_2,
 			CREATE_ONE__Table_create_hillenbrandEtAl1995);
-	praat_addMenuCommand (U"Objects", U"New", U"Create formant table (Pols & Van Nierop 1973)", U"Create formant table (Peterson & Barney 1952)", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_formant_table_pols_van_nierop_1973"), I18n_translate("menu.create_formant_table_peterson_barney_1952"), 2,
 			CREATE_ONE__Table_create_polsVanNierop1973);
-	praat_addMenuCommand (U"Objects", U"New", U"Create formant table (Weenink 1985)", U"Create formant table (Pols & Van Nierop 1973)", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_formant_table_weenink_1985"), I18n_translate("menu.create_formant_table_pols_van_nierop_1973"), 2,
 			CREATE_ONE__Table_create_weenink1983);
-	praat_addMenuCommand (U"Objects", U"New", U"Create H1H2 table (Keating & Esposito 2006)", U"Create formant table (Weenink 1985)", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_h1h2_table_keating_esposito_2006"), I18n_translate("menu.create_formant_table_weenink_1985"), 2,
 			CREATE_ONE__Table_create_keatingEsposito2006);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Table (Ganong 1980)", U"Create H1H2 table (Keating & Esposito 2006)", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_table_ganong_1980"), I18n_translate("menu.create_h1h2_table_keating_esposito_2006"), 2,
 			CREATE_ONE__Table_create_ganong1980);
-	praat_addMenuCommand (U"Objects", U"New", U"-- new TableOfReal --", U"Create Table (Ganong 1980)", 2, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create iris data set", U"-- new TableOfReal --" , 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.separator_new_tableofreal"), I18n_translate("menu.create_table_ganong_1980"), 2, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_iris_data_set"), I18n_translate("menu.separator_new_tableofreal") , 2,
 			CREATE_ONE__CreateIrisDataset);
-	praat_addMenuCommand (U"Objects", U"New", U"Create TableOfReal (Pols 1973)...", U"Create iris data set", 2, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_tableofreal_pols_1973"), I18n_translate("menu.create_iris_data_set"), 2, 
 			CREATE_ONE__TableOfReal_create_pols1973);
-	praat_addMenuCommand (U"Objects", U"New", U"Create TableOfReal (Van Nierop 1973)...", U"Create TableOfReal (Pols 1973)...", 2, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_tableofreal_van_nierop_1973"), I18n_translate("menu.create_tableofreal_pols_1973"), 2, 
 			CREATE_ONE__TableOfReal_create_vanNierop1973);
-	praat_addMenuCommand (U"Objects", U"New", U"Create TableOfReal (Weenink 1985)...", U"Create TableOfReal (Van Nierop 1973)...", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_tableofreal_weenink_1985"), I18n_translate("menu.create_tableofreal_van_nierop_1973"), 2,
 			CREATE_ONE__TableOfReal_create_weenink1983);
-	praat_addMenuCommand (U"Objects", U"New", U"Create TableOfReal (Sandwell 1987)", U"Create TableOfReal (Weenink 1985)...", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_tableofreal_sandwell_1987"), I18n_translate("menu.create_tableofreal_weenink_1985"), 2,
 			CREATE_ONE__Table_create_sandwell1987);
-	praat_addMenuCommand (U"Objects", U"New", U"-- new TableOfReal children --", U"Create TableOfReal (Weenink 1985)...", 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.separator_new_tableofreal_children"), I18n_translate("menu.create_tableofreal_weenink_1985"), 1,
 			CREATE_ONE__Confusion_createSimple);
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple Confusion...", U"-- new TableOfReal children --", 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_confusion"), I18n_translate("menu.separator_new_tableofreal_children"), 1,
 			CREATE_ONE__Confusion_createSimple);
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple Covariance...", U"Create simple Confusion...", 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_covariance"), I18n_translate("menu.create_simple_confusion"), 1,
 			CREATE_ONE__Covariance_createSimple);
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple Correlation...", U"Create simple Covariance...", 1, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_correlation"), I18n_translate("menu.create_simple_covariance"), 1, 
 			CREATE_ONE__Correlation_createSimple);
-	praat_addMenuCommand (U"Objects", U"New", U"Create empty EditCostsTable...", U"Create simple Covariance...", 1, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_empty_editcoststable"), I18n_translate("menu.create_simple_covariance"), 1, 
 			CREATE_ONE__EditCostsTable_createEmpty);
-	praat_addMenuCommand (U"Objects", U"New", U"Create KlattTable example", U"Create TableOfReal (Weenink 1985)...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_klattable_example"), I18n_translate("menu.create_tableofreal_weenink_1985"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CREATE_ONE__KlattTable_createExample);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Strings from tokens...", U"Create Strings as folder list...", 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_strings_from_tokens"), nullptr, 2,
 			CREATE_ONE__Strings_createFromTokens);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Strings as tokens...", U"Create Strings from tokens...", GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_strings_as_tokens"), I18n_translate("menu.create_strings_from_tokens"), GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
 			CREATE_ONE__Strings_createAsTokens);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Strings as characters...", U"Create Strings from tokens...", GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_strings_as_characters"), I18n_translate("menu.create_strings_from_tokens"), GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
 			CREATE_ONE__Strings_createAsCharacters);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple Polygon...", nullptr, GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_polygon"), nullptr, GuiMenu_HIDDEN,
 			CREATE_ONE__Polygon_createSimple);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Polygon (random vertices)...", nullptr, GuiMenu_DEPRECATED_2016,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_polygon_random_vertices"), nullptr, GuiMenu_DEPRECATED_2016,
 			CREATE_ONE__Polygon_createFromRandomPoints);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Polygon (random points)...", nullptr, GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_polygon_random_points"), nullptr, GuiMenu_HIDDEN,
 			CREATE_ONE__Polygon_createFromRandomPoints);
-	praat_addMenuCommand (U"Objects", U"New", U"FileInMemory", nullptr, GuiMenu_HIDDEN, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create FileInMemory...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.fileinmemory"), nullptr, GuiMenu_HIDDEN, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_fileinmemory"), nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			READ_ONE__FileInMemory_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create FileInMemorySet from directory contents...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_fileinmemoryset_from_directory_contents"), nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			CREATE_ONE__FileInMemorySet_createFromDirectoryContents);
 
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Sound from raw 16-bit Little Endian file...", U"Read from special sound file", 1, 
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_sound_from_raw_16bit_little_endian_file"), nullptr, 1, 
 			READ_ONE__Sound_readFromRawFileLE);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Sound from raw 16-bit Big Endian file...", U"Read Sound from raw 16-bit Little Endian file...", 1,
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_sound_from_raw_16bit_big_endian_file"), nullptr, 1,
 			READ_ONE__Sound_readFromRawFileBE);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read KlattTable from raw text file...", U"Read Matrix from raw text file...", GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_klattable_from_raw_text_file"), nullptr, GuiMenu_HIDDEN,
 			READ_ONE__KlattTable_readFromRawTextFile);
 
 	praat_addAction1 (classActivationList, 0, U"Modify", nullptr, 0, nullptr);
 	praat_addAction1 (classActivationList, 0, U"Formula...", nullptr, 0, 
 			MODIFY_ActivationList_formula);
 	praat_addAction1 (classActivationList, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classActivationList, 0, U"To Matrix", nullptr, 0, 
+	praat_addAction1 (classActivationList, 0, I18n_translate("menu.to_matrix_activationlist"), U"Hack", 0, 
 			CONVERT_EACH_TO_ONE__ActivationList_to_Matrix);
-	praat_addAction1 (classActivationList, 0, U"To PatternList", nullptr, 0, 
+	praat_addAction1 (classActivationList, 0, I18n_translate("menu.to_patternlist_activationlist"), I18n_translate("menu.to_matrix_activationlist"), 0, 
 			CONVERT_EACH_TO_ONE__ActivationList_to_PatternList);
 
-	praat_addAction2 (classActivationList, 1, classCategories, 1, U"To TableOfReal", nullptr, 0,
+	praat_addAction2 (classActivationList, 1, classCategories, 1, I18n_translate("menu.to_tableofreal_activationlist"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__ActivationList_Categories_to_TableOfReal);
 	
-	praat_addAction1 (classAmplitudeTier, 0, U"Get value at time...", U"Get time from index...", 1, 
+	praat_addAction1 (classAmplitudeTier, 0, U"Get value at time...", nullptr, 1, 
 			QUERY_ONE_FOR_REAL__AmplitudeTier_getValueAtTime);
-	praat_addAction1 (classAmplitudeTier, 0, U"Get value at index...", U"Get value at time...", 1, 
+	praat_addAction1 (classAmplitudeTier, 0, U"Get value at index...", nullptr, 1, 
 			QUERY_ONE_FOR_REAL__AmplitudeTier_getValueAtIndex);
 
 	praat_addAction1 (classBarkFilter, 0, U"BarkFilter help", nullptr, 0, HELP__BarkFilter_help);
 	praat_FilterBank_all_init (classBarkFilter);	// deprecated 2014
-	praat_addAction1 (classBarkFilter, 0, U"Draw spectrum (slice)...", U"Draw filters...", GuiMenu_DEPRECATED_2014,
+	praat_addAction1 (classBarkFilter, 0, U"Draw spectrum (slice)...", nullptr, GuiMenu_DEPRECATED_2014,
 			GRAPHICS_EACH__BarkFilter_drawSpectrum);
-	praat_addAction1 (classBarkFilter, 1, U"Draw filter functions...", U"Draw filters...", GuiMenu_DEPRECATED_2014,
+	praat_addAction1 (classBarkFilter, 1, U"Draw filter functions...", nullptr, GuiMenu_DEPRECATED_2014,
 			GRAPHICS_EACH__BarkFilter_drawSekeyHansonFilterFunctions);
 	praat_addAction1 (classBarkFilter, 0, U"Paint...", U"Draw filters...", GuiMenu_DEPTH_1,
 			GRAPHICS_EACH__BarkFilter_paint);	// deprecated 2014
-	praat_addAction1 (classBarkFilter, 0, U"To BarkSpectrogram", nullptr, 0,
+	praat_addAction1 (classBarkFilter, 0, I18n_translate("menu.to_barkspectrogram"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__BarkFilter_to_BarkSpectrogram);
 
 	praat_addAction1 (classBarkSpectrogram, 0, U"BarkSpectrogram help", nullptr, 0,
@@ -9136,9 +9137,9 @@ void praat_David_init () {
 	praat_BandFilterSpectrogram_query_init (classBarkSpectrogram);
 	praat_addAction1 (classBarkSpectrogram, 0, U"Equalize intensities...", nullptr, 0, 
 			MODIFY_EACH__BandFilterSpectrogram_equalizeIntensities);
-	praat_addAction1 (classBarkSpectrogram, 0, U"To Intensity", nullptr, 0,
+	praat_addAction1 (classBarkSpectrogram, 0, I18n_translate("menu.to_intensity_barkspectrogram"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__BandFilterSpectrogram_to_Intensity);
-	praat_addAction1 (classBarkSpectrogram, 0, U"To Matrix...", nullptr, 0,
+	praat_addAction1 (classBarkSpectrogram, 0, I18n_translate("menu.to_matrix_barkspectrogram"), I18n_translate("menu.to_intensity_barkspectrogram"), 0,
 			CONVERT_EACH_TO_ONE__BandFilterSpectrogram_to_Matrix);
 	praat_addAction1 (classBarkSpectrogram, 2, U"Cross-correlate...", nullptr, 0,
 			CONVERT_TWO_TO_ONE__BandFilterSpectrograms_crossCorrelate);
@@ -9160,23 +9161,23 @@ void praat_David_init () {
 		praat_addAction1 (classCategories, 0, U"Permute items (in-place)", nullptr, 1,
 			MODIFY_EACH__Categories_permuteItems_inplace);	
 	praat_addAction1 (classCategories, 0, U"Extract", nullptr, 0, nullptr);
-	praat_addAction1 (classCategories, 0, U"To unique Categories", nullptr, 0,
+	praat_addAction1 (classCategories, 0, I18n_translate("menu.to_unique_categories"), U"Extract", 0,
 			CONVERT_EACH_TO_ONE__Categories_selectUniqueItems);
-	praat_addAction1 (classCategories, 0, U"Analyse", nullptr, 0, nullptr); // TODO name
-	praat_addAction1 (classCategories, 2, U"To Confusion", nullptr, 0,
+	praat_addAction1 (classCategories, 0, U"Analyse", I18n_translate("menu.to_unique_categories"), 0, nullptr); // TODO name
+	praat_addAction1 (classCategories, 2, I18n_translate("menu.to_confusion_categories"), U"Analyse", 0,
 			CONVERT_TWO_TO_ONE__Categories_to_Confusion);
 	praat_addAction1 (classCategories, 0, U"Synthesize", nullptr, 0, nullptr);
 	praat_addAction1 (classCategories, 2, U"Join", nullptr, 0, 
 			CONVERT_TWO_TO_ONE__Categories_join);
 	praat_addAction1 (classCategories, 0, U"Permute items", nullptr, 0,
 			CONVERT_EACH_TO_ONE__Categories_permuteItems);
-	praat_addAction1 (classCategories, 0, U"To Strings", nullptr, 0,
+	praat_addAction1 (classCategories, 0, I18n_translate("menu.to_strings_categories"), U"Permute items", 0,
 			CONVERT_EACH_TO_ONE__Categories_to_Strings);
 
 	praat_addAction1 (classChebyshevSeries, 0, U"ChebyshevSeries help", nullptr, 0,
 			HELP__ChebyshevSeries_help);
 	praat_FunctionSeries_init (classChebyshevSeries);
-	praat_addAction1 (classChebyshevSeries, 0, U"To Polynomial", U"Analyse", 0,
+	praat_addAction1 (classChebyshevSeries, 0, I18n_translate("menu.to_polynomial_chebyshevseries"), U"Analyse", 0,
 			CONVERT_EACH_TO_ONE__ChebyshevSeries_to_Polynomial);
 
 	praat_addAction1 (classCCA, 1, U"CCA help", nullptr, 0,
@@ -9194,13 +9195,13 @@ void praat_David_init () {
 	praat_addAction1 (classCCA, 1, U"Extract Eigen...", nullptr, 0,
 			CONVERT_EACH_TO_ONE__CCA_extractEigen);
 
-	praat_addAction2 (classCCA, 1, classTableOfReal, 1, U"To TableOfReal (scores)...", nullptr, 0,
+	praat_addAction2 (classCCA, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_scores_cca"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__CCA_TableOfReal_to_TableOfReal_scores);
-	praat_addAction2 (classCCA, 1, classTableOfReal, 1, U"To TableOfReal (loadings)", nullptr, 0,
+	praat_addAction2 (classCCA, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_loadings_cca"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__CCA_TableOfReal_to_TableOfReal_loadings);
 	praat_addAction2 (classCCA, 1, classTableOfReal, 1, U"Predict...", nullptr, 0, 
 			CONVERT_ONE_AND_ONE_TO_ONE__CCA_TableOfReal_predict);
-	praat_addAction2 (classCCA, 1, classCorrelation, 1, U"To TableOfReal (loadings)", nullptr, 0,
+	praat_addAction2 (classCCA, 1, classCorrelation, 1, I18n_translate("menu.to_tableofreal_loadings_correlation"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__CCA_Correlation_to_TableOfReal_loadings);
 	praat_addAction2 (classCCA, 1, classCorrelation, 1, U"Get variance fraction...", nullptr, 0,
 			QUERY_ONE_AND_ONE_FOR_REAL__CCA_Correlation_getVarianceFraction);
@@ -9210,11 +9211,11 @@ void praat_David_init () {
 	praat_addAction1 (classComplexSpectrogram, 0, U"ComplexSpectrogram help", nullptr, 0,
 			HELP__ComplexSpectrogram_help);
 	praat_addAction1 (classComplexSpectrogram, 0, U"Draw -", nullptr, 0, nullptr);
-	praat_addAction1 (classComplexSpectrogram, 0, U"To Sound...", nullptr, 0,
+	praat_addAction1 (classComplexSpectrogram, 0, I18n_translate("menu.to_sound_complexspectrogram"), U"Draw -", 0,
 			CONVERT_EACH_TO_ONE__ComplexSpectrogram_to_Sound);
 	praat_addAction1 (classComplexSpectrogram, 0, U"Down to Spectrogram", nullptr, 0,
 			CONVERT_EACH_TO_ONE__ComplexSpectrogram_downto_Spectrogram);
-	praat_addAction1 (classComplexSpectrogram, 0, U"To Spectrum (slice)...", nullptr, 0,
+	praat_addAction1 (classComplexSpectrogram, 0, I18n_translate("menu.to_spectrum_slice_complexspectrogram"), U"Down to Spectrogram", 0,
 			CONVERT_EACH_TO_ONE__ComplexSpectrogram_to_Spectrum_slice);
 	praat_addAction2 (classComplexSpectrogram, 1, classSpectrogram, 1, U"Replace amplitudes", nullptr, 0,
 			MODIFY_ComplexSpectrogram_Spectrogram_replaceAmplitudes);
@@ -9244,7 +9245,7 @@ void praat_David_init () {
 			QUERY_ONE_FOR_REAL__TableOfReal_getGrandSum);
 	praat_addAction1 (classConfusion, 0, U"Increase...", U"Formula...", 1,
 			MODIFY_Confusion_increase);
-	praat_addAction1 (classConfusion, 0, U"To TableOfReal (marginals)", U"To TableOfReal", 0,
+	praat_addAction1 (classConfusion, 0, I18n_translate("menu.to_tableofreal_marginals_confusion"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__Confusion_to_TableOfReal_marginals);
 	praat_addAction1 (classConfusion, 0, U"Analyse", nullptr, 0, nullptr);
 	praat_addAction1 (classConfusion, 0, U"Condense...", nullptr, GuiMenu_HIDDEN,
@@ -9255,7 +9256,7 @@ void praat_David_init () {
 			CONVERT_EACH_TO_ONE__Confusion_groupStimuli);
 	praat_addAction1 (classConfusion, 0, U"Group responses...", nullptr, 0,
 			CONVERT_EACH_TO_ONE__Confusion_groupResponses);
-	praat_addAction1 (classConfusion, 2, U"To difference matrix", nullptr, 0,
+	praat_addAction1 (classConfusion, 2, I18n_translate("menu.to_difference_matrix"), U"Group...", 0,
 			CONVERT_TWO_TO_ONE__Confusion_difference); // TODO to_Matrix_difference ?
 
 	praat_addAction2 (classConfusion, 1, classClassificationTable, 1, U"Increase confusion count", nullptr, 0,
@@ -9290,20 +9291,20 @@ void praat_David_init () {
 			INFO_NONE__Covariances_reportEquality);
 	praat_addAction1 (classCovariance, 0, U"Report equality of covariances", U"Report multivariate mean difference...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			INFO_NONE__Covariances_reportEquality);
-	praat_addAction1 (classCovariance, 0, U"To TableOfReal (random sampling)...", nullptr, 0,
+	praat_addAction1 (classCovariance, 0, I18n_translate("menu.to_tableofreal_random_sampling_covariance"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__Covariance_to_TableOfReal_randomSampling);
-	praat_addAction1 (classCovariance, 0, U"To Correlation", nullptr, 0,
+	praat_addAction1 (classCovariance, 0, I18n_translate("menu.to_correlation"), I18n_translate("menu.to_tableofreal_random_sampling_covariance"), 0,
 			CONVERT_EACH_TO_ONE__Covariance_to_Correlation);
-	praat_addAction1 (classCovariance, 0, U"To PCA", nullptr, 0,
+	praat_addAction1 (classCovariance, 0, I18n_translate("menu.to_pca_covariance"), I18n_translate("menu.to_correlation"), 0,
 			CONVERT_EACH_TO_ONE__Covariance_to_PCA);
 	praat_addAction1 (classCovariance, 0, U"Pool", nullptr, 0,
 			COMBINE_ALL_LISTED_TO_ONE__Covariances_pool);
-	praat_addAction1 (classCovariance, 0, U"To Covariance (between)", nullptr, 0,
+	praat_addAction1 (classCovariance, 0, I18n_translate("menu.to_covariance_between"), U"Pool", 0,
 			COMBINE_ALL_LISTED_TO_ONE__Covariances_to_Covariance_between);
-	praat_addAction1 (classCovariance, 0, U"To Covariance (within)", nullptr, 0,
+	praat_addAction1 (classCovariance, 0, I18n_translate("menu.to_covariance_within"), I18n_translate("menu.to_covariance_between"), 0,
 			COMBINE_ALL_LISTED_TO_ONE__Covariances_to_Covariance_within);
 
-	praat_addAction2 (classCovariance, 1, classTableOfReal, 1, U"To TableOfReal (mahalanobis)...", nullptr, 0,
+	praat_addAction2 (classCovariance, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_mahalanobis_covariance"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Covariance_TableOfReal_mahalanobis);
 	
 	praat_addAction1 (classClassificationTable, 0, U"ClassificationTable help", nullptr, 0,
@@ -9313,13 +9314,13 @@ void praat_David_init () {
 		QUERY_ONE_FOR_INTEGER__ClassificationTable_getClassIndexAtMaximumInRow);
 	praat_addAction1 (classClassificationTable, 0, U"Get class label at maximum in row...", U"Get class index at maximum in row...", 1,
 		QUERY_ONE_FOR_STRING__ClassificationTable_getClassLabelAtMaximumInRow);
-	praat_addAction1 (classClassificationTable, 0, U"To Confusion...", nullptr, 0,
+	praat_addAction1 (classClassificationTable, 0, I18n_translate("menu.to_confusion_classificationtable"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__ClassificationTable_to_Confusion);
-	praat_addAction1 (classClassificationTable, 0, U"To Confusion", nullptr, GuiMenu_DEPRECATED_2014,
+	praat_addAction1 (classClassificationTable, 0, I18n_translate("menu.to_confusion_deprecated"), I18n_translate("menu.to_confusion_classificationtable"), GuiMenu_DEPRECATED_2014,
 			CONVERT_EACH_TO_ONE__ClassificationTable_to_Confusion_old);   // replace with To Confusion: 0
-	praat_addAction1 (classClassificationTable, 0, U"To Correlation (columns)", nullptr, 0,
+	praat_addAction1 (classClassificationTable, 0, I18n_translate("menu.to_correlation_columns"), I18n_translate("menu.to_confusion_deprecated"), 0,
 			CONVERT_EACH_TO_ONE__ClassificationTable_to_Correlation_columns);
-	praat_addAction1 (classClassificationTable, 0, U"To Strings (max. prob.)", nullptr, 0,
+	praat_addAction1 (classClassificationTable, 0, I18n_translate("menu.to_strings_max_prob"), I18n_translate("menu.to_correlation_columns"), 0,
 			CONVERT_EACH_TO_ONE__ClassificationTable_to_Strings_maximumProbability); // TODO name?
 
 	praat_addAction1 (classCorrelation, 0, U"Correlation help", nullptr, 0, 
@@ -9331,7 +9332,7 @@ void praat_David_init () {
 			QUERY_ONE_FOR_REAL__Correlation_getDiagonality_bartlett);
 	praat_addAction1 (classCorrelation, 0, U"Confidence intervals...", nullptr, 0, 
 			CONVERT_EACH_TO_ONE__Correlation_confidenceIntervals);
-	praat_addAction1 (classCorrelation, 0, U"To PCA", nullptr, 0, 
+	praat_addAction1 (classCorrelation, 0, I18n_translate("menu.to_pca_correlation"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__Correlation_to_PCA);
 
 	praat_addAction1 (classDiscriminant, 0, U"Discriminant help", 0, 0,
@@ -9428,7 +9429,7 @@ void praat_David_init () {
 	praat_Eigen_Matrix_project (classDiscriminant, classBarkFilter); // deprecated 2014
 	praat_Eigen_Matrix_project (classDiscriminant, classMelFilter); // deprecated 2014
 
-	praat_addAction2 (classDiscriminant, 1, classPatternList, 1, U"To Categories...", nullptr, 0,
+	praat_addAction2 (classDiscriminant, 1, classPatternList, 1, I18n_translate("menu.to_categories_discriminant"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Discriminant_PatternList_to_Categories);
 	praat_addAction2 (classDiscriminant, 1, classSSCP, 1, U"Project", nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Eigen_SSCP_project);
@@ -9436,13 +9437,13 @@ void praat_David_init () {
 	praat_addAction2 (classDiscriminant, 1, classStrings, 1, U"Set group labels", nullptr, 0,
 			MODIFY_FIRST_OF_ONE_AND_ONE__Discriminant_setGroupLabels);
 
-	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, U"To Configuration...", nullptr, 0,
+	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, I18n_translate("menu.to_configuration_discriminant"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Discriminant_TableOfReal_to_Configuration);
-	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, U"To ClassificationTable...", nullptr, 0,
+	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, I18n_translate("menu.to_classificationtable_discriminant"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Discriminant_TableOfReal_to_ClassificationTable);
-	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, U"To TableOfReal (mahalanobis)...", nullptr, 0,
+	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_mahalanobis_discriminant"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Discriminant_TableOfReal_mahalanobis);
-	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, U"To TableOfReal (mahalanobis, all)...", nullptr, 0,
+	praat_addAction2 (classDiscriminant, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_mahalanobis_all_discriminant"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Discriminant_TableOfReal_mahalanobis_all);
 
 	praat_addAction1 (classDTW, 0, U"DTW help", nullptr, 0,
@@ -9522,25 +9523,25 @@ void praat_David_init () {
 			MODIFY_DTW_findPath);
     praat_addAction1 (classDTW, 0, U"Find path (band & slope)...", nullptr, 0,
 			MODIFY_DTW_findPath_bandAndSlope);
-    praat_addAction1 (classDTW, 0, U"To Polygon...", nullptr, 1,
+    praat_addAction1 (classDTW, 0, I18n_translate("menu.to_polygon_dtw"), nullptr, 1,
 			CONVERT_EACH_TO_ONE__DTW_to_Polygon);
-	praat_addAction1 (classDTW, 0, U"To Matrix (distances)", nullptr, 0,
+	praat_addAction1 (classDTW, 0, I18n_translate("menu.to_matrix_distances_dtw"), I18n_translate("menu.to_polygon_dtw"), 0,
 			CONVERT_EACH_TO_ONE__DTW_to_Matrix_distances);
-    praat_addAction1 (classDTW, 0, U"To Matrix (cum. distances)...", nullptr, 0,
+    praat_addAction1 (classDTW, 0, I18n_translate("menu.to_matrix_cum_distances_dtw"), I18n_translate("menu.to_matrix_distances_dtw"), 0,
 			CONVERT_EACH_TO_ONE__DTW_to_Matrix_cumulativeDistances);
 	praat_addAction1 (classDTW, 0, U"Swap axes", nullptr, 0,
 			CONVERT_EACH_TO_ONE__DTW_swapAxes);
 
 	praat_addAction2 (classDTW, 1, classMatrix, 1, U"Replace matrix", nullptr, 0,
 			MODIFY_DTW_Matrix_replace);
-	praat_addAction2 (classDTW, 1, classTextGrid, 1, U"To TextGrid (warp times)", nullptr, 0,
+	praat_addAction2 (classDTW, 1, classTextGrid, 1, I18n_translate("menu.to_textgrid_warp_times_dtw"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__DTW_TextGrid_to_TextGrid);
-	praat_addAction2 (classDTW, 1, classIntervalTier, 1, U"To Table (distances)", nullptr, 0,
+	praat_addAction2 (classDTW, 1, classIntervalTier, 1, I18n_translate("menu.to_table_distances_dtw"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__DTW_IntervalTier_to_Table);
 
     praat_addAction2 (classDTW, 1, classPolygon, 1, U"Find path inside...", nullptr, 0,
 			MODIFY_DTW_Polygon_findPathInside);
-    praat_addAction2 (classDTW, 1, classPolygon, 1, U"To Matrix (cum. distances)...", nullptr, 0,
+    praat_addAction2 (classDTW, 1, classPolygon, 1, I18n_translate("menu.to_matrix_cum_distances_polygon_dtw"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__DTW_Polygon_to_Matrix_cumulativeDistances);
 	praat_addAction2 (classDTW, 1, classSound, 2, U"Draw...", nullptr, 0,
 			GRAPHICS_TWO_AND_ONE__DTW_Sounds_draw);
@@ -9550,7 +9551,7 @@ void praat_David_init () {
 	praat_addAction1 (classEditDistanceTable, 1, U"EditDistanceTable help", nullptr, 0, 
 			HELP__EditDistanceTable_help);
 	praat_EditDistanceTable_as_TableOfReal_init (classEditDistanceTable);
-	praat_addAction1 (classEditDistanceTable, 1, U"To TableOfReal (directions)...", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classEditDistanceTable, 1, I18n_translate("menu.to_tableofreal_directions_editdistance"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__EditDistanceTable_to_TableOfReal_directions);
 	praat_addAction2 (classEditDistanceTable, 1, classEditCostsTable, 1, U"Set edit costs", nullptr, 0, 
 			MODIFY_EditDistanceTable_setEditCosts);
@@ -9595,7 +9596,7 @@ void praat_David_init () {
 			MODIFY_EditCostsTable_setSubstitutionCosts);
 	praat_addAction1 (classEditCostsTable, 1, U"Set costs (others)...", nullptr, 1,
 			MODIFY_EditCostsTable_setCosts_others);
-	praat_addAction1 (classEditCostsTable, 1, U"To TableOfReal", nullptr, 0,
+	praat_addAction1 (classEditCostsTable, 1, I18n_translate("menu.to_tableofreal_editcosts"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__EditCostsTable_to_TableOfReal);
 
 	praat_addAction1 (classIndex, 0, U"Index help", nullptr, 0, HELP__Index_help);
@@ -9614,9 +9615,9 @@ void praat_David_init () {
 				QUERY_ONE_FOR_INTEGER__Index_getIndex);
 		praat_addAction1 (classStringsIndex, 1, U"List all classes", nullptr, 1,
 				QUERY_ONE_FOR_STRING_ARRAY__StringsIndex_listAllClasses);
-	praat_addAction1 (classStringsIndex, 1, U"To Strings", nullptr, 0,
+	praat_addAction1 (classStringsIndex, 1, I18n_translate("menu.to_strings_stringsindex"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__StringsIndex_to_Strings);
-	praat_addAction1 (classStringsIndex, 1, U"To Permutation...", nullptr, 0,
+	praat_addAction1 (classStringsIndex, 1, I18n_translate("menu.to_permutation_stringsindex"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__Index_to_Permutation);
 	praat_addAction1 (classStringsIndex, 1, U"Extract part...", nullptr, 0,
 			CONVERT_EACH_TO_ONE__Index_extractPart);
@@ -9642,10 +9643,10 @@ void praat_David_init () {
 	praat_addAction1 (classEigen, 0, U"Modify -", nullptr, 0, nullptr);
 		praat_addAction1 (classEigen, 1, U"Invert eigenvector...", nullptr, 1,
 				MODIFY_Eigen_invertEigenvector);
-	praat_addAction1 (classExcitation, 0, U"Synthesize", U"To Formant...", 0, 0);
-	praat_addAction1 (classExcitation, 0, U"To ExcitationList", U"Synthesize", 0,
+	praat_addAction1 (classExcitation, 0, U"Synthesize", I18n_translate("menu.to_formant_excitation"), 0, 0);
+	praat_addAction1 (classExcitation, 0, I18n_translate("menu.to_excitationlist"), U"Synthesize", 0,
 			COMBINE_ALL_TO_ONE__Excitations_to_ExcitationList);
-	praat_addAction1 (classExcitation, 0, U"To Excitations", U"Synthesize", GuiMenu_DEPRECATED_2015,
+	praat_addAction1 (classExcitation, 0, I18n_translate("menu.to_excitations"), U"Synthesize", GuiMenu_DEPRECATED_2015,
 			COMBINE_ALL_TO_ONE__Excitations_to_ExcitationList);
 
 	praat_addAction1 (classExcitationList, 0, U"Modify", nullptr, 0, 0);
@@ -9658,11 +9659,11 @@ void praat_David_init () {
 	praat_addAction1 (classExcitationList, 2, U"Append", nullptr, 0,
 			CONVERT_TWO_TO_ONE__ExcitationList_append);
 	praat_addAction1 (classExcitationList, 0, U"Convert", nullptr, 0, 0);
-	praat_addAction1 (classExcitationList, 0, U"To PatternList...", nullptr, 0,
+	praat_addAction1 (classExcitationList, 0, I18n_translate("menu.to_patternlist_excitationlist"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__ExcitationList_to_PatternList);
-	praat_addAction1 (classExcitationList, 0, U"To Pattern...", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classExcitationList, 0, I18n_translate("menu.to_pattern_excitationlist"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__ExcitationList_to_PatternList);
-	praat_addAction1 (classExcitationList, 0, U"To TableOfReal", nullptr, 0,
+	praat_addAction1 (classExcitationList, 0, I18n_translate("menu.to_tableofreal_excitationlist"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__ExcitationList_to_TableOfReal);
 
 	praat_addAction2 (classExcitationList, 1, classExcitation, 0, U"Add to ExcitationList", nullptr, 0,
@@ -9672,9 +9673,9 @@ void praat_David_init () {
 
 	praat_addAction1 (classFileInMemory, 1, U"Show as code...", nullptr, 0,
 			INFO_ONE__FileInMemory_showAsCode);
-	praat_addAction1 (classFileInMemory, 0, U"To FileInMemorySet", nullptr, 0,
+	praat_addAction1 (classFileInMemory, 0, I18n_translate("menu.to_fileinmemoryset"), nullptr, 0,
 			COMBINE_ALL_TO_ONE__FilesInMemory_to_FileInMemorySet);
-	praat_addAction1 (classFileInMemory, 0, U"To FilesInMemory", nullptr, GuiMenu_DEPRECATED_2015,
+	praat_addAction1 (classFileInMemory, 0, I18n_translate("menu.to_filesinmemory"), nullptr, GuiMenu_DEPRECATED_2015,
 			COMBINE_ALL_TO_ONE__FilesInMemory_to_FileInMemorySet);
 
 	praat_addAction1 (classFileInMemorySet, 1, U"Query -", nullptr, 0, nullptr);
@@ -9690,7 +9691,7 @@ void praat_David_init () {
 			INFO_ONE__FileInMemorySet_showOneFileAsCode);
 	praat_addAction1 (classFileInMemorySet, 0, U"Merge", nullptr, 0,
 			COMBINE_ALL_TO_ONE__FileInMemorySets_merge);
-	praat_addAction1 (classFileInMemorySet, 0, U"To Strings (path)", nullptr, 0,
+	praat_addAction1 (classFileInMemorySet, 0, I18n_translate("menu.to_strings_path_fileinmemoryset"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__FileInMemorySet_to_Strings_path);
 	praat_addAction1 (classFileInMemorySet, 0, U"Extract files...", nullptr, 0,
 			CONVERT_EACH_TO_ONE__FileInMemorySet_extractFiles);
@@ -9708,19 +9709,19 @@ void praat_David_init () {
 			GRAPHICS_EACH__FormantFilter_drawSpectrum_slice);
 	praat_addAction1 (classFormantFilter, 0, U"Draw filter functions...", U"Draw filters...", GuiMenu_DEPTH_1  | GuiMenu_DEPRECATED_2014,
 			GRAPHICS_EACH__FormantFilter_drawFilterFunctions);
-	praat_addAction1 (classFormantFilter, 0, U"To Spectrogram", nullptr, 0, 
+	praat_addAction1 (classFormantFilter, 0, I18n_translate("menu.to_spectrogram_formantfilter"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__FormantFilter_to_Spectrogram);
 
 	praat_addAction1 (classFormantGrid, 0, U"Draw...", U"Edit", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			GRAPHICS_EACH__FormantGrid_draw);
 
-	praat_addAction1 (classIntensity, 0, U"To TextGrid (silences)...", U"To IntensityTier (valleys)", 0,
+	praat_addAction1 (classIntensity, 0, I18n_translate("menu.to_textgrid_silences"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__Intensity_to_TextGrid_silences);
 	praat_addAction1 (classIntensity, 0, U"Get nearest level crossing...", U"Get time of maximum...", 1,
 			QUERY_ONE_FOR_REAL__Intensity_getNearestLevelCrossing);
-	praat_addAction1 (classIntensityTier, 0, U"To TextGrid (silences)...", nullptr, 0, 
+	praat_addAction1 (classIntensityTier, 0, I18n_translate("menu.to_textgrid_silences_intensitytier"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__IntensityTier_to_TextGrid_silences);
-	praat_addAction1 (classIntensityTier, 0, U"To Intensity...", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classIntensityTier, 0, I18n_translate("menu.to_intensity_intensitytier"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__IntensityTier_to_Intensity);
 
 	praat_addAction1 (classISpline, 0, U"ISpline help", nullptr, 0, 
@@ -9729,9 +9730,9 @@ void praat_David_init () {
 
 	praat_addAction1 (classKlattTable, 0, U"KlattTable help", nullptr, 0,
 			HELP__KlattTable_help);
-	praat_addAction1 (classKlattTable, 0, U"To Sound...", nullptr, 0,
+	praat_addAction1 (classKlattTable, 0, I18n_translate("menu.to_sound_klatttable"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__KlattTable_to_Sound);
-	praat_addAction1 (classKlattTable, 0, U"To KlattGrid...", nullptr, 0,
+	praat_addAction1 (classKlattTable, 0, I18n_translate("menu.to_klattgrid_klatttable"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__KlattTable_to_KlattGrid);
 	praat_addAction1 (classKlattTable, 0, U"To Table", nullptr, 0,
 			CONVERT_EACH_TO_ONE__KlattTable_to_Table);
@@ -9801,7 +9802,7 @@ void praat_David_init () {
 	praat_addAction1 (classMatrix, 0, U"To PCA (by columns)", U"To PCA (by rows)", 0,
 			CONVERT_EACH_TO_ONE__Matrix_to_PCA_byColumns);
 	praat_addAction1 (classMatrix, 0, U"To PatternList... || To Pattern...",
-			U"To VocalTract", 1, CONVERT_EACH_TO_ONE__Matrix_to_PatternList);
+			I18n_translate("menu.to_vocaltract_matrix"), 1, CONVERT_EACH_TO_ONE__Matrix_to_PatternList);
 	praat_addAction1 (classMatrix, 0, U"To ActivationList || To Activation",
 			U"To PatternList...", 1, CONVERT_EACH_TO_ONE__Matrix_to_ActivationList);
 	praat_addAction1 (classMatrix, 0, U"To Eigen", U"Eigen", GuiMenu_HIDDEN,
@@ -9816,7 +9817,7 @@ void praat_David_init () {
 			CONVERT_EACH_TO_ONE__Matrix_to_NMF_is);
 	praat_addAction1 (classMatrix, 0, U"Eigen (complex)", U"Eigen", GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_MULTIPLE_Matrix_eigen_complex);
-	praat_addAction1 (classMatrix, 2, U"To DTW...", U"To ParamCurve", 1,
+	praat_addAction1 (classMatrix, 2, U"To DTW...", I18n_translate("menu.to_paramcurve"), 1,
 			CONVERT_TWO_TO_ONE__Matrices_to_DTW);
 
 	praat_addAction2 (classMatrix, 1, classCategories, 1, U"To TableOfReal", nullptr, 0,
@@ -10061,11 +10062,11 @@ void praat_David_init () {
 	praat_addAction1 (classPermutation, 2, U"Permute part...",
 			nullptr, 0, CONVERT_TWO_TO_ONE__Permutation_permutePartByOther);
 
-	praat_addAction1 (classPitch, 2, U"To DTW...", U"To PointProcess",
+	praat_addAction1 (classPitch, 2, I18n_translate("menu.to_dtw"), nullptr,
 			GuiMenu_HIDDEN, CONVERT_TWO_TO_ONE__Pitches_to_DTW);
 
 	praat_addAction1 (classPitchTier, 0, U"To Pitch...",
-			U"To Sound (sine)...", 1, CONVERT_EACH_TO_ONE__PitchTier_to_Pitch);
+			nullptr, 1, CONVERT_EACH_TO_ONE__PitchTier_to_Pitch);
 	praat_addAction1 (classPitchTier, 0, U"Modify interval...",
 			U"Add point...", 1, MODIFY_PitchTier_modifyInterval);
 	praat_addAction1 (classPitchTier, 0, U"Modify interval (tone levels)...",
@@ -10162,82 +10163,82 @@ void praat_David_init () {
 	praat_addAction2 (classRoots, 1, classPolynomial, 1, U"Polish roots", nullptr, 0,
 			MODIFY_FIRST_OF_ONE_AND_ONE__Roots_Polynomial_polish);
 
-	praat_addAction1 (classSound, 0, U"To TextGrid (silences)...", U"To IntervalTier", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_textgrid_silences"), I18n_translate("menu.to_textgrid"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_TextGrid_detectSilences);
-	praat_addAction1 (classSound, 0, U"To TextGrid (speech activity)... || To TextGrid (voice activity)...", U"To IntervalTier", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_textgrid_speech_activity"), I18n_translate("menu.to_textgrid_silences"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_TextGrid_speechActivity);
-	praat_addAction1 (classSound, 0, U"To TextGrid (high, mid, low)...", U"To IntervalTier", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_textgrid_high_mid_low"), nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Sound_to_TextGrid_highMidLowIntervals);
-    praat_addAction1 (classSound, 0, U"Play one channel...", U"Play", GuiMenu_HIDDEN,
+    praat_addAction1 (classSound, 0, I18n_translate("menu.play_one_channel"), nullptr, GuiMenu_HIDDEN,
 			PLAY_EACH__Sound_playOneChannel);
-    praat_addAction1 (classSound, 0, U"Play as frequency shifted...", U"Play", GuiMenu_HIDDEN,
+    praat_addAction1 (classSound, 0, I18n_translate("menu.play_as_frequency_shifted"), nullptr, GuiMenu_HIDDEN,
 			PLAY_EACH__Sound_playAsFrequencyShifted);
-	praat_addAction1 (classSound, 0, U"Draw where...", U"Draw...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.draw_where"), I18n_translate("menu.draw_sound"), 1,
 			GRAPHICS_EACH__Sound_drawWhere);
-	praat_addAction1 (classSound, 0, U"Paint where...", U"Draw where...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.paint_where"), I18n_translate("menu.draw_where"), 1,
 			GRAPHICS_EACH__Sound_paintWhere);
-	praat_addAction1 (classSound, 2, U"Paint enclosed...", U"Paint where...", 1,
+	praat_addAction1 (classSound, 2, I18n_translate("menu.paint_enclosed"), I18n_translate("menu.paint_where"), 1,
 			GRAPHICS_TWO__Sounds_paintEnclosed);
 
-	praat_addAction1 (classSound, 1, U"Get nearest level crossing...", U"Get nearest zero crossing...", 1,
+	praat_addAction1 (classSound, 1, I18n_translate("menu.get_nearest_level_crossing"), I18n_translate("menu.query"), 1,
 			QUERY_ONE_FOR_REAL__Sound_getNearestLevelCrossing);
 
-	praat_addAction1 (classSound, 0, U"To Pitch (shs)...", U"To Pitch (filtered cc)...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_shs"), I18n_translate("menu.to_pitch"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_Pitch_shs);
-	praat_addAction1 (classSound, 0, U"Fade in...", U"Multiply by window...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.fade_in"), nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			MODIFY_EACH__Sound_fadeIn);
-	praat_addAction1 (classSound, 0, U"Fade out...", U"Fade in...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.fade_out"), nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			MODIFY_Sound_fadeOut);
-	praat_addAction1 (classSound, 0, U"To Pitch (SPINET)...", U"To Pitch (shs)...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_spinet"), I18n_translate("menu.to_pitch_shs"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_Pitch_SPINET);
 
-	praat_addAction1 (classSound, 1, U"Save as highest quality MP3 file...", U"Save as 32-bit WAV file...", 1,
+	praat_addAction1 (classSound, 1, I18n_translate("menu.save_as_highest_quality_mp3"), U"Save as 32-bit WAV file...", 1,
 			SAVE__Sound_saveAsHighestQualityMP3File);
-	praat_addAction1 (classSound, 0, U"To Spectrum (resampled)...", U"To Spectrum...", GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrum_resampled"), I18n_translate("menu.to_spectrum"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_Spectrum_resampled);
-	praat_addAction1 (classSound, 0, U"To FormantFilter...", U"To Cochleagram (edb)...", GuiMenu_DEPRECATED_2014 | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_formantfilter"), nullptr, GuiMenu_DEPRECATED_2014 | GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Sound_to_FormantFilter);
-	praat_addAction1 (classSound, 0, U"To Spectrogram (pitch-dependent)...", U"To Cochleagram (edb)...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrogram_pitch_dependent"), I18n_translate("menu.to_spectrum_resampled"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_Spectrogram_pitchDependent);
 
-	praat_addAction1 (classSound, 0, U"To BarkFilter...", U"To FormantFilter...", GuiMenu_DEPRECATED_2014 | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_barkfilter"), nullptr, GuiMenu_DEPRECATED_2014 | GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Sound_to_BarkFilter);
-	praat_addAction1 (classSound, 0, U"To BarkSpectrogram...", U"To FormantFilter...", GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_barkspectrogram"), I18n_translate("menu.to_spectrogram_pitch_dependent"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_BarkSpectrogram);
-
-	praat_addAction1 (classSound, 0, U"To MelFilter...", U"To BarkFilter...", GuiMenu_DEPRECATED_2014 | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_melfilter"), nullptr, GuiMenu_DEPRECATED_2014 | GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Sound_to_MelFilter);
-	praat_addAction1 (classSound, 0, U"To MelSpectrogram...", U"To BarkSpectrogram...", GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_melspectrogram"), I18n_translate("menu.to_barkspectrogram"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_MelSpectrogram);
-	praat_addAction1 (classSound, 0, U"To ComplexSpectrogram...", U"To MelSpectrogram...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_complexspectrogram"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_ComplexSpectrogram);
 
-	praat_addAction1 (classSound, 0, U"To Polygon...", U"Down to Matrix", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_polygon"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_Polygon);
-    praat_addAction1 (classSound, 2, U"To Polygon (enclosed)...", U"Cross-correlate...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+    praat_addAction1 (classSound, 2, I18n_translate("menu.to_polygon_enclosed"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_TWO_TO_ONE__Sounds_to_Polygon_enclosed);
-    praat_addAction1 (classSound, 2, U"To DTW...", U"Cross-correlate...", GuiMenu_DEPTH_1,
+
+    praat_addAction1 (classSound, 2, I18n_translate("menu.to_dtw"), I18n_translate("menu.convert"), 1,
 			CONVERT_TWO_TO_ONE__Sounds_to_DTW);
 
-	praat_addAction1 (classSound, 1, U"Filter (gammatone)...", U"Filter (de-emphasis)...", 1,
+	praat_addAction1 (classSound, 1, I18n_translate("menu.filter_gammatone"), I18n_translate("menu.filter"), 1,
 			CONVERT_EACH_TO_ONE__Sound_filterByGammaToneFilter4);
-	praat_addAction1 (classSound, 0, U"Remove noise...", U"Filter (formula)...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.remove_noise"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_removeNoise);
-	praat_addAction1 (classSound, 0, U"Reduce noise...", U"Filter (formula)...", GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.reduce_noise"), I18n_translate("menu.filter_gammatone"), 1,
 			CONVERT_EACH_TO_ONE__Sound_reduceNoise);
-	praat_addAction1 (classSound, 0, U"To Sound (derivative)...", U"Filter (formula)...", GuiMenu_DEPTH_1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_sound_derivative"), I18n_translate("menu.convert"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_Sound_derivative);
 
-	praat_addAction1 (classSound, 0, U"Change gender...", U"Deepen band modulation...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.change_gender"), I18n_translate("menu.deepen_band_modulation"), 1,
 			CONVERT_EACH_TO_ONE__Sound_changeGender);
 
-	praat_addAction1 (classSound, 0, U"Change speaker...", U"Deepen band modulation...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"Change speaker...", I18n_translate("menu.deepen_band_modulation"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_changeSpeaker);
-	praat_addAction1 (classSound, 0, U"Copy channel ranges...", U"Extract all channels", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"Copy channel ranges...", I18n_translate("menu.extract_all_channels"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_copyChannelRanges);
-	praat_addAction1 (classSound, 0 /* TODO produces 2N objects */, U"Trim silences...", U"Resample...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0 /* TODO produces 2N objects */, U"Trim silences...", I18n_translate("menu.resample"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_trimSilences);
-	praat_addAction1 (classSound, 0, U"To KlattGrid (simple)...", U"To Manipulation...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_klattgrid_simple"), I18n_translate("menu.to_manipulation"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_KlattGrid_simple);
 	praat_addAction2 (classSound, 1, classPitch, 1, U"To FormantFilter...", nullptr, GuiMenu_DEPRECATED_2014,
 			CONVERT_ONE_AND_ONE_TO_ONE__Sound_Pitch_to_FormantFilter);
@@ -10251,36 +10252,36 @@ void praat_David_init () {
 	praat_addAction2 (classSound, 1, classIntervalTier, 1, U"Cut parts matching label...", nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Sound_IntervalTier_cutPartsMatchingLabel);
 
-	praat_addAction1 (classSpectrogram, 2, U"To DTW...", U"To Spectrum (slice)...", 1,
+	praat_addAction1 (classSpectrogram, 2, U"To DTW...", nullptr, 1,
 			CONVERT_TWO_TO_ONE__Spectrograms_to_DTW);
-	praat_addAction1 (classSpectrogram, 0, U"Draw long-term spectral flatness...", U"Paint...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrogram, 0, U"Draw long-term spectral flatness...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			GRAPHICS_EACH__Spectrogram_drawLongtermSpectralFlatness);
-	praat_addAction1 (classSpectrogram, 0, U"Get long-term spectral flatness...", U"To DTW...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrogram, 0, U"Get long-term spectral flatness...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Spectrogram_getLongtermSpectralFlatness);
 
-	praat_addAction1 (classSpectrum, 0, U"To Sound (resampled)...", U"To Sound", GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_sound_resampled"), I18n_translate("menu.to_sound_mfcc"), GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Spectrum_to_Sound_resampled);
-	praat_addAction1 (classSpectrum, 0, U"Draw phases...", U"Draw (log freq)...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.draw_phases"), I18n_translate("spectrum.draw_log_freq"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			GRAPHICS_EACH__Spectrum_drawPhases);
-	praat_addAction1 (classSpectrum, 0, U"Set real value in bin...", U"Formula...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.set_real_value_in_bin"), I18n_translate("spectrum.formula"), GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			MODIFY_EACH__Spectrum_setRealValueInBin);
-	praat_addAction1 (classSpectrum, 0, U"Set imaginary value in bin...", U"Formula...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.set_imaginary_value_in_bin"), I18n_translate("spectrum.formula"), GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			MODIFY_EACH__Spectrum_setImaginaryValueInBin);
-	praat_addAction1 (classSpectrum, 0, U"Conjugate", U"Formula...", GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.conjugate"), I18n_translate("spectrum.formula"), GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			MODIFY_EACH__Spectrum_conjugate);
-	praat_addAction1 (classSpectrum, 2, U"Multiply", U"To Sound (fft)", GuiMenu_HIDDEN,
+	praat_addAction1 (classSpectrum, 2, I18n_translate("spectrum.multiply"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_TWO_TO_ONE__Spectra_multiply);
-	praat_addAction1 (classSpectrum, 0, U"To Matrix (unwrap)", U"To Matrix", GuiMenu_HIDDEN,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.to_matrix_unwrap"), I18n_translate("menu.to_matrix_spectrum"), GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Spectrum_unwrap);
-	praat_addAction1 (classSpectrum, 0, U"Shift frequencies...", U"To Matrix", GuiMenu_HIDDEN,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.shift_frequencies"), I18n_translate("menu.to_matrix_spectrum"), GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Spectrum_shiftFrequencies);
-	praat_addAction1 (classSpectrum, 0, U"Compress frequency domain...", U"Shift frequencies...", GuiMenu_HIDDEN,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.compress_frequency_domain"), I18n_translate("spectrum.shift_frequencies"), GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Spectrum_compressFrequencyDomain);
-	praat_addAction1 (classSpectrum, 0, U"Resample...", U"Compress frequency domain...", GuiMenu_HIDDEN,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.resample"), I18n_translate("spectrum.compress_frequency_domain"), GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Spectrum_resample);
-	praat_addAction1 (classSpectrum, 0, U"To Cepstrum", U"To Spectrogram", 1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.to_cepstrum"), I18n_translate("menu.to_spectrogram_spectrum"), 1,
 			CONVERT_EACH_TO_ONE__Spectrum_to_Cepstrum);
-	praat_addAction1 (classSpectrum, 0, U"To PowerCepstrum", U"To Cepstrum", 1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.to_power_cepstrum"), I18n_translate("spectrum.to_cepstrum"), 1,
 			CONVERT_EACH_TO_ONE__Spectrum_to_PowerCepstrum);
 
 	praat_addAction1 (classSpeechSynthesizer, 0, U"SpeechSynthesizer help", nullptr, 0,
@@ -10357,9 +10358,9 @@ void praat_David_init () {
 			CONVERT_EACH_TO_ONE__Strings_change);
 	praat_addAction1 (classStrings, 0, U"Extract part...", U"Replace all...", 0,
 			CONVERT_EACH_TO_ONE__Strings_extractPart);
-	praat_addAction1 (classStrings, 0, U"To Permutation...", U"To Distributions", 0,
+	praat_addAction1 (classStrings, 0, U"To Permutation...", I18n_translate("menu.to_distributions_strings"), 0,
 			CONVERT_EACH_TO_ONE__Strings_to_Permutation);
-	praat_addAction1 (classStrings, 2, U"To EditDistanceTable", U"To Distributions", 0,
+	praat_addAction1 (classStrings, 2, U"To EditDistanceTable", I18n_translate("menu.to_distributions_strings"), 0,
 			CONVERT_TWO_TO_ONE__Strings_to_EditDistanceTable);
 	praat_addAction1 (classStrings, 0, U"To StringsIndex...", U"To Permutation...", GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Strings_to_StringsIndex);
@@ -10520,9 +10521,9 @@ void praat_David_init () {
 	praat_addAction1 (classTableOfReal, 2, U"To TableOfReal (cross-correlations)...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			CONVERT_TWO_TO_ONE__TableOfReal_TableOfReal_crossCorrelations);
 
-	praat_addAction1 (classTableOfReal, 1, U"To PatternList and Categories... || To Pattern and Categories... || Split into Pattern and Categories...", U"To Matrix", 1,
+	praat_addAction1 (classTableOfReal, 1, U"To PatternList and Categories... || To Pattern and Categories... || Split into Pattern and Categories...", nullptr, 1,
 			CONVERT_EACH_TO_ONE__TableOfReal_to_PatternList_and_Categories);   // alternatives COMPATIBILITY <= 2015
-	praat_addAction1 (classTableOfReal, 0, U"To Permutation (sort row labels)", U"To Matrix", 1,
+	praat_addAction1 (classTableOfReal, 0, U"To Permutation (sort row labels)", nullptr, 1,
 			CONVERT_EACH_TO_ONE__TableOfReal_to_Permutation_sortRowlabels);
 
 	praat_addAction1 (classTableOfReal, 1, U"To SVD", nullptr, GuiMenu_HIDDEN,
@@ -10563,23 +10564,23 @@ void praat_David_init () {
 	praat_addAction2 (classTableOfReal, 1, classPermutation, 1, U"Permute columns", nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__TableOfReal_Permutation_permuteColumns);
 
-	praat_addAction1 (classTextGrid, 1, U"Get total duration of intervals where...", U"Count intervals where...", 2,
+	praat_addAction1 (classTextGrid, 1, U"Get total duration of intervals where...", I18n_translate("textgrid.count_intervals_where"), 2,
 			QUERY_ONE_FOR_REAL__TextGrid_getTotalDurationOfIntervalsWhere);
-	praat_addAction1 (classTextGrid, 0, U"Extend time...", U"Scale times...", 2,
+	praat_addAction1 (classTextGrid, 0, U"Extend time...", I18n_translate("textgrid.count_intervals_where"), 2,
 			MODIFY_TextGrid_extendTime);
-	praat_addAction1 (classTextGrid, 1, U"Set tier name...", U"Remove tier...", 1,
+	praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.set_tier_name"), I18n_translate("textgrid.remove_tier"), 1,
 			MODIFY_EACH__TextGrid_setTierName);
-	praat_addAction1 (classTextGrid, 0, U"Replace interval texts... || Replace interval text...", U"Set interval text...", 2,
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.replace_interval_texts"), I18n_translate("textgrid.set_interval_text"), 2,
 			MODIFY_TextGrid_replaceIntervalTexts);   // alternatives COMPATIBILITY <= 2018
-	praat_addAction1 (classTextGrid, 0, U"Replace point texts... || Replace point text...", U"Set point text...", 2,
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.replace_point_texts"), I18n_translate("textgrid.set_point_text"), 2,
 			MODIFY_TextGrid_replacePointTexts);   // alternatives COMPATIBILITY <= 2018
-	praat_addAction1 (classTextGrid, 2, U"To Table (text alignment)...", U"Extract part...", 0,
+	praat_addAction1 (classTextGrid, 2, I18n_translate("textgrid.to_table_text_alignment"), I18n_translate("textgrid.extract_part"), 0,
 			CONVERT_TWO_TO_ONE__TextGrids_to_Table_textAlignment);
-	praat_addAction1 (classTextGrid, 0, U"To DurationTier...", U"Concatenate", 0, 
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.to_duration_tier"), I18n_translate("textgrid.concatenate"), 0, 
 			CONVERT_EACH_TO_ONE__TextGrid_to_DurationTier);
-	praat_addAction1 (classTextGrid, 0, U"To TextGridNavigator (topic only)...", U"To DurationTier...", GuiMenu_HIDDEN,
+	praat_addAction1 (classTextGrid, 0, U"To TextGridNavigator (topic only)...", I18n_translate("textgrid.concatenate"), GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__TextGrid_to_TextGridNavigator_topicSearch);
-	praat_addAction1 (classTextGrid, 0, U"To TextGridNavigator...", U"To DurationTier...", GuiMenu_HIDDEN,
+	praat_addAction1 (classTextGrid, 0, U"To TextGridNavigator...", I18n_translate("textgrid.concatenate"), GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__TextGrid_to_TextGridNavigator);
 	praat_addAction2 (classTextGrid, 1, classDurationTier, 1, U"To TextGrid (scale times)", nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__TextGrid_DurationTier_to_TextGrid);

@@ -19,6 +19,7 @@
 
 #include "GuiP.h"
 #include "machine.h"
+#include "i18n_simple.h"
 
 void structGuiControl :: v_positionInForm (GuiObject widget, int left, int right, int top, int bottom, GuiForm parent) {
 	#if gtk
@@ -45,7 +46,7 @@ void structGuiControl :: v_positionInForm (GuiObject widget, int left, int right
 		if (right  <= 0) right  += parentWidth;
 		if (top    <  0) top    += parentHeight;
 		if (bottom <= 0) bottom += parentHeight;
-		trace (U"fixed: parent width ", parentWidth, U" height ", parentHeight);
+		trace (I18n_translate("debug.fixed_parent_width"), U" ", parentWidth, U" ", I18n_translate("debug.height"), U" ", parentHeight);
 		gtk_widget_set_size_request (GTK_WIDGET (widget), right - left, bottom - top);
 		gtk_fixed_put (GTK_FIXED (parent -> d_widget), GTK_WIDGET (widget), left, top);
 	#elif motif
@@ -58,9 +59,9 @@ void structGuiControl :: v_positionInForm (GuiObject widget, int left, int right
 			}
 		} else {
 			Melder_assert (right <= 0);
-			trace (U"parent width ", parent -> d_widget -> width);
+			trace (I18n_translate("debug.parent_width"), U" ", parent -> d_widget -> width);
 			XtVaSetValues (widget, XmNrightAttachment, XmATTACH_FORM, XmNrightOffset, - right, XmNwidth, right - left, nullptr);
-			trace (U"parent width ", parent -> d_widget -> width);
+			trace (I18n_translate("debug.parent_width"), U" ", parent -> d_widget -> width);
 		}
 		if (top >= 0) {
 			if (bottom > 0) {

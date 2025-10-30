@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiLabel, GuiControl, 0);
 
@@ -47,7 +48,7 @@ Thing_implement (GuiLabel, GuiControl, 0);
 	- (void) dealloc {   // override
 		GuiLabel me = d_userData;
 		forget (me);
-		trace (U"deleting a label");
+		trace (I18n_translate("debug.deleting_a_label"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -127,20 +128,20 @@ GuiLabel GuiLabel_create (GuiForm parent, int left, int right, int top, int bott
 			SetWindowFont (my d_widget -> window, theWinGuiNormalLabelFont (), false);
 		my v_positionInForm (my d_widget, left, right, top, bottom, parent);
 	#elif cocoa
-		trace (U"create");
+		trace (I18n_translate("debug.create"));
 		GuiCocoaLabel *label = [[GuiCocoaLabel alloc] init];
 		my d_widget = label;
-		trace (U"position");
+		trace (I18n_translate("debug.position"));
 		my v_positionInForm (my d_widget, left, right, top, bottom, parent);
-		trace (U"set user data");
+		trace (I18n_translate("debug.set_user_data"));
 		[label setUserData: me.get()];
-		trace (U"set bezel style");
+		trace (I18n_translate("debug.set_bezel_style"));
 		[label setBezelStyle: NSTextFieldRoundedBezel];
-		trace (U"set bordered");
+		trace (I18n_translate("debug.set_bordered"));
 		[label setBordered: NO];
-		trace (U"set selectable");
+		trace (I18n_translate("debug.set_selectable"));
 		[label setSelectable: NO];
-		trace (U"title");
+		trace (I18n_translate("debug.title"));
 		[label setTitleWithMnemonic: (NSString *) Melder_peek32toCfstring (labelText)];
 		[label setAlignment:( flags & GuiLabel_RIGHT ? NSRightTextAlignment : flags & GuiLabel_CENTRE ? NSCenterTextAlignment : NSLeftTextAlignment )];
 		if (flags & GuiLabel_BOLD)

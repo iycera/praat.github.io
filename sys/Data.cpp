@@ -17,6 +17,7 @@
  */
 
 #include "Collection.h"
+#include "i18n_simple.h"
 
 Thing_implement (Daata, Thing, 0);
 
@@ -29,7 +30,7 @@ autoDaata _Data_copy (constDaata me) {
 		Thing_setName (thee.get(), my name.get());
 		return thee;
 	} catch (MelderError) {
-		Melder_throw (me, U": not copied.");
+		Melder_throw (me, I18n_translate("error.not_copied"));
 	}
 }
 
@@ -53,7 +54,7 @@ bool Data_canWriteText (Daata me) {
 void Data_writeText (Daata me, MelderFile openFile) {
 	my v1_writeText (openFile);
 	if (ferror (openFile -> filePointer))
-		Melder_throw (U"I/O error.");
+		Melder_throw (I18n_translate("error.io_error"));
 }
 
 MelderFile Data_createTextFile (Daata me, MelderFile file, bool verbose) {
@@ -77,12 +78,12 @@ MelderFile Data_createTextFile (Daata me, MelderFile file, bool verbose) {
 static void _Data_writeToTextFile (Daata me, MelderFile file, bool verbose) {
 	try {
 		if (! Data_canWriteText (me))
-			Melder_throw (U"Objects of class ", my classInfo -> className, U" cannot be written to a text file.");
+			Melder_throw (I18n_translate("error.objects_of_class_cannot_be_written_to_text_file"), U" ", my classInfo -> className, U".");
 		autoMelderFile mfile = Data_createTextFile (me, file, verbose);
 		#ifndef _WIN32
 			flockfile (file -> filePointer);   // BUG
 		#endif
-		MelderFile_write (file, U"File type = \"ooTextFile\"\nObject class = \"", my classInfo -> className);
+		MelderFile_write (file, I18n_translate("form.file_type"), U" = \"ooTextFile\"\n", I18n_translate("form.object_class"), U" = \"", my classInfo -> className);
 		if (my classInfo -> version > 0)
 			MelderFile_write (file, U" ", my classInfo -> version);
 		MelderFile_write (file, U"\"\n");
@@ -106,7 +107,7 @@ void Data_writeToTextFile (Daata me, MelderFile file) {
 	try {
 		_Data_writeToTextFile (me, file, true);
 	} catch (MelderError) {
-		Melder_throw (me, U": not written to text file ", file, U".");
+		Melder_throw (me, I18n_translate("error.not_written_to_text_file"), U" ", file, U".");
 	}
 }
 
@@ -114,7 +115,7 @@ void Data_writeToShortTextFile (Daata me, MelderFile file) {
 	try {
 		_Data_writeToTextFile (me, file, false);
 	} catch (MelderError) {
-		Melder_throw (me, U": not written to short text file ", file, U".");
+		Melder_throw (me, I18n_translate("error.not_written_to_short_text_file"), U" ", file, U".");
 	}
 }
 
@@ -125,16 +126,16 @@ bool Data_canWriteBinary (Daata me) {
 void Data_writeBinary (Daata me, FILE *f) {
 	my v1_writeBinary (f);
 	if (ferror (f))
-		Melder_throw (U"I/O error.");
+		Melder_throw (I18n_translate("error.io_error"));
 }
 
 void Data_writeToBinaryFile (Daata me, MelderFile file) {
 	try {
 		if (! Data_canWriteBinary (me))
-			Melder_throw (U"Objects of class ", my classInfo -> className, U" cannot be written to a generic binary file.");
+			Melder_throw (I18n_translate("error.objects_of_class_cannot_be_written_to_generic_binary_file"), U" ", my classInfo -> className, U".");
 		autoMelderFile mfile = MelderFile_create (file);
 		if (fprintf (file -> filePointer, "ooBinaryFile") < 0)
-			Melder_throw (U"Cannot write first bytes of file.");
+			Melder_throw (I18n_translate("error.cannot_write_first_bytes_of_file"));
 		binputw8 (
 			my classInfo -> version > 0 ?
 				Melder_cat (my classInfo -> className, U" ", my classInfo -> version) :
@@ -206,7 +207,7 @@ void Data_readBinary (Daata me, FILE *f, int formatVersion) {
 		if (feof (f))
 			Melder_throw (U"Early end of file.");
 		if (ferror (f))
-			Melder_throw (U"I/O error.");
+			Melder_throw (I18n_translate("error.io_error"));
 		my v_repair ();
 	} catch (MelderError) {
 		Melder_throw (Thing_className (me), U" not read.");

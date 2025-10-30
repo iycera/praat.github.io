@@ -1,0 +1,31 @@
+# Makefile additions for i18n system
+# Add these lines to the appropriate Makefile sections
+
+# Add i18n source files to compilation
+I18N_SOURCES = sys/i18n.cpp sys/i18n_menu.cpp
+
+# Add i18n header files to dependencies
+I18N_HEADERS = sys/i18n.h
+
+# Add to main sources list
+SOURCES += $(I18N_SOURCES)
+
+# Add to header dependencies
+HEADERS += $(I18N_HEADERS)
+
+# Add language pack files to installation (if needed)
+LANGUAGE_PACKS = sys/language_packs/*.json
+
+# Installation target for language packs
+install-language-packs:
+	@echo "Installing language packs..."
+	@mkdir -p $(DESTDIR)/$(PREFIX)/share/praat/language_packs
+	@cp $(LANGUAGE_PACKS) $(DESTDIR)/$(PREFIX)/share/praat/language_packs/
+
+# Clean target for language packs
+clean-language-packs:
+	@echo "Cleaning language packs..."
+	@rm -f sys/language_packs/*.json
+
+# Note: The exact integration depends on the specific Makefile structure
+# used in the Praat project. These are general guidelines.

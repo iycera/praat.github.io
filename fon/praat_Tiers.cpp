@@ -26,6 +26,7 @@
 #include "SpectrumTier.h"
 #include "TextGrid.h"
 #include "VoiceAnalysis.h"
+#include "i18n_simple.h"
 
 #include "praat_Tiers.h"
 
@@ -33,7 +34,7 @@
 
 // MARK: New
 
-FORM (NEW1_AmplitudeTier_create, U"Create empty AmplitudeTier", nullptr) {
+FORM (NEW1_AmplitudeTier_create, I18n_translate("form.create_empty_amplitudetier"), nullptr) {
 	WORD (name, U"Name", U"empty")
 	REAL (startTime, U"Start time (s)", U"0.0")
 	REAL (endTime, U"End time (s)", U"1.0")
@@ -278,7 +279,7 @@ DIRECT (HINT_DurationTier_Manipulation_replace) {
 
 // MARK: Query
 
-FORM (REAL_DurationTier_getTargetDuration, U"Get target duration", nullptr) {
+FORM (REAL_DurationTier_getTargetDuration, I18n_translate("form.get_target_duration"), nullptr) {
 	REAL (fromSourceTime, U"left Source time range (s)", U"0.0")
 	REAL (toSourceTime, U"right Source time range (s)", U"1.0")
 	OK
@@ -351,7 +352,7 @@ DIRECT (NEW_DurationTier_downto_RealTier) {
 
 // MARK: New
 
-FORM (NEW1_FormantGrid_create, U"Create FormantGrid", nullptr) {
+FORM (NEW1_FormantGrid_create, I18n_translate("form.create_formantgrid"), nullptr) {
 	WORD (name, U"Name", U"schwa")
 	REAL (startTime, U"Start time (s)", U"0.0")
 	REAL (endTime, U"End time (s)", U"1.0")
@@ -467,7 +468,7 @@ DO
 
 // MARK: Convert
 
-FORM (NEW_FormantGrid_to_Formant, U"FormantGrid: To Formant", nullptr) {
+FORM (NEW_FormantGrid_to_Formant, I18n_translate("form.formantgrid_to_formant"), nullptr) {
 	POSITIVE (timeStep, U"Time step (s)", U"0.01")
 	REAL (intensity, U"Intensity (Pa\u00B2)", U"0.1")
 	OK
@@ -497,7 +498,7 @@ DIRECT (NEW1_Sound_FormantGrid_filter_noscale) {
 
 // MARK: New
 
-FORM (NEW1_FormantTier_create, U"Create empty FormantTier", nullptr) {
+FORM (NEW1_FormantTier_create, I18n_translate("form.create_empty_formanttier"), nullptr) {
 	WORD (name, U"Name", U"empty")
 	REAL (startTime, U"Start time (s)", U"0.0")
 	REAL (endTime, U"End time (s)", U"1.0")
@@ -512,7 +513,7 @@ DO
 
 // MARK: Draw
 
-FORM (GRAPHICS_FormantTier_speckle, U"Draw FormantTier", nullptr) {
+FORM (GRAPHICS_FormantTier_speckle, I18n_translate("form.draw_formanttier"), nullptr) {
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	POSITIVE (maximumFrequency, U"Maximum frequency (Hz)", U"5500.0")
 	BOOLEAN (garnish, U"Garnish", true)
@@ -568,7 +569,7 @@ DO
 
 // MARK: Convert
 
-FORM (NEW_FormantTier_downto_TableOfReal, U"Down to TableOfReal", nullptr) {
+FORM (NEW_FormantTier_downto_TableOfReal, I18n_translate("form.formanttier_downto_tableofreal"), nullptr) {
 	BOOLEAN (includeFormants, U"Include formants", true)
 	BOOLEAN (includeBandwidths, U"Include bandwidths", false)
 	OK
@@ -596,7 +597,7 @@ DIRECT (NEW1_Sound_FormantTier_filter_noscale) {
 
 // MARK: New
 
-FORM (NEW1_IntensityTier_create, U"Create empty IntensityTier", nullptr) {
+FORM (NEW1_IntensityTier_create, I18n_translate("form.create_empty_intensitytier"), nullptr) {
 	WORD (name, U"Name", U"empty")
 	REAL (startTime, U"Start time (s)", U"0.0")
 	REAL (endTime, U"End time (s)", U"1.0")
@@ -719,7 +720,7 @@ DIRECT (NEW1_Sound_IntensityTier_multiply_old) {
 	CONVERT_ONE_AND_ONE_TO_ONE_END (my name.get(), U"_int")
 }
 
-FORM (NEW1_Sound_IntensityTier_multiply, U"Sound & IntervalTier: Multiply", nullptr) {
+FORM (NEW1_Sound_IntensityTier_multiply, I18n_translate("form.sound_intensitytier_multiply"), nullptr) {
 	BOOLEAN (scaleTo09, U"Scale to 0.9", true)
 	OK
 DO
@@ -740,7 +741,7 @@ DO
 	MODIFY_EACH_END
 }
 
-FORM (NEW1_PitchTier_create, U"Create empty PitchTier", nullptr) {
+FORM (NEW1_PitchTier_create, I18n_translate("form.create_empty_pitchtier"), nullptr) {
 	WORD (name, U"Name", U"empty")
 	REAL (startTime, U"Start time (s)", U"0.0")
 	REAL (endTime, U"End time (s)", U"1.0")
@@ -765,7 +766,7 @@ DIRECT (NEW_PitchTier_downto_RealTier) {
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (NEW_PitchTier_downto_TableOfReal, U"PitchTier: Down to TableOfReal", nullptr) {
+FORM (NEW_PitchTier_downto_TableOfReal, I18n_translate("form.pitchtier_downto_tableofreal"), nullptr) {
 	CHOICEx (unit, U"Unit", 1, 0)
 		OPTION (U"Hertz")
 		OPTION (U"semitones")
@@ -776,7 +777,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (GRAPHICS_old_PitchTier_draw, U"PitchTier: Draw", nullptr) {
+FORM (GRAPHICS_old_PitchTier_draw, I18n_translate("form.pitchtier_draw"), nullptr) {
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	REAL (fromFrequency, U"left Frequency range (Hz)", U"0.0")
 	POSITIVE (toFrequency, U"right Frequency range (Hz)", U"500.0")
@@ -791,7 +792,7 @@ DO
 	GRAPHICS_EACH_END
 }
 
-FORM (GRAPHICS_PitchTier_draw, U"PitchTier: Draw", nullptr) {
+FORM (GRAPHICS_PitchTier_draw, I18n_translate("form.pitchtier_draw"), nullptr) {
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	REAL (fromFrequency, U"left Frequency range (Hz)", U"0.0")
 	POSITIVE (toFrequency, U"right Frequency range (Hz)", U"500.0")
@@ -895,7 +896,7 @@ DIRECT (PLAY_PitchTier_hum) {
 	PLAY_EACH_END
 }
 
-FORM (MODIFY_PitchTier_interpolateQuadratically, U"PitchTier: Interpolate quadratically", nullptr) {
+FORM (MODIFY_PitchTier_interpolateQuadratically, I18n_translate("form.pitchtier_interpolate_quadratically"), nullptr) {
 	NATURAL (numberOfPointsPerParabola, U"Number of points per parabola", U"4")
 	CHOICEx (unit, U"Unit", 2, 0)
 		OPTION (U"Hz")
@@ -919,7 +920,7 @@ DIRECT (PLAY_PitchTier_playSine) {
 	PLAY_EACH_END
 }
 
-FORM (MODIFY_PitchTier_shiftFrequencies, U"PitchTier: Shift frequencies", nullptr) {
+FORM (MODIFY_PitchTier_shiftFrequencies, I18n_translate("form.pitchtier_shift_frequencies"), nullptr) {
 	REAL (fromTime, U"left Time range (s)", U"0.0")
 	REAL (toTime, U"right Time range (s)", U"1000.0")
 	REAL (frequencyShift, U"Frequency shift", U"-20.0")
@@ -942,7 +943,7 @@ DO
 	MODIFY_EACH_WEAK_END
 }
 
-FORM (MODIFY_PitchTier_multiplyFrequencies, U"PitchTier: Multiply frequencies", nullptr){
+FORM (MODIFY_PitchTier_multiplyFrequencies, I18n_translate("form.pitchtier_multiply_frequencies"), nullptr){
 	REAL (fromTime, U"left Time range (s)", U"0.0")
 	REAL (toTime, U"right Time range (s)", U"1000.0")
 	POSITIVE (factor, U"Factor", U"1.2")
@@ -971,7 +972,7 @@ DIRECT (NEW_PitchTier_to_PointProcess) {
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (NEW_PitchTier_to_Sound_phonation, U"PitchTier: To Sound (phonation)", nullptr) {
+FORM (NEW_PitchTier_to_Sound_phonation, I18n_translate("form.pitchtier_to_sound_phonation"), nullptr) {
 	POSITIVE (samplingFrequency, U"Sampling frequency (Hz)", U"44100")
 	POSITIVE (adaptationFactor, U"Adaptation factor", U"1.0")
 	POSITIVE (maximumPeriod, U"Maximum period (s)", U"0.05")
@@ -988,7 +989,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (NEW_PitchTier_to_Sound_pulseTrain, U"PitchTier: To Sound (pulse train)", nullptr) {
+FORM (NEW_PitchTier_to_Sound_pulseTrain, I18n_translate("form.pitchtier_to_sound_pulse_train"), nullptr) {
 	POSITIVE (samplingFrequency, U"Sampling frequency (Hz)", U"44100")
 	POSITIVE (adaptationFactor, U"Adaptation factor", U"1.0")
 	POSITIVE (adaptationTime, U"Adaptation time", U"0.05")
@@ -1002,7 +1003,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (NEW_PitchTier_to_Sound_sine, U"PitchTier: To Sound (sine)", nullptr) {
+FORM (NEW_PitchTier_to_Sound_sine, I18n_translate("form.pitchtier_to_sound_sine"), nullptr) {
 	POSITIVE (samplingFrequency, U"Sampling frequency (Hz)", U"44100.0")
 	OK
 DO
@@ -1796,26 +1797,26 @@ void praat_Tiers_init () {
 		classFormantPoint, classFormantTier, classFormantGrid,
 		nullptr);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Tiers", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create empty PointProcess...",
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.tiers"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_empty_pointprocess"),
 				nullptr, 1, NEW1_PointProcess_createEmpty);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Poisson process...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_poisson_process"),
 				nullptr, 1, NEW1_PointProcess_createPoissonProcess);
-		praat_addMenuCommand (U"Objects", U"New", U"-- new tiers ---",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.separator_new_tiers"),
 				nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create PitchTier...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_pitchtier"),
 				nullptr, 1, NEW1_PitchTier_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create FormantGrid...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_formantgrid"),
 				nullptr, 1, NEW1_FormantGrid_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create FormantTier...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_formanttier"),
 				nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, NEW1_FormantTier_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create IntensityTier...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_intensitytier"),
 				nullptr, 1, NEW1_IntensityTier_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create DurationTier...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_durationtier"),
 				nullptr, 1, NEW1_DurationTier_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create AmplitudeTier...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_amplitudetier"),
 				nullptr, 1, NEW1_AmplitudeTier_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create RealTier...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_realtier"),
 				nullptr, 1, NEW1_RealTier_create);
 
 	praat_addAction1 (classAmplitudeTier, 0, U"AmplitudeTier help", nullptr, 0, HELP_AmplitudeTier_help);
@@ -1844,10 +1845,10 @@ void praat_Tiers_init () {
 		praat_addAction1 (classAmplitudeTier, 0, U"Formula...",
 				nullptr, 1, MODIFY_AmplitudeTier_formula);
 praat_addAction1 (classAmplitudeTier, 0, U"Synthesize", nullptr, 0, nullptr);
-	praat_addAction1 (classAmplitudeTier, 0, U"To Sound (pulse train)...",
+	praat_addAction1 (classAmplitudeTier, 0, I18n_translate("menu.to_sound_pulse_train_amplitudetier"),
 			nullptr, 0, NEW_AmplitudeTier_to_Sound);
-praat_addAction1 (classAmplitudeTier, 0, U"Convert", nullptr, 0, nullptr);
-	praat_addAction1 (classAmplitudeTier, 0, U"To IntensityTier...",
+	praat_addAction1 (classAmplitudeTier, 0, U"Convert", nullptr, 0, nullptr);
+	praat_addAction1 (classAmplitudeTier, 0, I18n_translate("menu.to_intensitytier_amplitudetier"),
 			nullptr, 0, NEW_AmplitudeTier_to_IntensityTier);
 	praat_addAction1 (classAmplitudeTier, 0, U"Down to PointProcess",
 			nullptr, 0, NEW_AmplitudeTier_downto_PointProcess);
@@ -1902,8 +1903,8 @@ praat_addAction1 (classDurationTier, 0, U"Convert", nullptr, 0, nullptr);
 				nullptr, 1, MODIFY_FormantGrid_removeFormantPointsBetween);
 		praat_addAction1 (classFormantGrid, 0, U"Remove bandwidth points between...",
 				nullptr, 1, MODIFY_FormantGrid_removeBandwidthPointsBetween);
-	praat_addAction1 (classFormantGrid, 0, U"Convert -", nullptr, 0, nullptr);
-		praat_addAction1 (classFormantGrid, 0, U"To Formant...",
+	praat_addAction1 (classFormantGrid, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
+		praat_addAction1 (classFormantGrid, 0, I18n_translate("menu.to_formant_formantgrid"),
 				nullptr, 1, NEW_FormantGrid_to_Formant);
 
 	praat_addAction1 (classFormantTier, 0, U"Draw -", nullptr, 0, nullptr);
@@ -1944,8 +1945,8 @@ praat_addAction1 (classFormantTier, 0, U"Down", nullptr, 0, nullptr);
 				nullptr, 1, MODIFY_IntensityTier_addPoint);
 		praat_addAction1 (classIntensityTier, 0, U"Formula...",
 				nullptr, 1, MODIFY_IntensityTier_formula);
-praat_addAction1 (classIntensityTier, 0, U"Convert", nullptr, 0, nullptr);
-	praat_addAction1 (classIntensityTier, 0, U"To AmplitudeTier",
+	praat_addAction1 (classIntensityTier, 0, U"Convert", nullptr, 0, nullptr);
+	praat_addAction1 (classIntensityTier, 0, I18n_translate("menu.to_amplitudetier_intensitytier"),
 			nullptr, 0, NEW_IntensityTier_to_AmplitudeTier);
 	praat_addAction1 (classIntensityTier, 0, U"Down to PointProcess",
 			nullptr, 0, NEW_IntensityTier_downto_PointProcess);
@@ -2011,15 +2012,15 @@ praat_addAction1 (classIntensityTier, 0, U"Convert", nullptr, 0, nullptr);
 		praat_addAction1 (classPitchTier, 0, U"Multiply frequencies...",
 				nullptr, 1, MODIFY_PitchTier_multiplyFrequencies);
 	praat_addAction1 (classPitchTier, 0, U"Synthesize -", nullptr, 0, nullptr);
-		praat_addAction1 (classPitchTier, 0, U"To PointProcess",
+		praat_addAction1 (classPitchTier, 0, I18n_translate("menu.to_pointprocess_pitchtier"),
 				nullptr, 1, NEW_PitchTier_to_PointProcess);
-		praat_addAction1 (classPitchTier, 0, U"To Sound (pulse train)...",
+		praat_addAction1 (classPitchTier, 0, I18n_translate("menu.to_sound_pulse_train_pitchtier"),
 				nullptr, 1, NEW_PitchTier_to_Sound_pulseTrain);
-		praat_addAction1 (classPitchTier, 0, U"To Sound (phonation)...",
+		praat_addAction1 (classPitchTier, 0, I18n_translate("menu.to_sound_phonation_pitchtier"),
 				nullptr, 1, NEW_PitchTier_to_Sound_phonation);
-		praat_addAction1 (classPitchTier, 0, U"To Sound (sine)...",
+		praat_addAction1 (classPitchTier, 0, I18n_translate("menu.to_sound_sine_pitchtier"),
 				nullptr, 1, NEW_PitchTier_to_Sound_sine);
-	praat_addAction1 (classPitchTier, 0, U"Convert -", nullptr, 0, nullptr);
+	praat_addAction1 (classPitchTier, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classPitchTier, 0, U"Down to PointProcess",
 				nullptr, 1, NEW_PitchTier_downto_PointProcess);
 		praat_addAction1 (classPitchTier, 0, U"Down to RealTier",
@@ -2094,30 +2095,30 @@ praat_addAction1 (classIntensityTier, 0, U"Convert", nullptr, 0, nullptr);
 		praat_addAction1 (classPointProcess, 0, U"Voice...",
 				nullptr, 1, MODIFY_PointProcess_voice);
 	praat_addAction1 (classPointProcess, 0, U"Annotate -", nullptr, 0, nullptr);
-		praat_addAction1 (classPointProcess, 0, U"To TextGrid...",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_textgrid_pointprocess"),
 				nullptr, 1, NEW_PointProcess_to_TextGrid);
 		praat_addAction1 (classPointProcess, 0, U"-- to single tier --",
 				nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1, nullptr);
-		praat_addAction1 (classPointProcess, 0, U"To TextTier",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_texttier_pointprocess"),
 				nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, NEW_PointProcess_to_TextTier);
-		praat_addAction1 (classPointProcess, 0, U"To IntervalTier",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_intervaltier_pointprocess"),
 				nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, NEW_PointProcess_to_IntervalTier);
 	praat_addAction1 (classPointProcess, 0, U"Analyse -",
 			nullptr, 0, nullptr);
-		praat_addAction1 (classPointProcess, 0, U"To PitchTier...",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_pitchtier_pointprocess"),
 				nullptr, 1, NEW_PointProcess_to_PitchTier);
-		praat_addAction1 (classPointProcess, 0, U"To TextGrid (vuv)...",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_textgrid_vuv_pointprocess"),
 				nullptr, 1, NEW_PointProcess_to_TextGrid_vuv);
 	praat_addAction1 (classPointProcess, 0, U"Synthesize -", nullptr, 0, nullptr);
-		praat_addAction1 (classPointProcess, 0, U"To Sound (pulse train)...",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_sound_pulse_train_pointprocess"),
 				nullptr, 1, NEW_PointProcess_to_Sound_pulseTrain);
-		praat_addAction1 (classPointProcess, 0, U"To Sound (phonation)...",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_sound_phonation_pointprocess"),
 				nullptr, 1, NEW_PointProcess_to_Sound_phonation);
-		praat_addAction1 (classPointProcess, 0, U"To Sound (hum)",
+		praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_sound_hum_pointprocess"),
 				nullptr, 1, NEW_PointProcess_to_Sound_hum);
-	praat_addAction1 (classPointProcess, 0, U"Convert -", nullptr, 0, nullptr);
+	praat_addAction1 (classPointProcess, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classPointProcess, 0, U"Hack", nullptr, 1, nullptr);
-			praat_addAction1 (classPointProcess, 0, U"To Matrix",
+			praat_addAction1 (classPointProcess, 0, I18n_translate("menu.to_matrix_pointprocess"),
 					nullptr, 2, NEW_PointProcess_to_Matrix);
 			praat_addAction1 (classPointProcess, 0, U"Up to TextTier...",
 					nullptr, 2, NEW_PointProcess_upto_TextTier);
@@ -2159,13 +2160,13 @@ praat_addAction1 (classRealTier, 0, U"Convert", nullptr, 0, nullptr);
 	praat_addAction1 (classRealTier, 0, U"Down to TableOfReal",
 			nullptr, 0, NEW_RealTier_downto_TableOfReal);
 praat_addAction1 (classRealTier, 0, U"Cast", nullptr, 0, nullptr);
-	praat_addAction1 (classRealTier, 0, U"To PitchTier",
+	praat_addAction1 (classRealTier, 0, I18n_translate("menu.to_pitchtier_realtier"),
 			nullptr, 0, NEW_RealTier_to_PitchTier);
-	praat_addAction1 (classRealTier, 0, U"To IntensityTier",
+	praat_addAction1 (classRealTier, 0, I18n_translate("menu.to_intensitytier_realtier"),
 			nullptr, 0, NEW_RealTier_to_IntensityTier);
-	praat_addAction1 (classRealTier, 0, U"To DurationTier",
+	praat_addAction1 (classRealTier, 0, I18n_translate("menu.to_durationtier_realtier"),
 			nullptr, 0, NEW_RealTier_to_DurationTier);
-	praat_addAction1 (classRealTier, 0, U"To AmplitudeTier",
+	praat_addAction1 (classRealTier, 0, I18n_translate("menu.to_amplitudetier_realtier"),
 			nullptr, 0, NEW_RealTier_to_AmplitudeTier);
 
 	praat_addAction1 (classSpectrumTier, 0, U"Draw...",
@@ -2192,7 +2193,7 @@ praat_addAction1 (classRealTier, 0, U"Cast", nullptr, 0, nullptr);
 			nullptr, 0, NEW1_Sound_FormantTier_filter);
 	praat_addAction2 (classFormantTier, 1, classSound, 1, U"Filter (no scale)",
 			nullptr, 0, NEW1_Sound_FormantTier_filter_noscale);
-	praat_addAction2 (classIntensityTier, 1, classPointProcess, 1, U"To IntensityTier",
+	praat_addAction2 (classIntensityTier, 1, classPointProcess, 1, I18n_translate("menu.to_intensitytier_intensitytier_pointprocess"),
 			nullptr, 0, NEW1_IntensityTier_PointProcess_to_IntensityTier);
 	praat_addAction2 (classIntensityTier, 1, classSound, 1, U"View & Edit || Edit",
 			nullptr, GuiMenu_ATTRACTIVE, EDITOR_ONE_WITH_ONE_IntensityTier_viewAndEdit);
@@ -2200,7 +2201,7 @@ praat_addAction1 (classRealTier, 0, U"Cast", nullptr, 0, nullptr);
 			nullptr, 0, NEW1_Sound_IntensityTier_multiply);
 	praat_addAction2 (classIntensityTier, 1, classSound, 1,   U"Multiply",
 			nullptr, GuiMenu_DEPRECATED_2005, NEW1_Sound_IntensityTier_multiply_old);   // replace with Multiply: 1
-	praat_addAction2 (classPitchTier, 1, classPointProcess, 1, U"To PitchTier",
+	praat_addAction2 (classPitchTier, 1, classPointProcess, 1, I18n_translate("menu.to_pitchtier_pitchtier_pointprocess"),
 			nullptr, 0, NEW1_PitchTier_PointProcess_to_PitchTier);
 	praat_addAction2 (classPitchTier, 1, classSound, 1, U"View & Edit || Edit",
 			nullptr, GuiMenu_ATTRACTIVE, EDITOR_ONE_WITH_ONE_PitchTier_viewAndEdit);
@@ -2223,22 +2224,22 @@ praat_addAction2 (classPointProcess, 1, classSound, 1, U"Modify", nullptr, 0, nu
 	praat_addAction2 (classPointProcess, 1, classSound, 1, U"Transplant time domain",
 			nullptr, 0, MODIFY_Point_Sound_transplantDomain);
 praat_addAction2 (classPointProcess, 1, classSound, 1, U"Analyse", nullptr, 0, nullptr);
-	/*praat_addAction2 (classPointProcess, 1, classSound, 1, U"To Manipulation",
+	/*praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_manipulation_pointprocess_sound"),
 			nullptr, 0, NEW1_Sound_PointProcess_to_Manipulation);*/
-	praat_addAction2 (classPointProcess, 1, classSound, 1, U"To AmplitudeTier (point)",
+	praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_amplitudetier_point_pointprocess_sound"),
 			nullptr, 0, NEW1_PointProcess_Sound_to_AmplitudeTier_point);
-	praat_addAction2 (classPointProcess, 1, classSound, 1, U"To AmplitudeTier (period)...",
+	praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_amplitudetier_period_pointprocess_sound"),
 			nullptr, 0, NEW1_PointProcess_Sound_to_AmplitudeTier_period);
-	praat_addAction2 (classPointProcess, 1, classSound, 1, U"To H1minusH2Tier...",
+	praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_h1minush2tier_pointprocess_sound"),
 			nullptr, 0, NEW1_PointProcess_Sound_to_H1minusH2Tier);
-	praat_addAction2 (classPointProcess, 1, classSound, 1, U"To Ltas...",
+	praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_ltas_pointprocess_sound"),
 			nullptr, 0, NEW1_PointProcess_Sound_to_Ltas);
-	praat_addAction2 (classPointProcess, 1, classSound, 1, U"To Ltas (only harmonics)...",
+	praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_ltas_harmonics_pointprocess_sound"),
 			nullptr, 0, NEW1_PointProcess_Sound_to_Ltas_harmonics);
 praat_addAction2 (classPointProcess, 1, classSound, 1, U"Synthesize", nullptr, 0, nullptr);
-	praat_addAction2 (classPointProcess, 1, classSound, 1, U"To Sound ensemble...",
+	praat_addAction2 (classPointProcess, 1, classSound, 1, I18n_translate("menu.to_sound_ensemble_pointprocess_sound"),
 			nullptr, 0, NEW1_Sound_PointProcess_to_SoundEnsemble_correlate);
-	praat_addAction2 (classRealTier, 1, classPointProcess, 1, U"To RealTier",
+	praat_addAction2 (classRealTier, 1, classPointProcess, 1, I18n_translate("menu.to_realtier_realtier_pointprocess"),
 			nullptr, 0, NEW1_RealTier_PointProcess_to_RealTier);
 	praat_addAction2 (classRealTier, 1, classSound, 1, U"View & Edit || Edit",
 			nullptr, GuiMenu_ATTRACTIVE, EDITOR_ONE_WITH_ONE_RealTier_viewAndEdit);

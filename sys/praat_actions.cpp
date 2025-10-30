@@ -21,6 +21,7 @@
 #include "../kar/longchar.h"
 #include "machine.h"
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 #define BUTTON_LEFT  -240
 #define BUTTON_RIGHT -5
@@ -131,7 +132,7 @@ static void praat_addAction4__ (ClassInfo class1, integer n1, ClassInfo class2, 
 		fixSelectionSpecification (& class1, & n1, & class2, & n2, & class3, & n3);
 
 		if (callback && ! title)
-			Melder_throw (U"An action command with callback has no title. Classes: ",
+			Melder_throw (I18n_translate ("error.action_command_with_callback_has_no_title"),
 				class1 ? class1 -> className : U"", U" ",
 				class2 ? class2 -> className : U"", U" ",
 				class3 ? class3 -> className : U"", U" ",
@@ -139,7 +140,7 @@ static void praat_addAction4__ (ClassInfo class1, integer n1, ClassInfo class2, 
 			);
 
 		if (! class1)
-			Melder_throw (U"The action command \"", title, U"\" has no first class.");
+			Melder_throw (I18n_translate ("error.action_command_has_no_first_class"), title);
 
 		/*
 			Determine the position of the new command.
@@ -148,7 +149,7 @@ static void praat_addAction4__ (ClassInfo class1, integer n1, ClassInfo class2, 
 		if (after) {   // search for existing command with same selection
 			const integer found = lookUpMatchingAction (class1, class2, class3, class4, after);
 			if (found == 0)
-				Melder_throw (U"The action command \"", title, U"\" cannot be put after \"", after, U"\",\n"
+				Melder_throw (I18n_translate ("error.action_command_cannot_be_put_after"), title, U"\" cannot be put after \"", after, U"\",\n"
 					U"because the latter command does not exist.");
 			position = found + 1;   // after 'after'
 		} else {

@@ -17,6 +17,7 @@
  */
 
 #include <stdio.h>
+#include "i18n_simple.h"
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
@@ -189,7 +190,7 @@ static int NativeButton_preferredHeight (GuiObject me) {
 GuiObject _Gui_initializeWidget (int widgetClass, GuiObject parent, conststring32 name) {
 	GuiObject me = Melder_calloc_f (struct structGuiObject, 1);
 	if (Melder_debug == 34)
-		Melder_casual (U"from _Gui_initializeWidget\t", Melder_pointer (me), U"\t1\t", sizeof (struct structGuiObject));
+		Melder_casual (I18n_translate ("debug.from_gui_initialize_widget"), Melder_pointer (me), sizeof (struct structGuiObject));
 	my magicNumber = 15111959;
 	numberOfWidgets ++;
 	my widgetClass = widgetClass;
@@ -340,7 +341,7 @@ GuiObject _Gui_initializeWidget (int widgetClass, GuiObject parent, conststring3
 	if (MEMBER2 (me, BulletinBoard, Form) && MEMBER (my parent, Shell))
 		my leftAttachment = my rightAttachment = my topAttachment = my bottomAttachment = XmATTACH_FORM;
 
-	if (MEMBER (me, CascadeButton) && str32equ (name, U"Help"))
+	if (MEMBER (me, CascadeButton) && str32equ (name, I18n_translate ("form.help")))
 		my rightAttachment = XmATTACH_FORM;   /* !!!!!! */
 
 	/* A child of a scrolled window will be installed as the workWindow of that scrolled window,
@@ -399,15 +400,13 @@ void _GuiNativeControl_setTitle (GuiObject me) {
 
 static int _XmScrollBar_check (GuiObject me) {
 	if (my maximum < my minimum)
-		Melder_warning (U"XmScrollBar: maximum (", my maximum, U") less than minimum (", my minimum, U").");
+		Melder_warning (I18n_translate ("warning.xm_scrollbar_maximum_less_than_minimum"), my maximum, my minimum);
 	else if (my sliderSize > my maximum - my minimum)
-		Melder_warning (U"XmScrollBar: slider size (", my sliderSize, U") greater than maximum (",
-			my maximum, U") minus minimum (", my minimum, U").");
+		Melder_warning (I18n_translate ("warning.xm_scrollbar_slider_size_greater_than_maximum"), my sliderSize, my maximum, my minimum);
 	else if (my value < my minimum)
-		Melder_warning (U"XmScrollBar: value (", my value, U") less than minimum (", my minimum, U").");
+		Melder_warning (I18n_translate ("warning.xm_scrollbar_value_less_than_minimum"), my value, my minimum);
 	else if (my value > my maximum - my sliderSize)
-		Melder_warning (U"XmScrollBar: value (", my value, U") greater than maximum (",
-			my maximum, U") minus slider size (", my sliderSize, U").");
+		Melder_warning (I18n_translate ("warning.xm_scrollbar_value_greater_than_maximum"), my value, my maximum, my sliderSize);
 	else
 		return 1;
 	return 0;
@@ -526,7 +525,7 @@ static void _GuiNativizeWidget (GuiObject me) {
 				my x, my y, my width, my height, my parent -> window, NULL, theGui.instance, NULL);
 			SetWindowLongPtr (my window, GWLP_USERDATA, (LONG_PTR) me);
 		} break;
-		case xmDrawingAreaWidgetClass: Melder_fatal (U"Should be implemented in GuiDrawingArea."); break;
+		case xmDrawingAreaWidgetClass: Melder_fatal (I18n_translate ("error.should_be_implemented_in_gui_drawing_area")); break;
 		case xmFormWidgetClass: {
 			my window = CreateWindowEx (0, Melder_peek32toW (theWindowClassName), L"form", WS_CHILD | WS_CLIPSIBLINGS,
 				my x, my y, my width, my height, my parent -> window, NULL, theGui.instance, NULL);

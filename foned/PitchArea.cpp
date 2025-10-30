@@ -19,6 +19,7 @@
 #include "PitchArea.h"
 #include "Pitch_to_Sound.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (PitchArea, FunctionArea, 0);
 
@@ -118,28 +119,28 @@ static void menu_cb_voiceless (PitchArea me, EDITOR_ARGS) {
 void structPitchArea :: v_createMenus () {
 	PitchArea_Parent :: v_createMenus ();
 
-	EditorMenu menu = Editor_addMenu (our functionEditor(), U"Pitch", 0);
+	EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.pitch"), 0);
 
-	FunctionAreaMenu_addCommand (menu, U"- Query selected part of pitch:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Get pitch", GuiMenu_F5,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_selected_part_of_pitch"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_pitch"), GuiMenu_F5,
 			QUERY_DATA_FOR_REAL__getPitch, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Modify whole pitch:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Change ceiling...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.modify_whole_pitch"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.change_ceiling"), 0,
 			menu_cb_setCeiling, this);
-	FunctionAreaMenu_addCommand (menu, U"Path finder...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.path_finder"), 0,
 			menu_cb_pathFinder, this);
-	FunctionAreaMenu_addCommand (menu, U"- Modify selected part of pitch:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Unvoice", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.modify_selected_part_of_pitch"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.unvoice"), 0,
 			menu_cb_voiceless, this);
-	FunctionAreaMenu_addCommand (menu, U"-- up and down --", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Octave up", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.up_and_down"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.octave_up"), 0,
 			menu_cb_octaveUp, this);
-	FunctionAreaMenu_addCommand (menu, U"Fifth up", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.fifth_up"), 0,
 			menu_cb_fifthUp, this);
-	FunctionAreaMenu_addCommand (menu, U"Fifth down", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.fifth_down"), 0,
 			menu_cb_fifthDown, this);
-	FunctionAreaMenu_addCommand (menu, U"Octave down", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.octave_down"), 0,
 			menu_cb_octaveDown, this);
 }
 

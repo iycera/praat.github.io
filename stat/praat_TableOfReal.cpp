@@ -18,6 +18,7 @@
 
 #include "Matrix.h"
 #include "praat_TableOfReal.h"
+#include "../sys/i18n_simple.h"
 
 // MARK: - TABLEOFREAL
 
@@ -584,9 +585,9 @@ void praat_TableOfReal_init (ClassInfo klas) {
 		praat_addAction1 (klas, 0, U"Extract column labels as Strings",
 				nullptr, 1, NEW_TableOfReal_extractColumnLabelsAsStrings);
 	praat_addAction1 (klas, 0, U"Convert -", nullptr, 0, nullptr);
-		praat_addAction1 (klas, 0, U"To Table...",
+		praat_addAction1 (klas, 0, I18n_translate("menu.to_table_tableofreal"),
 				nullptr, 1, NEW_TableOfReal_to_Table);
-		praat_addAction1 (klas, 0, U"To Matrix",
+		praat_addAction1 (klas, 0, I18n_translate("menu.to_matrix_tableofreal"),
 				nullptr, 1, NEW_TableOfReal_to_Matrix);
 }
 

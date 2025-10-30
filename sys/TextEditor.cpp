@@ -21,6 +21,7 @@
 #include "../kar/longchar.h"
 #include "EditorM.h"
 #include "../kar/UnicodeData.h"
+#include "i18n_simple.h"
 
 Thing_implement (TextEditor, Editor, 0);
 
@@ -57,14 +58,14 @@ void structTextEditor :: v_nameChanged () {
 		const bool dirtinessAlreadyShown = GuiWindow_setDirty (our windowForm, our dirty);
 		static MelderString windowTitle;
 		if (MelderFile_isNull (& our file)) {
-			MelderString_copy (& windowTitle, U"(untitled");
+			MelderString_copy (& windowTitle, I18n_translate ("form.untitled"));
 			if (our dirty && ! dirtinessAlreadyShown)
-				MelderString_append (& windowTitle, U", modified");
+				MelderString_append (& windowTitle, I18n_translate ("form.modified"));
 			MelderString_append (& windowTitle, U")");
 		} else {
-			MelderString_copy (& windowTitle, U"File ", MelderFile_messageName (& our file));
+			MelderString_copy (& windowTitle, I18n_translate ("form.file"), MelderFile_messageName (& our file));
 			if (our dirty && ! dirtinessAlreadyShown)
-				MelderString_append (& windowTitle, U" (modified)");
+				MelderString_append (& windowTitle, U" (", I18n_translate ("form.modified"), U")");
 		}
 		GuiShell_setTitle (our windowForm, windowTitle.string);
 	} else {
@@ -92,7 +93,7 @@ static void openDocument (TextEditor me, MelderFile file) {
 				because at the time of writing (2019-04-28) the owner of `file` is owned by `me`,
 				so that destroying `me` would dangle `file`.
 			*/
-			Melder_appendError (U"Text file ", file, U" is already open.");
+			Melder_appendError (I18n_translate ("error.text_file_already_open"), file);
 			forget (me);
 			Melder_flushError ();
 			return;
@@ -141,7 +142,7 @@ static void cb_open_ok (UiForm sendingForm, integer /* narg */, Stackel /* args 
 static void cb_showOpen (EditorCommand cmd) {
 	TextEditor me = (TextEditor) cmd -> d_editor;
 	if (! my openDialog)
-		my openDialog = UiInfile_create (my windowForm, nullptr, U"Open", cb_open_ok, me, nullptr, nullptr, false);
+		my openDialog = UiInfile_create (my windowForm, nullptr, I18n_translate ("form.open"), cb_open_ok, me, nullptr, nullptr, false);
 	UiInfile_do (my openDialog.get());
 }
 
@@ -352,7 +353,7 @@ static void menu_cb_save (TextEditor me, EDITOR_ARGS) {
 static void gui_button_cb_saveAndClose (TextEditor me, GuiButtonEvent /* event */) {
 	GuiThing_hide (my dirtyCloseDialog);
 	if (MelderFile_isNull (& my file)) {
-		menu_cb_saveAs (me, Editor_getMenuCommand (me, U"File", U"Save as..."), nullptr, 0, nullptr, nullptr, nullptr);
+		menu_cb_saveAs (me, Editor_getMenuCommand (me, I18n_translate("menu.file"), U"Save as..."), nullptr, 0, nullptr, nullptr, nullptr);
 	} else {
 		try {
 			saveDocument (me, & my file);
@@ -638,7 +639,7 @@ static void do_replace (TextEditor me) {
 }
 
 static void menu_cb_find (TextEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Find", nullptr)
+	EDITOR_FORM (I18n_translate("form.find"), nullptr)
 		TEXTFIELD (findString, U"Find", U"", 5)
 	EDITOR_OK
 		if (theFindString) SET_STRING (findString, theFindString.get());
@@ -667,7 +668,7 @@ static void menu_cb_useSelectionForFind (TextEditor me, EDITOR_ARGS) {
 }
 
 static void menu_cb_replace (TextEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Find", nullptr)
+	EDITOR_FORM (I18n_translate("form.find"), nullptr)
 		COMMENT (U"This is a \"slow\" find-and-replace method;")
 		COMMENT (U"if the selected text is identical to the Find string,")
 		COMMENT (U"the selected text will be replaced by the Replace string;")
@@ -703,7 +704,7 @@ static void menu_cb_whereAmI (TextEditor me, EDITOR_ARGS) {
 }
 
 static void menu_cb_goToLine (TextEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Go to line", nullptr)
+	EDITOR_FORM (I18n_translate("form.go_to_line"), nullptr)
 		NATURAL (lineToGo, U"Line", U"1")
 	EDITOR_OK
 		integer firstLine, lastLine;
@@ -799,7 +800,7 @@ static void menu_cb_14 (TextEditor me, EDITOR_ARGS) { setFontSize (me, 14.0); }
 static void menu_cb_18 (TextEditor me, EDITOR_ARGS) { setFontSize (me, 18.0); }
 static void menu_cb_24 (TextEditor me, EDITOR_ARGS) { setFontSize (me, 24.0); }
 static void menu_cb_fontSize (TextEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Text window: Font size", nullptr)
+	EDITOR_FORM (I18n_translate("form.text_window_font_size"), nullptr)
 		POSITIVE (fontSize, U"Font size (points)", U"12")
 	EDITOR_OK
 		SET_REAL (fontSize, my instancePref_fontSize());
@@ -824,51 +825,51 @@ void structTextEditor :: v_createMenus () {
 	TextEditor_Parent :: v_createMenus ();
 
 	if (v_fileBased ()) {
-		Editor_addCommand (this, U"File", U"New", 'N', menu_cb_new);
-		Editor_addCommand (this, U"File", U"Open...", 'O', menu_cb_open);
-		Editor_addCommand (this, U"File", U"Reopen from disk", GuiMenu_SHIFT | 'O', menu_cb_reopen);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"New", 'N', menu_cb_new);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Open...", 'O', menu_cb_open);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Reopen from disk", GuiMenu_SHIFT | 'O', menu_cb_reopen);
 	} else {
-		Editor_addCommand (this, U"File", U"Clear", 'N', menu_cb_clear);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Clear", 'N', menu_cb_clear);
 	}
-	Editor_addCommand (this, U"File", U"-- save --", 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"-- save --", 0, nullptr);
 	if (v_fileBased ()) {
-		Editor_addCommand (this, U"File", U"Save", 'S', menu_cb_save);
-		Editor_addCommand (this, U"File", U"Save as...", 0, menu_cb_saveAs);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Save", 'S', menu_cb_save);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Save as...", 0, menu_cb_saveAs);
 	} else {
-		Editor_addCommand (this, U"File", U"Save as...", 'S', menu_cb_saveAs);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Save as...", 'S', menu_cb_saveAs);
 	}
-	Editor_addCommand (this, U"File", U"-- close --", 0, nullptr);
-	GuiText_setUndoItem (textWidget, Editor_addCommand (this, U"Edit", U"Undo", 'Z', menu_cb_undo));
-	GuiText_setRedoItem (textWidget, Editor_addCommand (this, U"Edit", U"Redo", 'Y', menu_cb_redo));
-	Editor_addCommand (this, U"Edit", U"-- cut copy paste --", 0, nullptr);
-	Editor_addCommand (this, U"Edit", U"Cut", 'X', menu_cb_cut);
-	Editor_addCommand (this, U"Edit", U"Copy", 'C', menu_cb_copy);
-	Editor_addCommand (this, U"Edit", U"Paste", 'V', menu_cb_paste);
-	Editor_addCommand (this, U"Edit", U"Erase", 0, menu_cb_erase);
-	Editor_addCommand (this, U"Edit", U"-- layout --", 0, nullptr);
-	Editor_addCommand (this, U"Edit", U"Shift right", ']', menu_cb_shiftRight);
-	Editor_addCommand (this, U"Edit", U"Shift left", '[', menu_cb_shiftLeft);
+	//Editor_addCommand (this, I18n_translate("menu.file"), U"-- close --", 0, nullptr);
+	GuiText_setUndoItem (textWidget, Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.undo"), 'Z', menu_cb_undo));
+	GuiText_setRedoItem (textWidget, Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.redo"), 'Y', menu_cb_redo));
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.separator_cut_copy_paste"), 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.cut"), 'X', menu_cb_cut);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.copy"), 'C', menu_cb_copy);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.paste"), 'V', menu_cb_paste);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.erase"), 0, menu_cb_erase);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.separator_layout"), 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.shift_right"), ']', menu_cb_shiftRight);
+	Editor_addCommand (this, I18n_translate("menu.edit"), I18n_translate("menu.shift_left"), '[', menu_cb_shiftLeft);
 
-	Editor_addMenu (this, U"Search", 0);
-	Editor_addCommand (this, U"Search", U"Find...", 'F', menu_cb_find);
-	Editor_addCommand (this, U"Search", U"Find again", 'G', menu_cb_findAgain);
-	Editor_addCommand (this, U"Search", U"Replace...", GuiMenu_SHIFT | 'F', menu_cb_replace);
-	Editor_addCommand (this, U"Search", U"Replace again", GuiMenu_SHIFT | 'G', menu_cb_replaceAgain);
-	Editor_addCommand (this, U"Search", U"Use selection for find", 'E', menu_cb_useSelectionForFind);
-	Editor_addCommand (this, U"Search", U"-- line --", 0, nullptr);
-	Editor_addCommand (this, U"Search", U"Where am I?", 0, menu_cb_whereAmI);
-	Editor_addCommand (this, U"Search", U"Go to line...", 'L', menu_cb_goToLine);
+	Editor_addMenu (this, I18n_translate("menu.search"), 0);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.find"), 'F', menu_cb_find);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.find_again"), 'G', menu_cb_findAgain);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.replace"), GuiMenu_SHIFT | 'F', menu_cb_replace);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.replace_again"), GuiMenu_SHIFT | 'G', menu_cb_replaceAgain);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.use_selection_for_find"), 'E', menu_cb_useSelectionForFind);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.line"), 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.where_am_i"), 0, menu_cb_whereAmI);
+	Editor_addCommand (this, I18n_translate("menu.search"), I18n_translate("menu.go_to_line"), 'L', menu_cb_goToLine);
 
-	Editor_addMenu (this, U"Convert", 0);
-	Editor_addCommand (this, U"Convert", U"Convert to C string", 0, menu_cb_convertToCString);
+	Editor_addMenu (this, I18n_translate("menu.convert"), 0);
+	Editor_addCommand (this, I18n_translate("menu.convert"), I18n_translate("menu.convert_to_c_string"), 0, menu_cb_convertToCString);
 
-	Editor_addMenu (this, U"Font", 0);
-	Editor_addCommand (this, U"Font", U"Font size...", 0, menu_cb_fontSize);
-	fontSizeButton_10 = Editor_addCommand (this, U"Font", U"10", GuiMenu_CHECKBUTTON, menu_cb_10);
-	fontSizeButton_12 = Editor_addCommand (this, U"Font", U"12", GuiMenu_CHECKBUTTON, menu_cb_12);
-	fontSizeButton_14 = Editor_addCommand (this, U"Font", U"14", GuiMenu_CHECKBUTTON, menu_cb_14);
-	fontSizeButton_18 = Editor_addCommand (this, U"Font", U"18", GuiMenu_CHECKBUTTON, menu_cb_18);
-	fontSizeButton_24 = Editor_addCommand (this, U"Font", U"24", GuiMenu_CHECKBUTTON, menu_cb_24);
+	Editor_addMenu (this, I18n_translate("menu.font"), 0);
+	Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_size"), 0, menu_cb_fontSize);
+	fontSizeButton_10 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_10"), GuiMenu_CHECKBUTTON, menu_cb_10);
+	fontSizeButton_12 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_12"), GuiMenu_CHECKBUTTON, menu_cb_12);
+	fontSizeButton_14 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_14"), GuiMenu_CHECKBUTTON, menu_cb_14);
+	fontSizeButton_18 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_18"), GuiMenu_CHECKBUTTON, menu_cb_18);
+	fontSizeButton_24 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_24"), GuiMenu_CHECKBUTTON, menu_cb_24);
 }
 
 void TextEditor_init (TextEditor me, conststring32 initialText) {
@@ -924,7 +925,7 @@ autoTextEditor TextEditor_create (conststring32 initialText) {
 #pragma mark - Export
 
 void TextEditor_showOpen (TextEditor me) {
-	cb_showOpen (Editor_getMenuCommand (me, U"File", U"Open..."));
+		cb_showOpen (Editor_getMenuCommand (me, I18n_translate("menu.file"), U"Open..."));
 }
 
 /* End of file TextEditor.cpp */

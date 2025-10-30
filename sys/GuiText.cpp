@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 #include <locale.h>
 
 Thing_implement (GuiText, GuiControl, 0);
@@ -401,7 +402,7 @@ void _GuiText_exit () {
 #if gtk
 	static void _GuiGtkEntry_history_delete_cb (GtkEditable *ed, gint from, gint to, gpointer void_me) {
 		iam (GuiText);
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		if (my d_history_change) return;
 		history_add (me, gtk_editable_get_chars (GTK_EDITABLE (ed), from, to), from, to, 1);
 	}
@@ -409,7 +410,7 @@ void _GuiText_exit () {
 	static void _GuiGtkEntry_history_insert_cb (GtkEditable *ed, gchar *utf8_text, gint len, gint *from, gpointer void_me) {
 		(void) ed;
 		iam (GuiText);
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		if (my d_history_change) return;
 		gchar *text = (gchar *) malloc (sizeof (gchar) * (len + 1));
 		strcpy (text, utf8_text);
@@ -418,7 +419,7 @@ void _GuiText_exit () {
 	
 	static void _GuiGtkTextBuf_history_delete_cb (GtkTextBuffer *buffer, GtkTextIter *from, GtkTextIter *to, gpointer void_me) {
 		iam (GuiText);
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		if (my d_history_change) return;
 		int from_pos = gtk_text_iter_get_offset (from);
 		int to_pos = gtk_text_iter_get_offset (to);
@@ -428,7 +429,7 @@ void _GuiText_exit () {
 	static void _GuiGtkTextBuf_history_insert_cb (GtkTextBuffer *buffer, GtkTextIter *from, gchar *utf8_text, gint len, gpointer void_me) {
 		(void) buffer;
 		iam (GuiText);
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		if (my d_history_change) return;
 		int from_pos = gtk_text_iter_get_offset (from);
 		gchar *text = (gchar *) malloc (sizeof (gchar) * (len + 1));
@@ -438,7 +439,7 @@ void _GuiText_exit () {
 	
 	static void _GuiGtkText_valueChangedCallback (GuiObject widget, gpointer void_me) {
 		iam (GuiText);
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		Melder_assert (me);
 		if (my d_changedCallback) {
 			struct structGuiTextEvent event { me };
@@ -451,18 +452,18 @@ void _GuiText_exit () {
 		iam (GuiText);
 		Melder_assert (me);
 		Melder_assert (my classInfo == classGuiText);
-		trace (U"begin");
+		trace (I18n_translate("debug.begin"));
 		if (my d_undo_item) {
-			trace (U"undo");
+			trace (I18n_translate("debug.undo"));
 			//g_object_unref (my d_undo_item -> d_widget);
 		}
 		if (my d_redo_item) {
-			trace (U"redo");
+			trace (I18n_translate("debug.redo"));
 			//g_object_unref (my d_redo_item -> d_widget);
 		}
 		my d_undo_item = nullptr;
 		my d_redo_item = nullptr;
-		trace (U"history");
+		trace (I18n_translate("debug.history"));
 		history_clear (me);
 		forget (me);
 	}
@@ -474,7 +475,7 @@ void _GuiText_exit () {
 	- (void) dealloc {   // override
 		GuiText me = self -> d_userData;
 		forget (me);
-		trace (U"deleting a text field");
+		trace (I18n_translate("debug.deleting_text_field"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -516,7 +517,7 @@ void _GuiText_exit () {
 	- (void) dealloc {   // override
 		GuiText me = self -> d_userData;
 		forget (me);
-		trace (U"deleting a text view");
+		trace (I18n_translate("debug.deleting_text_view"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -544,7 +545,7 @@ void _GuiText_exit () {
 		(void) aTextView;
 		(void) affectedCharRange;
 		(void) replacementString;
-		trace (U"changing text to: ", Melder_peek8to32 ([replacementString UTF8String]));
+		trace (I18n_translate("debug.changing_text_to"), U" ", Melder_peek8to32 ([replacementString UTF8String]));
 		GuiText me = self -> d_userData;
 		if (me && my d_changedCallback) {
 			struct structGuiTextEvent event { me };
@@ -593,7 +594,7 @@ void _GuiText_exit () {
 								structGuiMenuItemEvent event { nullptr, false, false, false };
 								window -> d_enterCallback (window -> d_enterBoss, & event);
 							} catch (MelderError) {
-								Melder_flushError (U"Enter key not completely handled.");
+								Melder_flushError (I18n_translate("error.enter_key_not_handled"));
 							}
 							return YES;
 						}
@@ -608,7 +609,7 @@ void _GuiText_exit () {
 							try {
 								dialog -> d_defaultCallback (dialog -> d_defaultBoss);
 							} catch (MelderError) {
-								Melder_flushError (U"Default button not completely handled.");
+								Melder_flushError (I18n_translate("error.default_button_not_handled"));
 							}
 							return YES;
 						}
@@ -665,7 +666,7 @@ GuiText GuiText_create (GuiForm parent, int left, int right, int top, int bottom
 	my d_parent = parent;
 	my flags = flags;
 	#if gtk
-		trace (U"before creating a GTK text widget: locale is ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
+		trace (I18n_translate("debug.before_creating_gtk_widget"), U" ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		if (flags & GuiText_SCROLLED) {
 			GuiObject scrolled = gtk_scrolled_window_new (nullptr, nullptr);
 			gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -749,7 +750,7 @@ GuiText GuiText_create (GuiForm parent, int left, int right, int top, int bottom
 			my v_positionInForm (my d_widget, left, right, top, bottom, parent);
 			gtk_entry_set_activates_default (GTK_ENTRY (my d_widget), true);
 		}
-		trace (U"after creating a GTK text widget: locale is ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
+		trace (I18n_translate("debug.after_creating_gtk_widget"), U" ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		my d_prev = nullptr;
 		my d_next = nullptr;
 		my d_history_change = 0;
@@ -757,7 +758,7 @@ GuiText GuiText_create (GuiForm parent, int left, int right, int top, int bottom
 		my d_redo_item = nullptr;
 		g_signal_connect (G_OBJECT (my d_widget), "destroy", G_CALLBACK (_GuiGtkText_destroyCallback), me.get());
 	#elif motif
-		my d_widget = _Gui_initializeWidget (xmTextWidgetClass, parent -> d_widget, flags & GuiText_SCROLLED ? U"scrolledText" : U"text");
+		my d_widget = _Gui_initializeWidget (xmTextWidgetClass, parent -> d_widget, flags & GuiText_SCROLLED ? I18n_translate("gui.scrolled_text") : I18n_translate("gui.text"));
 		_GuiObject_setUserData (my d_widget, me.get());
 		my d_editable = (flags & GuiText_NONEDITABLE) == 0;
 		my d_widget -> window = CreateWindow (L"edit", nullptr, WS_CHILD | WS_BORDER
@@ -1126,10 +1127,10 @@ void GuiText_paste (GuiText me) {
 		UpdateWindow (my d_widget -> window);
 	#elif cocoa
 		if (my d_cocoaTextView) {
-			trace (U"Pasting to text view.");
+			trace (I18n_translate("debug.pasting_to_text_view"));
 			[my d_cocoaTextView   pasteAsPlainText: nil];
 		} else {
-			trace (U"Pasting to text field.");
+			trace (I18n_translate("debug.pasting_to_text_field"));
 			[(NSTextView *) [[(GuiCocoaTextField *) my d_widget   window]   fieldEditor: NO   forObject: nil] pasteAsPlainText: nil];
 		}
 	#endif
@@ -1388,7 +1389,7 @@ void GuiText_setString (GuiText me, conststring32 text, bool undoable) {
 		SetWindowTextW (my d_widget -> window, Melder_peek32toW (winText.get()));
 		UpdateWindow (my d_widget -> window);
 	#elif cocoa
-		trace (U"title");
+		trace (I18n_translate("debug.title"));
 		if (my d_cocoaTextView) {
 			NSRange nsRange = NSMakeRange (0, [[my d_cocoaTextView   textStorage] length]);
 			NSString *nsString = (NSString *) Melder_peek32toCfstring (text);

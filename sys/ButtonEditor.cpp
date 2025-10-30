@@ -17,6 +17,7 @@
  */
 
 #include "ButtonEditor.h"
+#include "i18n_simple.h"
 #include "praatP.h"
 #include "praat_script.h"
 #include "EditorM.h"
@@ -37,11 +38,11 @@ static void drawMenuCommand (ButtonEditor me, Praat_Command cmd, integer i) {
 	bool isAdded = cmd -> uniqueID != 0 || !! cmd -> script;
 	bool isHidden = cmd -> hidden;
 	bool isToggled = cmd -> toggled;
-	conststring32 clickText = isHidden ? (isToggled ? (isAdded ? (cmd -> uniqueID ? U"REMOVED" : U"HIDDEN") : U"HIDDEN") : U"hidden") :
-		(isToggled ? U"SHOWN" :  (isAdded ? (cmd -> uniqueID ? U"ADDED" : U"START-UP") : U"shown"));
+	conststring32 clickText = isHidden ? (isToggled ? (isAdded ? (cmd -> uniqueID ? I18n_translate ("form.removed") : I18n_translate ("form.hidden")) : I18n_translate ("form.hidden")) : I18n_translate ("form.hidden_lower")) :
+		(isToggled ? I18n_translate ("form.shown") :  (isAdded ? (cmd -> uniqueID ? I18n_translate ("form.added") : I18n_translate ("form.start_up")) : I18n_translate ("form.shown_lower")));
 	MelderString_empty (& text);
 	if (cmd -> unhidable)
-		MelderString_append (& text, U"#unhidable ");
+		MelderString_append (& text, I18n_translate ("form.unhidable"));
 	else
 		MelderString_append (& text, U"@@m", i, U"|", clickText, U"@ ");
 	MelderString_append (& text, cmd -> window.get(), U": ");
@@ -53,10 +54,10 @@ static void drawMenuCommand (ButtonEditor me, Praat_Command cmd, integer i) {
 		else
 			MelderString_append (& text, cmd -> title.get());
 	} else {
-		MelderString_append (& text, U"---------");
+		MelderString_append (& text, I18n_translate ("form.separator"));
 	}
 	if (cmd -> after)
-		MelderString_append (& text, U", %%%%after \"", cmd -> after.get(), U"\"%%");
+		MelderString_append (& text, I18n_translate ("form.after"), cmd -> after.get());
 	if (cmd -> script)
 		MelderString_append (& text, U", script \"", Melder_peekExpandBackslashes (cmd -> script.get()), U"\"");
 	HyperPage_any (me, text.string, my instancePref_font(), my instancePref_fontSize(), cmd -> callback ? 0 : Graphics_ITALIC, 0.0,
@@ -67,12 +68,12 @@ static void drawAction (ButtonEditor me, Praat_Command cmd, integer i) {
 	static MelderString text;
 	bool isAdded = cmd -> uniqueID != 0 || !! cmd -> script;
 	bool isHidden = cmd -> hidden, isToggled = cmd -> toggled;
-	conststring32 clickText = isHidden ? (isToggled ? (isAdded ? (cmd -> uniqueID ? U"REMOVED" : U"HIDDEN") : U"HIDDEN") : U"hidden") :
-		(isToggled ? U"SHOWN" :  (isAdded ? (cmd -> uniqueID ? U"ADDED" : U"START-UP") : U"shown"));
+	conststring32 clickText = isHidden ? (isToggled ? (isAdded ? (cmd -> uniqueID ? I18n_translate ("form.removed") : I18n_translate ("form.hidden")) : I18n_translate ("form.hidden")) : I18n_translate ("form.hidden_lower")) :
+		(isToggled ? I18n_translate ("form.shown") :  (isAdded ? (cmd -> uniqueID ? I18n_translate ("form.added") : I18n_translate ("form.start_up")) : I18n_translate ("form.shown_lower")));
 	integer n1 = cmd -> n1;
 	MelderString_empty (& text);
 	if (cmd -> class4)
-		MelderString_append (& text, U"#unhidable ");
+		MelderString_append (& text, I18n_translate ("form.unhidable"));
 	else
 		MelderString_append (& text, U"@@a", i, U"|", clickText, U"@ ");
 	MelderString_append (& text, cmd -> class1 -> className);
@@ -103,10 +104,10 @@ static void drawAction (ButtonEditor me, Praat_Command cmd, integer i) {
 		else
 			MelderString_append (& text, cmd -> title.get());
 	} else {
-		MelderString_append (& text, U"---------");
+		MelderString_append (& text, I18n_translate ("form.separator"));
 	}
 	if (cmd -> after)
-		MelderString_append (& text, U", %%%%after \"", cmd -> after.get(), U"\"%%");
+		MelderString_append (& text, I18n_translate ("form.after"), cmd -> after.get());
 	if (cmd -> script)
 		MelderString_append (& text, U", script \"", Melder_peekExpandBackslashes (cmd -> script.get()), U"\"");
 	HyperPage_any (me, text.string, my instancePref_font(), my instancePref_fontSize(), cmd -> callback ? 0 : Graphics_ITALIC, 0.0,

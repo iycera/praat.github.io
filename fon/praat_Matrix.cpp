@@ -28,6 +28,7 @@
 #include "ParamCurve.h"
 #include "Photo.h"
 #include "RealTier.h"
+#include "../sys/i18n_simple.h"
 #include "Spectrogram.h"
 #include "Spectrum.h"
 #include "Transition.h"
@@ -39,23 +40,23 @@
 
 // MARK: New
 
-FORM (NEW1_Matrix_create, U"Create Matrix", U"Create Matrix...") {
-	WORD (name, U"Name", U"xy")
-	REAL (xmin, U"xmin", U"1.0")
-	REAL (xmax, U"xmax", U"1.0")
-	NATURAL (numberOfColumns, U"Number of columns", U"1")
-	POSITIVE (dx, U"dx", U"1.0")
-	REAL (x1, U"x1", U"1.0")
-	REAL (ymin, U"ymin", U"1.0")
-	REAL (ymax, U"ymax", U"1.0")
-	NATURAL (numberOfRows, U"Number of rows", U"1")
-	POSITIVE (dy, U"dy", U"1.0")
-	REAL (y1, U"y1", U"1.0")
-	FORMULA (formula, U"Formula", U"x*y")
+FORM (NEW1_Matrix_create, I18n_translate("form.create_matrix"), I18n_translate("form.create_matrix_dialog")) {
+	WORD (name, I18n_translate("form.name"), U"xy")
+	REAL (xmin, I18n_translate("form.xmin"), U"1.0")
+	REAL (xmax, I18n_translate("form.xmax"), U"1.0")
+	NATURAL (numberOfColumns, I18n_translate("form.number_of_columns"), U"1")
+	POSITIVE (dx, I18n_translate("form.dx"), U"1.0")
+	REAL (x1, I18n_translate("form.x1"), U"1.0")
+	REAL (ymin, I18n_translate("form.ymin"), U"1.0")
+	REAL (ymax, I18n_translate("form.ymax"), U"1.0")
+	NATURAL (numberOfRows, I18n_translate("form.number_of_rows"), U"1")
+	POSITIVE (dy, I18n_translate("form.dy"), U"1.0")
+	REAL (y1, I18n_translate("form.y1"), U"1.0")
+	FORMULA (formula, I18n_translate("form.formula"), U"x*y")
 	OK
 DO
-	if (xmax < xmin) Melder_throw (U"Your xmax (", Melder_single (xmax), U") should not be less than your xmin (", Melder_single (xmin), U").");
-	if (ymax < ymin) Melder_throw (U"Your ymax (", Melder_single (ymax), U") should not be less than your ymin (", Melder_single (ymin), U").");
+	if (xmax < xmin) Melder_throw (I18n_translate("error.xmax_should_not_be_less_than_xmin"), Melder_single (xmax), U") should not be less than your xmin (", Melder_single (xmin), U").");
+	if (ymax < ymin) Melder_throw (I18n_translate("error.ymax_should_not_be_less_than_ymin"), Melder_single (ymax), U") should not be less than your ymin (", Melder_single (ymin), U").");
 	CREATE_ONE
 		autoMatrix result = Matrix_create (
 			xmin, xmax, numberOfColumns, dx, x1,
@@ -64,10 +65,10 @@ DO
 	CREATE_ONE_END (name)
 }
 
-FORM (NEW1_Matrix_createSimple, U"Create simple Matrix", U"Create simple Matrix...") {
-	WORD (name, U"Name", U"xy")
-	NATURAL (numberOfRows, U"Number of rows", U"10")
-	NATURAL (numberOfColumns, U"Number of columns", U"10")
+FORM (NEW1_Matrix_createSimple, I18n_translate("form.create_simple_matrix"), I18n_translate("form.create_simple_matrix_dialog")) {
+	WORD (name, I18n_translate("form.name"), U"xy")
+	NATURAL (numberOfRows, I18n_translate("form.number_of_rows"), U"10")
+	NATURAL (numberOfColumns, I18n_translate("form.number_of_columns"), U"10")
 	FORMULA (formula, U"Formula", U"x*y")
 	OK
 DO
@@ -835,19 +836,19 @@ void praat_Matrix_init () {
 
 	Data_recognizeFileType (imageFileRecognizer);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Matrix", nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Matrix...", nullptr, 2, NEW1_Matrix_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create simple Matrix...", nullptr, 2, NEW1_Matrix_createSimple);
-		praat_addMenuCommand (U"Objects", U"New", U"Create simple Matrix from values...", nullptr, 2, NEW1_Matrix_createSimpleFromValues);
-	praat_addMenuCommand (U"Objects", U"New", U"Photo", nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Photo...", nullptr, 2, NEW1_Photo_create);
-		praat_addMenuCommand (U"Objects", U"New", U"Create simple Photo...", nullptr, 2, NEW1_Photo_createSimple);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.matrix"), nullptr, 1, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_matrix"), nullptr, 2, NEW1_Matrix_create);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_matrix"), nullptr, 2, NEW1_Matrix_createSimple);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_matrix_from_values"), nullptr, 2, NEW1_Matrix_createSimpleFromValues);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.photo"), nullptr, 1, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_photo"), nullptr, 2, NEW1_Photo_create);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_photo"), nullptr, 2, NEW1_Photo_createSimple);
 
-	praat_addMenuCommand (U"Objects", U"Open", U"-- read movie --", nullptr, GuiMenu_HIDDEN, nullptr);
-	praat_addMenuCommand (U"Objects", U"Open", U"Open movie file...", nullptr, GuiMenu_HIDDEN, READ1_Movie_openFromSoundFile);
-	praat_addMenuCommand (U"Objects", U"Open", U"-- read raw --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Matrix from raw text file...", nullptr, 0, READ1_Matrix_readFromRawTextFile);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Matrix from LVS AP file...", nullptr, GuiMenu_HIDDEN, READ1_Matrix_readAP);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.separator_read_movie"), nullptr, GuiMenu_HIDDEN, nullptr);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.open_movie_file"), nullptr, GuiMenu_HIDDEN, READ1_Movie_openFromSoundFile);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.separator_read_raw"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_matrix_from_raw_text_file"), nullptr, 0, READ1_Matrix_readFromRawTextFile);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_matrix_from_lvs_ap_file"), nullptr, GuiMenu_HIDDEN, READ1_Matrix_readAP);
 
 	praat_addAction1 (classMatrix, 0, U"Matrix help", nullptr, 0, HELP_Matrix_help);
 	praat_addAction1 (classMatrix, 1, U"Save as matrix text file... || Write to matrix text file...", nullptr, 0,
@@ -893,25 +894,25 @@ praat_addAction1 (classMatrix, 0, U"Analyse", nullptr, 0, nullptr);
 	praat_addAction1 (classMatrix, 0, U"Power...", nullptr, 0, NEW_Matrix_power);
 	praat_addAction1 (classMatrix, 0, U"Combine two Matrices -", nullptr, 0, nullptr);
 		praat_addAction1 (classMatrix, 2, U"Merge (append rows)", nullptr, 1, NEW1_Matrix_appendRows);
-		praat_addAction1 (classMatrix, 2, U"To ParamCurve", nullptr, 1, NEW1_Matrix_to_ParamCurve);
+		praat_addAction1 (classMatrix, 2, I18n_translate("menu.to_paramcurve"), nullptr, 1, NEW1_Matrix_to_ParamCurve);
 	praat_addAction1 (classMatrix, 0, U"Cast -", nullptr, 0, nullptr);
-		praat_addAction1 (classMatrix, 0, U"To Cochleagram", nullptr, 1, NEW_Matrix_to_Cochleagram);
-		praat_addAction1 (classMatrix, 0, U"To Excitation", nullptr, 1, NEW_Matrix_to_Excitation);
-		praat_addAction1 (classMatrix, 0, U"To Harmonicity", nullptr, 1, NEW_Matrix_to_Harmonicity);
-		praat_addAction1 (classMatrix, 0, U"To Intensity", nullptr, 1, NEW_Matrix_to_Intensity);
-		praat_addAction1 (classMatrix, 0, U"To Ltas", nullptr, 1, NEW_Matrix_to_Ltas);
-		praat_addAction1 (classMatrix, 0, U"To Pitch", nullptr, 1, NEW_Matrix_to_Pitch);
-		praat_addAction1 (classMatrix, 0, U"To PointProcess", nullptr, 1, NEW_Matrix_to_PointProcess);
-		praat_addAction1 (classMatrix, 0, U"To Polygon", nullptr, 1, NEW_Matrix_to_Polygon);
-		praat_addAction1 (classMatrix, 0, U"To RealTier...", nullptr, 1,
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_cochleagram_matrix"), nullptr, 1, NEW_Matrix_to_Cochleagram);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_excitation_matrix"), nullptr, 1, NEW_Matrix_to_Excitation);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_harmonicity_matrix"), nullptr, 1, NEW_Matrix_to_Harmonicity);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_intensity_matrix"), nullptr, 1, NEW_Matrix_to_Intensity);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_ltas_matrix"), nullptr, 1, NEW_Matrix_to_Ltas);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_pitch_matrix"), nullptr, 1, NEW_Matrix_to_Pitch);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_pointprocess_matrix"), nullptr, 1, NEW_Matrix_to_PointProcess);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_polygon_matrix"), nullptr, 1, NEW_Matrix_to_Polygon);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_realtier_matrix"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Matrix_to_RealTier);
-		praat_addAction1 (classMatrix, 0, U"To Sound", nullptr, 1, NEW_Matrix_to_Sound);
-		praat_addAction1 (classMatrix, 0, U"To Sound (slice)...", nullptr, 1, NEW_Matrix_to_Sound_mono);
-		praat_addAction1 (classMatrix, 0, U"To Spectrogram", nullptr, 1, NEW_Matrix_to_Spectrogram);
-		praat_addAction1 (classMatrix, 0, U"To TableOfReal", nullptr, 1, NEW_Matrix_to_TableOfReal);
-		praat_addAction1 (classMatrix, 0, U"To Spectrum", nullptr, 1, NEW_Matrix_to_Spectrum);
-		praat_addAction1 (classMatrix, 0, U"To Transition", nullptr, 1, NEW_Matrix_to_Transition);
-		praat_addAction1 (classMatrix, 0, U"To VocalTract", nullptr, 1, NEW_Matrix_to_VocalTract);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_sound_matrix"), nullptr, 1, NEW_Matrix_to_Sound);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_sound_slice_matrix"), nullptr, 1, NEW_Matrix_to_Sound_mono);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_spectrogram_matrix"), nullptr, 1, NEW_Matrix_to_Spectrogram);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_tableofreal_matrix"), nullptr, 1, NEW_Matrix_to_TableOfReal);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_spectrum_matrix"), nullptr, 1, NEW_Matrix_to_Spectrum);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_transition_matrix"), nullptr, 1, NEW_Matrix_to_Transition);
+		praat_addAction1 (classMatrix, 0, I18n_translate("menu.to_vocaltract_matrix"), nullptr, 1, NEW_Matrix_to_VocalTract);
 
 	praat_addAction1 (classPhoto, 0, U"Draw -", nullptr, 0, nullptr);
 		praat_addAction1 (classPhoto, 0, U"Paint image...", nullptr, 1, GRAPHICS_Photo_paintImage);
@@ -942,7 +943,7 @@ praat_addAction1 (classMatrix, 0, U"Analyse", nullptr, 0, nullptr);
 	praat_addAction1 (classMovie, 1, U"Paint one image...", nullptr, 1, GRAPHICS_Movie_paintOneImage);
 	praat_addAction1 (classMovie, 1, U"View & Edit", nullptr, GuiMenu_ATTRACTIVE, EDITOR_ONE_Movie_viewAndEdit);
 
-	praat_addAction2 (classMatrix, 1, classSound, 1, U"To ParamCurve", nullptr, 0, NEW1_Matrix_to_ParamCurve);
+	praat_addAction2 (classMatrix, 1, classSound, 1, I18n_translate("menu.to_paramcurve"), nullptr, 0, NEW1_Matrix_to_ParamCurve);
 	praat_addAction2 (classPhoto, 1, classMatrix, 1, U"Replace red", nullptr, 0, MODIFY_Photo_Matrix_replaceRed);
 	praat_addAction2 (classPhoto, 1, classMatrix, 1, U"Replace green", nullptr, 0, MODIFY_Photo_Matrix_replaceGreen);
 	praat_addAction2 (classPhoto, 1, classMatrix, 1, U"Replace blue", nullptr, 0, MODIFY_Photo_Matrix_replaceBlue);

@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 #include "../kar/UnicodeData.h"
 #include "machine.h"
 #include <locale.h>
@@ -62,23 +63,23 @@ Thing_implement (GuiWindow, GuiShell, 0);
 				/*
 					Move and resize.
 				*/
-				trace (U"moving child of class ", Thing_className (control));
+				trace (I18n_translate("debug.moving_child_of_class"), U" ", Thing_className (control));
 				int left = control -> d_left, right = control -> d_right, top = control -> d_top, bottom = control -> d_bottom;
 				if (left   <  0) left   += parentAllocation -> width;   // this replicates structGuiControl :: v_positionInForm ()
 				if (right  <= 0) right  += parentAllocation -> width;
 				if (top    <  0) top    += parentAllocation -> height;
 				if (bottom <= 0) bottom += parentAllocation -> height;
-				trace (U"moving child to (", left, U",", top, U") with size ", right - left, U" x ", bottom - top, U".");
+				trace (I18n_translate("debug.moving_child_to"), U" (", left, U",", top, U") ", I18n_translate("debug.with_size"), U" ", right - left, U" x ", bottom - top, U".");
 				GtkAllocation childAllocation { parentAllocation -> x + left, parentAllocation -> y + top, right - left, bottom - top };
 				gtk_widget_size_allocate (GTK_WIDGET (childWidget), & childAllocation);
-				trace (U"moved child of class ", Thing_className (control));
+				trace (I18n_translate("debug.moved_child_of_class"), U" ", Thing_className (control));
 			}
 		}
 	}
 	static void _GuiWindow_resizeCallback (GuiObject widget, GtkAllocation *allocation, gpointer void_me) {
 		(void) widget;
 		iam (GuiWindow);
-		trace (U"fixed received size allocation: (", allocation -> x, U", ", allocation -> y,
+		trace (I18n_translate("debug.fixed_received_size_allocation"), U" (", allocation -> x, U", ", allocation -> y,
 			U"), ", allocation -> width, U" x ", allocation -> height, U".");
 		/*
 			Apparently, GTK sends the size allocation message both to the shell and to its fixed-container child.
@@ -99,7 +100,7 @@ Thing_implement (GuiWindow, GuiShell, 0);
 		//gtk_container_foreach (GTK_CONTAINER (my d_widget), _GuiWindow_child_resizeCallback, allocation);
 		my d_width = allocation -> width;
 		my d_height = allocation -> height;
-		trace (U"end");
+		trace (I18n_translate("debug.end"));
 	}
 #elif motif
 	static void _GuiMotifWindow_destroyCallback (GuiObject widget, XtPointer void_me, XtPointer call) {
@@ -107,7 +108,7 @@ Thing_implement (GuiWindow, GuiShell, 0);
 		iam (GuiWindow);
 		if (my d_xmMenuBar) {
 		}
-		trace (U"destroying window widget");
+		trace (I18n_translate("debug.destroying_window_widget"));
 		forget (me);
 	}
 	static void _GuiMotifWindow_goAwayCallback (GuiObject widget, XtPointer void_me, XtPointer call) {
@@ -163,7 +164,7 @@ GuiWindow GuiWindow_create (int x, int y, int width, int height, int minimumWidt
 		GuiShell_setTitle (me.get(), title);
 		gint rootX, rootY;
 		gtk_window_get_position (my d_gtkWindow, & rootX, & rootY);
-		trace (rootX, U" root ", rootY);
+		trace (rootX, U" ", I18n_translate("debug.root"), U" ", rootY);
 	#elif motif
 		my d_xmShell = XmCreateShell (nullptr, flags & GuiWindow_FULLSCREEN ? "Praatwulgfullscreen" : "Praatwulg", nullptr, 0);
 		XtVaSetValues (my d_xmShell, XmNdeleteResponse, goAwayCallback ? XmDO_NOTHING : XmUNMAP, nullptr);

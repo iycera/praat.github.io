@@ -17,6 +17,7 @@
  */
 
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 
 /* Normally on, because e.g. the intensity contour in the Sound window should not run through the play buttons: */
 #define FUNCTIONS_ARE_CLIPPED  1
@@ -213,7 +214,7 @@ void structGraphicsScreen :: v_polyline (integer numberOfPoints, double *xyDC, b
 	#elif quartz
 		quartzPrepareLine (this);
 		CGContextBeginPath (our d_macGraphicsContext);
-		trace (U"starting point ", xyDC [0], U" ", xyDC [1]);
+		trace (I18n_translate ("debug.starting_point"), xyDC [0], U" ", xyDC [1]);
 		CGContextMoveToPoint (our d_macGraphicsContext, xyDC [0], xyDC [1]);   // starts a new subpath
 		for (integer i = 1; i < numberOfPoints; i ++)
 			CGContextAddLineToPoint (our d_macGraphicsContext, xyDC [i + i], xyDC [i + i + 1]);
@@ -322,7 +323,7 @@ void structGraphicsScreen :: v_fillRectangle (double x1DC, double x2DC, double y
 		const double width = x2DC - x1DC + 1.0, height = y1DC - y2DC + 1.0;
 		if (width <= 0.0 || height <= 0.0)
 			return;
-		trace (U"x1DC ", x1DC, U", x2DC ", x2DC, U", y1DC ", y1DC, U", y2DC ", y2DC);
+		trace (I18n_translate ("debug.x1dc_x2dc_y1dc_y2dc"), x1DC, U", x2DC ", x2DC, U", y1DC ", y1DC, U", y2DC ", y2DC);
 		cairo_rectangle (our d_cairoGraphicsContext, round (x1DC), round (y2DC), round (width), round (height));
 		cairo_fill (our d_cairoGraphicsContext);
 	#elif gdi
@@ -922,7 +923,7 @@ void Graphics_function (Graphics me, const double yWC [], integer ix1, integer i
 
 void Graphics_function16 (Graphics me, const int16 yWC [], integer stride, integer ix1, integer ix2, double x1WC, double x2WC) {
 	if (my recording) {
-		Melder_fatal (U"Graphics_function16: cannot be used during graphics recording.");
+		Melder_fatal (I18n_translate ("error.graphics_function16_cannot_be_used_during_recording"));
 	} else
 		Graphics_function_ <int16> (me, yWC, stride, ix1, ix2, x1WC, x2WC);
 }

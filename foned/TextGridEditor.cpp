@@ -18,6 +18,7 @@
 
 #include "TextGridEditor.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (TextGridEditor, FunctionEditor, 0);
 
@@ -28,17 +29,17 @@ Thing_implement (TextGridEditor, FunctionEditor, 0);
 #include "Prefs_copyToInstance.h"
 #include "TextGridEditor_prefs.h"
 
-static void menu_cb_TextGridEditorHelp (TextGridEditor, EDITOR_ARGS) { HELP (U"TextGridEditor") }
-static void menu_cb_AboutSpecialSymbols (TextGridEditor, EDITOR_ARGS) { HELP (U"Special symbols") }
-static void menu_cb_PhoneticSymbols (TextGridEditor, EDITOR_ARGS) { HELP (U"Phonetic symbols") }
-static void menu_cb_AboutTextStyles (TextGridEditor, EDITOR_ARGS) { HELP (U"Text styles") }
+static void menu_cb_TextGridEditorHelp (TextGridEditor, EDITOR_ARGS) { HELP (I18n_translate("help.textgrideditor")) }
+static void menu_cb_AboutSpecialSymbols (TextGridEditor, EDITOR_ARGS) { HELP (I18n_translate("help.special_symbols")) }
+static void menu_cb_PhoneticSymbols (TextGridEditor, EDITOR_ARGS) { HELP (I18n_translate("help.phonetic_symbols")) }
+static void menu_cb_AboutTextStyles (TextGridEditor, EDITOR_ARGS) { HELP (I18n_translate("help.text_styles")) }
 
 void structTextGridEditor :: v_createMenuItems_help (EditorMenu menu) {
 	TextGridEditor_Parent :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"TextGridEditor help", '?', menu_cb_TextGridEditorHelp);
-	EditorMenu_addCommand (menu, U"About special symbols", 0, menu_cb_AboutSpecialSymbols);
-	EditorMenu_addCommand (menu, U"Phonetic symbols", 0, menu_cb_PhoneticSymbols);
-	EditorMenu_addCommand (menu, U"About text styles", 0, menu_cb_AboutTextStyles);
+	EditorMenu_addCommand (menu, I18n_translate("menu.textgrideditor_help"), '?', menu_cb_TextGridEditorHelp);
+	EditorMenu_addCommand (menu, I18n_translate("menu.about_special_symbols"), 0, menu_cb_AboutSpecialSymbols);
+	EditorMenu_addCommand (menu, I18n_translate("menu.phonetic_symbols"), 0, menu_cb_PhoneticSymbols);
+	EditorMenu_addCommand (menu, I18n_translate("menu.about_text_styles"), 0, menu_cb_AboutTextStyles);
 }
 
 autoTextGridEditor TextGridEditor_create (conststring32 title, TextGrid textGrid,
@@ -77,7 +78,7 @@ autoTextGridEditor TextGridEditor_create (conststring32 title, TextGrid textGrid
 				U"to shift the starting time of the TextGrid to zero.");
 		return me;
 	} catch (MelderError) {
-		Melder_throw (U"TextGrid window not created.");
+		Melder_throw (I18n_translate("error.textgrid_window_not_created"));
 	}
 }
 

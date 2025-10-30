@@ -21,6 +21,7 @@
 #include "HMM.h"
 #include "Strings_extensions.h"
 #include "TableOfReal.h"
+#include "../sys/i18n_simple.h"
 
 DIRECT (HELP__GaussianMixture_help) {
 	HELP (U"GaussianMixture")
@@ -690,18 +691,18 @@ void praat_HMM_init () {
 	Thing_recognizeClassesByName (classHMM, classHMMState, classHMMObservation, classHMMObservationSequence, classHMMStateSequence, classGaussianMixture, nullptr);
 
 	praat_addMenuCommand (U"Objects", U"New", U"Markov models", nullptr, GuiMenu_HIDDEN, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create HMM...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_hmm"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CREATE_ONE__HMM_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple HMM...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_hmm"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CREATE_ONE__HMM_createSimple);
-	praat_addMenuCommand (U"Objects", U"New", U"Create continuous HMM...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_continuous_hmm"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CREATE_ONE__HMM_createContinuousModel);
-	praat_addMenuCommand (U"Objects", U"New", U"--drawings--", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Draw forward probabilities illustration", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.separator_drawings"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.draw_forward_probabilities_illustration"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			GRAPHICS_NONE__HMM_drawForwardProbabilitiesIllustration);
-	praat_addMenuCommand (U"Objects", U"New", U"Draw backward probabilities illustration", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.draw_backward_probabilities_illustration"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			GRAPHICS_NONE__HMM_drawBackwardProbabilitiesIllustration);
-	praat_addMenuCommand (U"Objects", U"New", U"Draw forward and backward probabilities illustration", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.draw_forward_and_backward_probabilities_illustration"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			GRAPHICS_NONE__HMM_drawForwardAndBackwardProbabilitiesIllustration);
 	
 	praat_addAction1 (classGaussianMixture, 0, U"GaussianMixture help", nullptr, 0, 
@@ -727,26 +728,26 @@ void praat_HMM_init () {
 			CONVERT_EACH_TO_ONE__GaussianMixture_extractComponent);
 	praat_addAction1 (classGaussianMixture, 0, U"Extract centroids", nullptr, 1, 
 			CONVERT_EACH_TO_ONE__GaussianMixture_extractCentroids);
-	praat_addAction1 (classGaussianMixture, 0, U"To Covariance (between)", nullptr, 0, 
+	praat_addAction1 (classGaussianMixture, 0, I18n_translate("menu.to_covariance_between"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__GaussianMixture_to_Covariance_between);
-	praat_addAction1 (classGaussianMixture, 0, U"To Covariance (within)", nullptr, 0, 
+	praat_addAction1 (classGaussianMixture, 0, I18n_translate("menu.to_covariance_within"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__GaussianMixture_to_Covariance_within);
-	praat_addAction1 (classGaussianMixture, 0, U"To Covariance (total)", nullptr, 0, 
+	praat_addAction1 (classGaussianMixture, 0, I18n_translate("menu.to_covariance_total"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__GaussianMixture_to_Covariance_total);
-	praat_addAction1 (classGaussianMixture, 0, U"To PCA", nullptr, 0, 
+	praat_addAction1 (classGaussianMixture, 0, I18n_translate("menu.to_pca_gaussianmixture"), nullptr, 0, 
 			CONVERT_EACH_TO_ONE__GaussianMixture_to_PCA);
-	praat_addAction1 (classGaussianMixture, 0, U"To TableOfReal (random sampling)...", nullptr, 0,
+	praat_addAction1 (classGaussianMixture, 0, I18n_translate("menu.to_tableofreal_random_sampling"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__GaussianMixture_to_TableOfReal_randomSampling);
 
 	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, U"Get likelihood value...", nullptr, 0,
 			QUERY_ONE_AND_ONE_FOR_REAL__GaussianMixture_TableOfReal_getLikelihoodValue);
 	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, U"Improve likelihood...", nullptr, 0,
 			MODIFY_FIRST_OF_ONE_AND_ONE__GaussianMixture_TableOfReal_improveLikelihood);
-	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, U"To GaussianMixture (CEMM)...", nullptr, 0,
+	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, I18n_translate("menu.to_gaussianmixture_cemm"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__GaussianMixture_TableOfReal_to_GaussianMixture_CEMM);
-	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, U"To TableOfReal (probabilities)", nullptr, 0,
+	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_probabilities"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__GaussianMixture_TableOfReal_to_TableOfReal_probabilities);
-	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, U"To TableOfReal (responsibilities)", nullptr, 0,
+	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, I18n_translate("menu.to_tableofreal_responsibilities"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__GaussianMixture_TableOfReal_to_TableOfReal_responsibilities);
 	praat_addAction2 (classGaussianMixture, 1, classTableOfReal, 1, U"To ClassificationTable", nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__GaussianMixture_TableOfReal_to_ClassificationTable);

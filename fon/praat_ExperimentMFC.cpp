@@ -17,6 +17,7 @@
  */
 
 #include "praat_ExperimentMFC.h"
+#include "../sys/i18n_simple.h"
 
 // MARK: - CATEGORIES
 
@@ -40,7 +41,7 @@ DIRECT (MODIFY_Categories_sort) {
 
 DIRECT (WINDOW_ExperimentMFC_run) {
 	if (theCurrentPraatApplication -> batch)
-		Melder_throw (U"Cannot run experiments from the command line.");
+		Melder_throw (I18n_translate("error.cannot_run_experiments_from_command_line"));
 	autoRunnerMFC runner;
 	{// scope
 		/*
@@ -51,7 +52,7 @@ DIRECT (WINDOW_ExperimentMFC_run) {
 		Melder_assert (list->size >= 1);
 		Melder_assert (list->at [1] -> classInfo == classExperimentMFC);
 		Melder_assert (list->at [list->size] -> classInfo == classExperimentMFC);
-		runner = RunnerMFC_create (U"listening experiments", list.move());
+		runner = RunnerMFC_create (I18n_translate("form.listening_experiments"), list.move());
 		/*
 			Now that `list` has been moved, it has become invalid.
 			We help the compiler notice this by ending the scope here:
@@ -81,24 +82,24 @@ DIRECT (INTEGER_ResultsMFC_getNumberOfTrials) {
 	QUERY_ONE_FOR_REAL_END (U" trials")
 }
 
-FORM (STRING_ResultsMFC_getResponse, U"ResultsMFC: Get response", nullptr) {
-	NATURAL (trial, U"Trial", U"1")
+FORM (STRING_ResultsMFC_getResponse, I18n_translate("form.resultsmfc_get_response"), nullptr) {
+	NATURAL (trial, I18n_translate("form.trial"), U"1")
 	OK
 DO
 	QUERY_ONE_FOR_STRING (ResultsMFC)
 		if (trial > my numberOfTrials)
-			Melder_throw (U"Trial ", trial, U" does not exist (maximum ", my numberOfTrials, U").");
+			Melder_throw (I18n_translate("error.trial_does_not_exist"), trial, I18n_translate("error.maximum"), my numberOfTrials, U").");
 		conststring32 result = my result [trial]. response.get();
 	QUERY_ONE_FOR_STRING_END
 }
 
-FORM (STRING_ResultsMFC_getStimulus, U"ResultsMFC: Get stimulus", nullptr) {
-	NATURAL (trial, U"Trial", U"1")
+FORM (STRING_ResultsMFC_getStimulus, I18n_translate("form.resultsmfc_get_stimulus"), nullptr) {
+	NATURAL (trial, I18n_translate("form.trial"), U"1")
 	OK
 DO
 	QUERY_ONE_FOR_STRING (ResultsMFC)
 		if (trial > my numberOfTrials)
-			Melder_throw (U"Trial ", trial, U" does not exist (maximum ", my numberOfTrials, U").");
+			Melder_throw (I18n_translate("error.trial_does_not_exist"), trial, I18n_translate("error.maximum"), my numberOfTrials, U").");
 		conststring32 result = my result [trial]. stimulus.get();
 	QUERY_ONE_FOR_STRING_END
 }
@@ -145,8 +146,8 @@ void praat_ExperimentMFC_init () {
 	praat_addAction1 (classResultsMFC, 0, U"Modify", nullptr, 0, nullptr);
 	praat_addAction1 (classResultsMFC, 2, U"Remove unshared stimuli", 0, 0, NEW1_ResultsMFC_removeUnsharedStimuli);
 	praat_addAction1 (classResultsMFC, 0, U"Convert", nullptr, 0, nullptr);
-	praat_addAction1 (classResultsMFC, 0, U"To Categories (stimuli)", nullptr, 0, NEW_ResultsMFC_to_Categories_stimuli);
-	praat_addAction1 (classResultsMFC, 0, U"To Categories (responses)", nullptr, 0, NEW_ResultsMFC_to_Categories_responses);
+	praat_addAction1 (classResultsMFC, 0, I18n_translate("menu.to_categories_stimuli"), nullptr, 0, NEW_ResultsMFC_to_Categories_stimuli);
+	praat_addAction1 (classResultsMFC, 0, I18n_translate("menu.to_categories_responses"), nullptr, 0, NEW_ResultsMFC_to_Categories_responses);
 	praat_addAction1 (classResultsMFC, 0, U"Collect", nullptr, 0, nullptr);
 	praat_addAction1 (classResultsMFC, 0, U"Collect to Table", nullptr, 0, NEW1_ResultsMFCs_to_Table);
 }

@@ -23,6 +23,7 @@
 	#include <pwd.h>
 #endif
 #include "praatP.h"
+#include "i18n_simple.h"
 #include "GraphicsP.h"
 #include "NUMmachar.h"
 
@@ -67,11 +68,11 @@ void praat_statistics_exit () {
 @*/
 void praat_reportIntegerProperties () {
 	MelderInfo_open ();
-	MelderInfo_writeLine (U"Integer properties of this edition of Praat on this computer:\n");
-	MelderInfo_writeLine (U"A boolean is ",                sizeof (bool)        * 8, U" bits.");
-	MelderInfo_writeLine (U"A \"short integer\" is ",      sizeof (short)       * 8, U" bits.");
-	MelderInfo_writeLine (U"An \"integer\" is ",           sizeof (int)         * 8, U" bits.");
-	MelderInfo_writeLine (U"A \"long integer\" is ",       sizeof (long)        * 8, U" bits.");
+	MelderInfo_writeLine (I18n_translate ("info.integer_properties_of_praat"));
+	MelderInfo_writeLine (I18n_translate ("info.boolean_is_bits"), sizeof (bool)        * 8);
+	MelderInfo_writeLine (I18n_translate ("info.short_integer_is_bits"), sizeof (short)       * 8);
+	MelderInfo_writeLine (I18n_translate ("info.integer_is_bits"), sizeof (int)         * 8);
+	MelderInfo_writeLine (I18n_translate ("info.long_integer_is_bits"), sizeof (long)        * 8);
 	MelderInfo_writeLine (U"A \"long long integer\" is ",  sizeof (long long)   * 8, U" bits.");
 	MelderInfo_writeLine (U"An indexing integer is ",      sizeof (integer)     * 8, U" bits.");
 	MelderInfo_writeLine (U"A pointer is ",                sizeof (void *)      * 8, U" bits.");

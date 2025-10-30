@@ -17,6 +17,7 @@
  */
 
 #include "praatP.h"
+#include "i18n_simple.h"
 #include "praat_script.h"
 #include "GuiP.h"
 
@@ -76,7 +77,7 @@ static void do_menu (Praat_Command me, bool isModified) {
 		try {
 			DO_RunTheScriptFromAnyAddedMenuCommand (nullptr, 0, nullptr, my script.get(), nullptr, nullptr, false, nullptr, nullptr);
 		} catch (MelderError) {
-			Melder_flushError (U"Command \"", my title.get(), U"\" not executed.");
+			Melder_flushError (I18n_translate ("error.command_not_executed"), my title.get());
 		}
 		praat_updateSelection ();
 	} else {
@@ -87,7 +88,7 @@ static void do_menu (Praat_Command me, bool isModified) {
 		try {
 			my callback (nullptr, 0, nullptr, nullptr, nullptr, my title.get(), isModified, nullptr, nullptr);
 		} catch (MelderError) {
-			Melder_flushError (U"Command \"", my title.get(), U"\" not executed.");
+			Melder_flushError (I18n_translate ("error.command_not_executed"), my title.get());
 		}
 		praat_updateSelection ();
 	}
@@ -127,7 +128,7 @@ static GuiMenuItem praat_addMenuCommand__ (conststring32 window, conststring32 m
 		guiFlags = key ? flags & (0x000000FF | GuiMenu_SHIFT | GuiMenu_OPTION | GuiMenu_BUTTON_STATE_MASK) : flags & GuiMenu_BUTTON_STATE_MASK;
 	}
 	if (callback && ! title) {
-		Melder_flushError (U"praat_addMenuCommand: command with callback has no title. Window \"", window, U"\", menu \"", menu, U"\".");
+		Melder_flushError (I18n_translate ("error.praat_add_menu_command_no_title"), window, U"\", menu \"", menu);
 		return nullptr;
 	}
 
@@ -138,7 +139,7 @@ static GuiMenuItem praat_addMenuCommand__ (conststring32 window, conststring32 m
 	if (after) {   // search for existing command with same selection
 		const integer found = lookUpMatchingMenuCommand_0 (window, menu, after);
 		if (found == 0) {
-			Melder_flushError (U"praat_addMenuCommand: the command \"", title, U"\" cannot be put after \"", after, U"\",\n"
+			Melder_flushError (I18n_translate ("error.praat_add_menu_command_cannot_be_put_after"), title, U"\" cannot be put after \"", after, U"\",\n"
 				U"in the menu \"", menu, U"\" in the window \"", window, U"\"\n"
 				U"because the latter command does not exist.");
 			return nullptr;

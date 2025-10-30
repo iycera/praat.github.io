@@ -26,6 +26,7 @@
 #include "VoiceAnalysis.h"
 #include "EditorM.h"
 #include "praat_script.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (SoundAnalysisArea, FunctionArea, 0);
 
@@ -61,7 +62,7 @@ type structSoundAnalysisArea :: dynamic_instancePref_pitch_##setting () { \
 		case kSoundAnalysisArea_pitch_analysisMethod::FILTERED_CROSS_CORRELATION: \
 			return our instancePref_pitch_filteredCC_##setting(); \
 		default: \
-			Melder_fatal (U"Unknown pitch analysis method ", (int) our instancePref_pitch_method(), U"."); \
+			Melder_fatal (I18n_translate("error.unknown_pitch_analysis_method"), (int) our instancePref_pitch_method(), U"."); \
 	} \
 }
 DEFINE_dynamic_instancePref_pitch (double, floor)
@@ -85,7 +86,7 @@ double structSoundAnalysisArea :: dynamic_instancePref_pitch_ceilingOrTop () {
 		case kSoundAnalysisArea_pitch_analysisMethod::FILTERED_CROSS_CORRELATION:
 			return our instancePref_pitch_filteredCC_top();
 		default:
-			Melder_fatal (U"Unknown pitch analysis method ", (int) our instancePref_pitch_method(), U".");
+			Melder_fatal (I18n_translate("error.unknown_pitch_analysis_method"), (int) our instancePref_pitch_method(), U".");
 	}
 }
 
@@ -96,7 +97,7 @@ static double dynamic_instancePref_pitch_attenuationAtTop (SoundAnalysisArea me)
 		case kSoundAnalysisArea_pitch_analysisMethod::FILTERED_CROSS_CORRELATION:
 			return my instancePref_pitch_filteredCC_attenuationAtTop();
 		default:
-			Melder_fatal (U"Unknown pitch analysis method ", (int) my instancePref_pitch_method(), U".");
+			Melder_fatal (I18n_translate("error.unknown_pitch_analysis_method"), (int) my instancePref_pitch_method(), U".");
 	}
 }
 static double periodsPerAnalysisWindow (SoundAnalysisArea me) {
@@ -110,7 +111,7 @@ static double periodsPerAnalysisWindow (SoundAnalysisArea me) {
 		case kSoundAnalysisArea_pitch_analysisMethod::FILTERED_CROSS_CORRELATION:
 			return 1.0;
 		default:
-			Melder_fatal (U"Unknown pitch analysis method ", (int) my instancePref_pitch_method(), U".");
+			Melder_fatal (I18n_translate("error.unknown_pitch_analysis_method"), (int) my instancePref_pitch_method(), U".");
 	}
 }
 
@@ -205,7 +206,7 @@ static void tryToComputePitch (SoundAnalysisArea me) {
 				my instancePref_pitch_filteredCC_voicedUnvoicedCost()
 			);
 		else
-			Melder_fatal (U"Unknown pitch method ", (int) my instancePref_pitch_method(), U".");
+			Melder_fatal (I18n_translate("error.unknown_pitch_method"), (int) my instancePref_pitch_method(), U".");
 		my d_pitch -> xmin = my startWindow();
 		my d_pitch -> xmax = my endWindow();
 	} catch (MelderError) {
@@ -318,10 +319,10 @@ static void tryToHavePulses (SoundAnalysisArea me) {
 */
 void SoundAnalysisArea_haveVisibleSpectrogram (SoundAnalysisArea me) {
 	if (! my instancePref_spectrogram_show())
-		Melder_throw (U"No spectrogram is visible.\nFirst choose \"Show spectrogram\" from the Spectrogram menu.");
+		Melder_throw (I18n_translate("error.no_spectrogram_visible"));
 	tryToHaveSpectrogram (me);
 	if (! my d_spectrogram)
-		Melder_throw (U"The spectrogram is not defined at the edge of the sound.");
+		Melder_throw (I18n_translate("error.spectrogram_not_defined_at_edge"));
 }
 void SoundAnalysisArea_haveVisiblePitch (SoundAnalysisArea me) {
 	if (! my instancePref_pitch_show())
@@ -1024,7 +1025,7 @@ static void QUERY_DATA_FOR_REAL__getSpectralPowerAtCursorCross (SoundAnalysisAre
 
 static void menu_cb_moveFrequencyCursorTo (SoundAnalysisArea me, EDITOR_ARGS) {
 	if (! my instancePref_spectrogram_show())
-		Melder_throw (U"No spectrogram is visible.\nFirst choose \"Show spectrogram\" from the Spectrogram menu.");
+		Melder_throw (I18n_translate("error.no_spectrogram_visible"));
 	EDITOR_FORM (U"Move frequency cursor to", nullptr)
 		REAL (frequency, U"Frequency (Hz)", U"0.0")
 	EDITOR_OK
@@ -2308,191 +2309,191 @@ DIRECT (SoundAnalysisArea, cb_getShimmer_dda) { cb_getShimmer_xx (me, PointProce
 #pragma mark - SoundAnalysisArea All menus
 
 void structSoundAnalysisArea :: v_createMenuItems_formant (EditorMenu menu) {
-	our formantToggle = FunctionAreaMenu_addCommand (menu, U"Show formants",
+	our formantToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_formants"),
 		GuiMenu_CHECKBUTTON | (instancePref_formant_show() ? GuiMenu_TOGGLE_ON : 0),
 		menu_cb_showFormants, this
 	);
-	FunctionAreaMenu_addCommand (menu, U"Formant settings...",
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.formant_settings"),
 			0, menu_cb_formantSettings, this);
-	FunctionAreaMenu_addCommand (menu, U"Advanced formant settings...",
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.advanced_formant_settings"),
 			0, menu_cb_advancedFormantSettings, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Query formants:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Formant listing", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_formants"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.formant_listing"), 1,
 			INFO_DATA__formantListing, this);
-	FunctionAreaMenu_addCommand (menu, U"Get first formant", GuiMenu_F1 | GuiMenu_DEPTH_1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_first_formant"), GuiMenu_F1 | GuiMenu_DEPTH_1,
 			QUERY_DATA_FOR_REAL__getFirstFormant, this);
-	FunctionAreaMenu_addCommand (menu, U"Get first bandwidth", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_first_bandwidth"), 1,
 			QUERY_DATA_FOR_REAL__getFirstBandwidth, this);
-	FunctionAreaMenu_addCommand (menu, U"Get second formant", GuiMenu_F2 | GuiMenu_DEPTH_1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_second_formant"), GuiMenu_F2 | GuiMenu_DEPTH_1,
 			QUERY_DATA_FOR_REAL__getSecondFormant, this);
-	FunctionAreaMenu_addCommand (menu, U"Get second bandwidth", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_second_bandwidth"), 1,
 			QUERY_DATA_FOR_REAL__getSecondBandwidth, this);
-	FunctionAreaMenu_addCommand (menu, U"Get third formant", GuiMenu_F3 | GuiMenu_DEPTH_1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_third_formant"), GuiMenu_F3 | GuiMenu_DEPTH_1,
 			QUERY_DATA_FOR_REAL__getThirdFormant, this);
-	FunctionAreaMenu_addCommand (menu, U"Get third bandwidth", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_third_bandwidth"), 1,
 			QUERY_DATA_FOR_REAL__getThirdBandwidth, this);
-	FunctionAreaMenu_addCommand (menu, U"Get fourth formant", GuiMenu_F4 | GuiMenu_DEPTH_1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_fourth_formant"), GuiMenu_F4 | GuiMenu_DEPTH_1,
 			QUERY_DATA_FOR_REAL__getFourthFormant, this);
-	FunctionAreaMenu_addCommand (menu, U"Get fourth bandwidth", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_fourth_bandwidth"), 1,
 			QUERY_DATA_FOR_REAL__getFourthBandwidth, this);
-	FunctionAreaMenu_addCommand (menu, U"Get formant...", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_formant"), 1,
 			QUERY_DATA_FOR_REAL__getFormant, this);
-	FunctionAreaMenu_addCommand (menu, U"Get bandwidth...", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_bandwidth"), 1,
 			QUERY_DATA_FOR_REAL__getBandwidth, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Draw formants to picture window:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Draw visible formant contour...", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_formants_to_picture"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_visible_formant_contour"), 1,
 			menu_cb_drawVisibleFormantContour, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Extract formants to objects window:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Extract visible formant contour", 1,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_formants_to_objects"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_visible_formant_contour"), 1,
 			CONVERT_DATA_TO_ONE__ExtractVisibleFormantContour, this);
 }
 
 void structSoundAnalysisArea :: v_createMenus () {
 	if (our v_hasSpectrogram () && our v_hasPitch () && our v_hasIntensity () && our v_hasPulses ()) {
-		EditorMenu menu = Editor_addMenu (our functionEditor(), U"Analyses", 0);
-		FunctionAreaMenu_addCommand (menu, U"Show analyses...", 0, menu_cb_showAnalyses, this);
-		FunctionAreaMenu_addCommand (menu, U"Time step settings...", 0, menu_cb_timeStepSettings, this);
-		FunctionAreaMenu_addCommand (menu, U"-- query log --", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Log settings...", 0, menu_cb_logSettings, this);
-		FunctionAreaMenu_addCommand (menu, U"Delete log file 1", 0, menu_cb_deleteLogFile1, this);
-		FunctionAreaMenu_addCommand (menu, U"Delete log file 2", 0, menu_cb_deleteLogFile2, this);
-		FunctionAreaMenu_addCommand (menu, U"Log 1", GuiMenu_F12, menu_cb_log1, this);
-		FunctionAreaMenu_addCommand (menu, U"Log 2", GuiMenu_F12 | GuiMenu_SHIFT, menu_cb_log2, this);
-		FunctionAreaMenu_addCommand (menu, U"Log script 3 (...)", GuiMenu_F12 | GuiMenu_OPTION, menu_cb_logScript3, this);
-		FunctionAreaMenu_addCommand (menu, U"Log script 4 (...)", GuiMenu_F12 | GuiMenu_COMMAND, menu_cb_logScript4, this);
+		EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.analyses"), 0);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_analyses"), 0, menu_cb_showAnalyses, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.time_step_settings"), 0, menu_cb_timeStepSettings, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_log"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.log_settings"), 0, menu_cb_logSettings, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.delete_log_file_1"), 0, menu_cb_deleteLogFile1, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.delete_log_file_2"), 0, menu_cb_deleteLogFile2, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.log_1"), GuiMenu_F12, menu_cb_log1, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.log_2"), GuiMenu_F12 | GuiMenu_SHIFT, menu_cb_log2, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.log_script_3"), GuiMenu_F12 | GuiMenu_OPTION, menu_cb_logScript3, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.log_script_4"), GuiMenu_F12 | GuiMenu_COMMAND, menu_cb_logScript4, this);
 	}
 
 	if (our v_hasSpectrogram ()) {
-		EditorMenu menu = Editor_addMenu (our functionEditor(), U"Spectrogram", 0);
-		our spectrogramToggle = FunctionAreaMenu_addCommand (menu, U"Show spectrogram",
+		EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.spectrogram"), 0);
+		our spectrogramToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_spectrogram"),
 			GuiMenu_CHECKBUTTON | (instancePref_spectrogram_show() ? GuiMenu_TOGGLE_ON : 0),
 			menu_cb_showSpectrogram, this
 		);
-		FunctionAreaMenu_addCommand (menu, U"Spectrogram settings...", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.spectrogram_settings"), 0,
 				menu_cb_spectrogramSettings, this);
-		FunctionAreaMenu_addCommand (menu, U"Advanced spectrogram settings...", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.advanced_spectrogram_settings"), 0,
 				menu_cb_advancedSpectrogramSettings, this);
-		FunctionAreaMenu_addCommand (menu, U"- Query spectrogram:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Get frequency at frequency cursor", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_spectrogram"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_frequency_at_frequency_cursor"), 1,
 				QUERY_EDITOR_FOR_REAL__getFrequency, this);
-		FunctionAreaMenu_addCommand (menu, U"Get spectral power at cursor cross", GuiMenu_F7 | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_spectral_power_at_cursor_cross"), GuiMenu_F7 | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getSpectralPowerAtCursorCross, this);
-		FunctionAreaMenu_addCommand (menu, U"- Select frequency:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Move frequency cursor to...", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_frequency"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_frequency_cursor_to"), 1,
 				menu_cb_moveFrequencyCursorTo, this);
-		FunctionAreaMenu_addCommand (menu, U"- Draw spectogram to picture window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Paint visible spectrogram...", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_spectrogram_to_picture"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.paint_visible_spectrogram"), 1,
 				menu_cb_paintVisibleSpectrogram, this);
-		FunctionAreaMenu_addCommand (menu, U"- Extract to objects window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Extract visible spectrogram", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_spectrogram_to_objects"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_visible_spectrogram"), 1,
 				CONVERT_DATA_TO_ONE__ExtractVisibleSpectrogram, this);
-		FunctionAreaMenu_addCommand (menu, U"View spectral slice", 'L' | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.view_spectral_slice"), 'L' | GuiMenu_DEPTH_1,
 				CONVERT_DATA_TO_ONE__ViewSpectralSlice, this);
 	}
 
 	if (our v_hasPitch ()) {
-		EditorMenu menu = Editor_addMenu (our functionEditor(), U"Pitch", 0);
-		our pitchToggle = FunctionAreaMenu_addCommand (menu, U"Show pitch",
+		EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.pitch"), 0);
+		our pitchToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_pitch"),
 			GuiMenu_CHECKBUTTON | ( our instancePref_pitch_show() ? GuiMenu_TOGGLE_ON : 0 ),
 			menu_cb_showPitch, this
 		);
-		FunctionAreaMenu_addCommand (menu, U"- Pitch methods and settings:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"How to choose a pitch analysis method", GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_methods_and_settings"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.how_to_choose_pitch_analysis_method"), GuiMenu_DEPTH_1,
 				menu_cb_howToChooseAPitchAnalysisMethod, this);
 		FunctionAreaMenu_addCommand (menu, U"", 0, nullptr, this);
-		our pitchFilteredAutocorrelationToggle = FunctionAreaMenu_addCommand (menu, U"Pitch analysis method is filtered autocorrelation",
+		our pitchFilteredAutocorrelationToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_analysis_method_is_filtered_autocorrelation"),
 				GuiMenu_CHECKBUTTON | GuiMenu_DEPTH_1, menu_cb_pitchMethodIsFilteredAutocorrelation, this);
-		FunctionAreaMenu_addCommand (menu, U"Pitch settings (filtered autocorrelation)...", GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_settings_filtered_ac"), GuiMenu_DEPTH_1,
 				menu_cb_pitchSettings_filteredAC, this);
 		FunctionAreaMenu_addCommand (menu, U"", 0, nullptr, this);
-		our pitchRawCrossCorrelationToggle = FunctionAreaMenu_addCommand (menu, U"Pitch analysis method is raw cross-correlation",
+		our pitchRawCrossCorrelationToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_analysis_method_is_raw_cross_correlation"),
 				GuiMenu_CHECKBUTTON | GuiMenu_DEPTH_1, menu_cb_pitchMethodIsRawCrossCorrelation, this);
-		FunctionAreaMenu_addCommand (menu, U"Pitch settings (raw cross-correlation)...", GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_settings_raw_cc"), GuiMenu_DEPTH_1,
 				menu_cb_pitchSettings_rawCC, this);
 		FunctionAreaMenu_addCommand (menu, U"", 0, nullptr, this);
-		our pitchRawAutocorrelationToggle = FunctionAreaMenu_addCommand (menu, U"Pitch analysis method is raw autocorrelation",
+		our pitchRawAutocorrelationToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_analysis_method_is_raw_autocorrelation"),
 				GuiMenu_CHECKBUTTON | GuiMenu_DEPTH_1, menu_cb_pitchMethodIsRawAutocorrelation, this);
-		FunctionAreaMenu_addCommand (menu, U"Pitch settings (raw autocorrelation)...", GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_settings_raw_ac"), GuiMenu_DEPTH_1,
 				menu_cb_pitchSettings_rawAC, this);
 		FunctionAreaMenu_addCommand (menu, U"", 0, nullptr, this);
-		our pitchFilteredCrossCorrelationToggle = FunctionAreaMenu_addCommand (menu, U"Pitch analysis method is filtered cross-correlation",
+		our pitchFilteredCrossCorrelationToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_analysis_method_is_filtered_cross_correlation"),
 				GuiMenu_CHECKBUTTON | GuiMenu_DEPTH_1, menu_cb_pitchMethodIsFilteredCrossCorrelation, this);
-		FunctionAreaMenu_addCommand (menu, U"Pitch settings (filtered cross-correlation)...", GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_settings_filtered_cc"), GuiMenu_DEPTH_1,
 				menu_cb_pitchSettings_filteredCC, this);
-		FunctionAreaMenu_addCommand (menu, U"Pitch settings...", GuiMenu_HIDDEN,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_settings"), GuiMenu_HIDDEN,
 				menu_cb_pitchSettings_BEFORE_6414, this);
-		FunctionAreaMenu_addCommand (menu, U"Advanced pitch settings...", GuiMenu_HIDDEN,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.advanced_pitch_settings"), GuiMenu_HIDDEN,
 				menu_cb_advancedPitchSettings_BEFORE_6400, this);
-		FunctionAreaMenu_addCommand (menu, U"Advanced pitch settings (filtered AC and CC)...", GuiMenu_HIDDEN,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.advanced_pitch_settings_filtered_ac_cc"), GuiMenu_HIDDEN,
 				menu_cb_advancedPitchSettings_filteredAcCc_BEFORE_6414, this);
-		FunctionAreaMenu_addCommand (menu, U"Advanced pitch settings (raw AC and CC)...", GuiMenu_HIDDEN,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.advanced_pitch_settings_raw_ac_cc"), GuiMenu_HIDDEN,
 				menu_cb_advancedPitchSettings_rawAcCc_BEFORE_6414, this);
-		FunctionAreaMenu_addCommand (menu, U"- Query pitch:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Pitch listing", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_pitch"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_listing"), 1,
 				INFO_DATA__pitchListing, this);
-		FunctionAreaMenu_addCommand (menu, U"Get pitch", GuiMenu_F5 | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_pitch"), GuiMenu_F5 | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getPitch, this);
-		FunctionAreaMenu_addCommand (menu, U"Get minimum pitch", GuiMenu_F5 | GuiMenu_OPTION | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_minimum_pitch"), GuiMenu_F5 | GuiMenu_OPTION | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getMinimumPitch, this);
-		FunctionAreaMenu_addCommand (menu, U"Get maximum pitch", GuiMenu_F5 | GuiMenu_SHIFT | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_maximum_pitch"), GuiMenu_F5 | GuiMenu_SHIFT | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getMaximumPitch, this);
-		FunctionAreaMenu_addCommand (menu, U"- Select by pitch:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Move cursor to minimum pitch", GuiMenu_SHIFT | 'L' | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_by_pitch"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_cursor_to_minimum_pitch"), GuiMenu_SHIFT | 'L' | GuiMenu_DEPTH_1,
 				menu_cb_moveCursorToMinimumPitch, this);
-		FunctionAreaMenu_addCommand (menu, U"Move cursor to maximum pitch", GuiMenu_SHIFT | 'H' | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_cursor_to_maximum_pitch"), GuiMenu_SHIFT | 'H' | GuiMenu_DEPTH_1,
 				menu_cb_moveCursorToMaximumPitch, this);
-		FunctionAreaMenu_addCommand (menu, U"- Draw pitch to picture window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Draw visible pitch contour...", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_pitch_to_picture"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_visible_pitch_contour"), 1,
 				menu_cb_drawVisiblePitchContour, this);
-		FunctionAreaMenu_addCommand (menu, U"- Extract pitch to objects window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Extract visible pitch contour", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_pitch_to_objects"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_visible_pitch_contour"), 1,
 				CONVERT_DATA_TO_ONE__ExtractVisiblePitchContour, this);
 	}
 
 	if (our v_hasIntensity ()) {
-		EditorMenu menu = Editor_addMenu (our functionEditor(), U"Intensity", 0);
-		our intensityToggle = FunctionAreaMenu_addCommand (menu, U"Show intensity",
+		EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.intensity"), 0);
+		our intensityToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_intensity"),
 			GuiMenu_CHECKBUTTON | (instancePref_intensity_show() ? GuiMenu_TOGGLE_ON : 0),
 			menu_cb_showIntensity, this
 		);
-		FunctionAreaMenu_addCommand (menu, U"Intensity settings...", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.intensity_settings"), 0,
 				menu_cb_intensitySettings, this);
-		FunctionAreaMenu_addCommand (menu, U"- Query intensity:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Intensity listing", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_intensity"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.intensity_listing"), 1,
 				INFO_DATA__intensityListing, this);
-		FunctionAreaMenu_addCommand (menu, U"Get intensity", GuiMenu_F8 | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_intensity"), GuiMenu_F8 | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getIntensity, this);
-		FunctionAreaMenu_addCommand (menu, U"Get minimum intensity", GuiMenu_F8 | GuiMenu_OPTION | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_minimum_intensity"), GuiMenu_F8 | GuiMenu_OPTION | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getMinimumIntensity, this);
-		FunctionAreaMenu_addCommand (menu, U"Get maximum intensity", GuiMenu_F8 | GuiMenu_SHIFT | GuiMenu_DEPTH_1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_maximum_intensity"), GuiMenu_F8 | GuiMenu_SHIFT | GuiMenu_DEPTH_1,
 				QUERY_DATA_FOR_REAL__getMaximumIntensity, this);
-		FunctionAreaMenu_addCommand (menu, U"- Draw intensity to picture window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Draw visible intensity contour...", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_intensity_to_picture"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_visible_intensity_contour"), 1,
 				menu_cb_drawVisibleIntensityContour, this);
-		FunctionAreaMenu_addCommand (menu, U"- Extract intensity to objects window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Extract visible intensity contour", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_intensity_to_objects"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_visible_intensity_contour"), 1,
 				CONVERT_DATA_TO_ONE__ExtractVisibleIntensityContour, this);
 	}
 	if (our v_hasFormants ()) {
-		EditorMenu menu = Editor_addMenu (our functionEditor(), U"Formants", 0);
+		EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.formants"), 0);
 		our v_createMenuItems_formant (menu);
 	}
 
 	if (our v_hasPulses ()) {
-		EditorMenu menu = Editor_addMenu (our functionEditor(), U"Pulses", 0);
-		our pulsesToggle = FunctionAreaMenu_addCommand (menu, U"Show pulses",
+		EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.pulses"), 0);
+		our pulsesToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_pulses"),
 			GuiMenu_CHECKBUTTON | (instancePref_pulses_show() ? GuiMenu_TOGGLE_ON : 0),
 			menu_cb_showPulses, this
 		);
-		FunctionAreaMenu_addCommand (menu, U"Advanced pulses settings...", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.advanced_pulses_settings"), 0,
 				menu_cb_advancedPulsesSettings, this);
-		FunctionAreaMenu_addCommand (menu, U"- Query pulses:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Voice report", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_pulses"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.voice_report"), 1,
 				INFO_DATA__voiceReport, this);
-		FunctionAreaMenu_addCommand (menu, U"Pulse listing", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pulse_listing"), 1,
 				INFO_DATA__pulseListing, this);
 		/*
 		FunctionAreaMenu_addCommand (menu, U"Get jitter (local)", 0, cb_getJitter_local, this);
@@ -2507,11 +2508,11 @@ void structSoundAnalysisArea :: v_createMenus () {
 		FunctionAreaMenu_addCommand (menu, U"Get shimmer (apq11)", 0, cb_getShimmer_apq11, this);
 		FunctionAreaMenu_addCommand (menu, U"Get shimmer (dda)", 0, cb_getShimmer_dda, this);
 		*/
-		FunctionAreaMenu_addCommand (menu, U"- Draw pulses to picture window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Draw visible pulses...", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_pulses_to_picture"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_visible_pulses"), 1,
 				menu_cb_drawVisiblePulses, this);
-		FunctionAreaMenu_addCommand (menu, U"- Extract pulses to objects window:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Extract visible pulses", 1,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_pulses_to_objects"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_visible_pulses"), 1,
 				CONVERT_DATA_TO_ONE__ExtractVisiblePulses, this);
 	}
 }

@@ -17,6 +17,7 @@
  */
 
 #include "ManPages.h"
+#include "i18n_simple.h"
 
 Thing_implement (ManPages, Daata, 0);
 
@@ -64,7 +65,7 @@ static conststring32 ManPage_Paragraph_extractLink (ManPage_Paragraph par, const
 				const char32 *from = p + 2;
 				while (*from != U'@' && *from != U'|' && *from != U'\0') {
 					if (to - link >= MAXIMUM_LINK_LENGTH)
-						Melder_throw (U"(ManPage_Paragraph_extractLink:) Link starting with “@@” is too long:\n", text);
+						Melder_throw (I18n_translate("error.manpage_link_too_long"), U"\n", text);
 					*to ++ = *from ++;
 				}
 				/*
@@ -80,7 +81,7 @@ static conststring32 ManPage_Paragraph_extractLink (ManPage_Paragraph par, const
 							if (*from == U'\0')
 								break;
 							if (to - link >= MAXIMUM_LINK_LENGTH)
-								Melder_throw (U"(ManPage_Paragraph_extractLink:) Link starting with “@@” and containing “||” is too long:\n", text);
+								Melder_throw (I18n_translate("error.manpage_link_with_pipes_too_long"), U"\n", text);
 							*to ++ = *from ++;
 						}
 					} else {

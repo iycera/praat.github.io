@@ -17,6 +17,7 @@
  */
 
 #include "praatP.h"
+#include "i18n_simple.h"
 
 void praat_library_createC (bool isInHeaderFile, bool includeCreateAPI, bool includeReadAPI, bool includeSaveAPI,
 	bool includeQueryAPI, bool includeModifyAPI, bool includeToAPI,
@@ -26,14 +27,14 @@ void praat_library_createC (bool isInHeaderFile, bool includeCreateAPI, bool inc
 {
 	try {
 		MelderInfo_open ();
-		MelderInfo_writeLine (U"/* praatlib.h");
+		MelderInfo_writeLine (I18n_translate ("comment.praatlib_header"));
 		MelderInfo_writeLine (U" *");
-		MelderInfo_writeLine (U" * Copyright (C) 2016-2018 Paul Boersma and David Weenink");
+		MelderInfo_writeLine (I18n_translate ("comment.copyright_praatlib"));
 		MelderInfo_writeLine (U" *");
-		MelderInfo_writeLine (U" * This code is free software; you can redistribute it and/or modify");
-		MelderInfo_writeLine (U" * it under the terms of the GNU General Public License as published by");
-		MelderInfo_writeLine (U" * the Free Software Foundation; either version 3 of the License, or (at");
-		MelderInfo_writeLine (U" * your option) any later version.");
+		MelderInfo_writeLine (I18n_translate ("comment.free_software"));
+		MelderInfo_writeLine (I18n_translate ("comment.gnu_license"));
+		MelderInfo_writeLine (I18n_translate ("comment.free_software_foundation"));
+		MelderInfo_writeLine (I18n_translate ("comment.your_option"));
 		MelderInfo_writeLine (U" *");
 		MelderInfo_writeLine (U" * This code is distributed in the hope that it will be useful, but");
 		MelderInfo_writeLine (U" * WITHOUT ANY WARRANTY; without even the implied warranty of");

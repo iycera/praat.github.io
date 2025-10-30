@@ -20,13 +20,14 @@
 #include "Pitch_to_PitchTier.h"
 #include "SpeechSynthesizer_and_TextGrid.h"
 #include "LongSound.h"
+#include "../sys/i18n_simple.h"
 
 static bool IntervalTier_check (IntervalTier me) {
 	for (integer iinterval = 1; iinterval <= my intervals.size; iinterval ++) {
 		TextInterval interval = my intervals.at [iinterval];
 		if (interval -> xmin >= interval -> xmax) {
-			Melder_casual (U"Interval ", iinterval, U" starts at ", interval -> xmin,
-				U" but ends at ", interval -> xmax, U" seconds.");
+			Melder_casual (I18n_translate("debug.interval_starts_at"), iinterval, I18n_translate("debug.starts_at"), interval -> xmin,
+				I18n_translate("debug.but_ends_at"), interval -> xmax, I18n_translate("debug.seconds"));
 			return false;
 		}
 	}
@@ -55,7 +56,7 @@ static void IntervalTier_insertIntervalDestructively (IntervalTier me, double tm
 	if (! firstIntervalNumber) {
 		integer intervalNumber = IntervalTier_timeToIndex (me, tmin);
 		if (intervalNumber == 0)
-			Melder_throw (U"Cannot add a boundary at ", Melder_fixed (tmin, 6), U" seconds, because this is outside the time domain of the intervals.");
+			Melder_throw (I18n_translate("error.cannot_add_boundary_at"), Melder_fixed (tmin, 6), I18n_translate("error.seconds_outside_time_domain"));
 		TextInterval interval = my intervals.at [intervalNumber];
 		/*
 			Move the text to the left of the boundary.
@@ -70,7 +71,7 @@ static void IntervalTier_insertIntervalDestructively (IntervalTier me, double tm
 	if (! lastIntervalNumber) {
 		integer intervalNumber = IntervalTier_timeToIndex (me, tmax);
 		if (intervalNumber == 0)
-			Melder_throw (U"Cannot add a boundary at ", Melder_fixed (tmin, 6), U" seconds, because this is outside the time domain of the intervals.");
+			Melder_throw (I18n_translate("error.cannot_add_boundary_at"), Melder_fixed (tmin, 6), I18n_translate("error.seconds_outside_time_domain"));
 		TextInterval interval = my intervals.at [intervalNumber];
 		/*
 			Move the text to the right of the boundary.
@@ -153,12 +154,12 @@ void TextGrid_anySound_alignInterval (
 		//TRACE
 		IntervalTier headTier = TextGrid_checkSpecifiedTierIsIntervalTier (me, tierNumber);
 		if (intervalNumber < 1 || intervalNumber > headTier -> intervals.size)
-			Melder_throw (U"Interval ", intervalNumber, U" does not exist.");
+			Melder_throw (I18n_translate("error.interval_does_not_exist"), intervalNumber, U".");
 		TextInterval interval = headTier -> intervals.at [intervalNumber];
 		if (! includeWords && ! includePhonemes)
-			Melder_throw (U"Nothing to be done, because you asked neither for word alignment nor for phoneme alignment.");
+			Melder_throw (I18n_translate("error.nothing_to_be_done_no_alignment"));
 		if (str32str (headTier -> name.get(), U"/"))
-			Melder_throw (U"The current tier already has a slash (\"/\") in its name. Cannot create a word or phoneme tier from it.");
+			Melder_throw (I18n_translate("error.tier_has_slash_cannot_create_word_phoneme"));
 		trace (U"tier ", tierNumber, U" interval ", intervalNumber,
 				U" (", interval -> xmin, U" .. ", interval -> xmax, U" “", interval -> text.get(), U"”)");
 		autoSound part =

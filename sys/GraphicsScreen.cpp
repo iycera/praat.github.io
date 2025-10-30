@@ -17,6 +17,7 @@
  */
 
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 #include "Printer.h"
 #include "GuiP.h"
 
@@ -78,7 +79,7 @@ void structGraphicsScreen :: v9_destroy () noexcept {
 			d_winBrush = nullptr;
 		}
 		if (d_isPng && d_gdiBitmap) {
-			trace (U"saving the filled bitmap to a PNG file");
+			trace (I18n_translate ("debug.saving_the_filled_bitmap_to_png_file"));
 			/*
 				Deselect the bitmap from the device context (otherwise GetDIBits won't work).
 			*/
@@ -89,7 +90,7 @@ void structGraphicsScreen :: v9_destroy () noexcept {
 			GetObject (d_gdiBitmap, sizeof (BITMAP), & bitmap);
 			int width = bitmap. bmWidth, height = bitmap. bmHeight;
 			//int width = 3600, height = 3600;
-			trace (U"width ", width, U", height ", height);
+			trace (I18n_translate ("debug.width_height"), width, U", height ", height);
 
 			/*
 				Get the bits from the HBITMAP;
@@ -110,15 +111,15 @@ void structGraphicsScreen :: v9_destroy () noexcept {
 			//HANDLE handle = GlobalAlloc (GHND, 4 * width * height);
 			//unsigned char *bits = (unsigned char *) GlobalLock (handle);
 			int numberOfLinesScanned = GetDIBits (GetDC (nullptr), d_gdiBitmap, 0, height, bits, (BITMAPINFO *) & bitmapInfo, DIB_RGB_COLORS);
-			trace (numberOfLinesScanned, U" lines scanned");
+			trace (numberOfLinesScanned, U" ", I18n_translate ("debug.lines_scanned"));
 
-			trace (U"creating a savable bitmap");
+			trace (I18n_translate ("debug.creating_a_savable_bitmap"));
 
 			//Gdiplus::Bitmap gdiplusBitmap (width, height, PixelFormat32bppARGB);
 			Gdiplus::Bitmap gdiplusBitmap ((BITMAPINFO *) & bitmapInfo, bits);
 			gdiplusBitmap. SetResolution (resolution, resolution);
 
-			trace (U"copying the device-independent bits to the savable bitmap.");
+			trace (I18n_translate ("debug.copying_device_independent_bits"));
 
 			/*
 			for (integer irow = 1; irow <= height; irow ++) {
@@ -130,7 +131,7 @@ void structGraphicsScreen :: v9_destroy () noexcept {
 			}
 			*/
 
-			trace (U"saving");
+			trace (I18n_translate ("debug.saving"));
 
 			UINT numberOfImageEncoders, sizeOfImageEncoderArray;
 			Gdiplus::GetImageEncodersSize (& numberOfImageEncoders, & sizeOfImageEncoderArray);
@@ -143,7 +144,7 @@ void structGraphicsScreen :: v9_destroy () noexcept {
 				}
 			}
 
-			trace (U"cleaning up");
+			trace (I18n_translate ("debug.cleaning_up"));
 
 			Melder_free (imageEncoderInfos);
 			//bits -= 4 * width * height;
@@ -198,9 +199,9 @@ void structGraphicsScreen :: v9_destroy () noexcept {
 		}
 		Melder_free (d_bits);
 	#endif
-	trace (U"destroying parent");
+	trace (I18n_translate ("debug.destroying_parent"));
 	GraphicsScreen_Parent :: v9_destroy ();
-	trace (U"exit");
+	trace (I18n_translate ("debug.exit"));
 }
 
 void structGraphicsScreen :: v_clearWs () {

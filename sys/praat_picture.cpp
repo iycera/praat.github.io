@@ -17,6 +17,7 @@
  */
 
 #include "praatP.h"
+#include "i18n_simple.h"
 #include "praatM.h"
 #include "Picture.h"
 #include "Printer.h"
@@ -129,8 +130,8 @@ DIRECT (GRAPHICS_24) {
 	if (theCurrentPraatPicture == & theForegroundPraatPicture)
 		updateSizeMenu ();
 }
-FORM (GRAPHICS_Font_size, U"Praat picture: Font size", U"Font menu") {
-	POSITIVE (fontSize, U"Font size (points)", U"10")
+FORM (GRAPHICS_Font_size, I18n_translate ("form.praat_picture_font_size"), I18n_translate ("form.font_menu")) {
+	POSITIVE (fontSize, I18n_translate ("form.font_size_points"), U"10")
 OK
 	SET_REAL (fontSize, (integer) theCurrentPraatPicture -> fontSize);
 DO
@@ -177,7 +178,7 @@ static void updateViewportMenu () {
 
 DIRECT (GRAPHICS_MouseSelectsInnerViewport) {
 	if (theCurrentPraatPicture != & theForegroundPraatPicture)
-		Melder_throw (U"Mouse commands are not available inside pictures.");
+		Melder_throw (I18n_translate ("error.mouse_commands_not_available_inside_pictures"));
 	{// scope
 		autoPraatPictureOpen picture;
 		Picture_setMouseSelectsInnerViewport (praat_picture.get(), praat_mouseSelectsInnerViewport = true);
@@ -188,7 +189,7 @@ DIRECT (GRAPHICS_MouseSelectsInnerViewport) {
 
 DIRECT (GRAPHICS_MouseSelectsOuterViewport) {
 	if (theCurrentPraatPicture != & theForegroundPraatPicture)
-		Melder_throw (U"Mouse commands are not available inside pictures.");
+		Melder_throw (I18n_translate ("error.mouse_commands_not_available_inside_pictures"));
 	{// scope
 		autoPraatPictureOpen picture;
 		Picture_setMouseSelectsInnerViewport (praat_picture.get(), praat_mouseSelectsInnerViewport = false);
@@ -197,8 +198,8 @@ DIRECT (GRAPHICS_MouseSelectsOuterViewport) {
 	END_NO_NEW_DATA
 }
 
-FORM (GRAPHICS_SelectInnerViewport, U"Praat picture: Select inner viewport", U"Select inner viewport...") {
-	COMMENT (U"The viewport is the selected rectangle in the Picture window.")
+FORM (GRAPHICS_SelectInnerViewport, I18n_translate ("form.praat_picture_select_inner_viewport"), I18n_translate ("form.select_inner_viewport")) {
+	COMMENT (I18n_translate ("comment.viewport_is_selected_rectangle"))
 	COMMENT (U"It is where your next drawing will appear.")
 	COMMENT (U"The rectangle you select here will not include the margins.")
 	COMMENT (U"")
@@ -270,8 +271,8 @@ DO
 	END_NO_NEW_DATA
 }
 
-FORM (GRAPHICS_SelectOuterViewport, U"Praat picture: Select outer viewport", U"Select outer viewport...") {
-	COMMENT (U"The viewport is the selected rectangle in the Picture window.")
+FORM (GRAPHICS_SelectOuterViewport, I18n_translate("form.praat_picture_select_outer_viewport"), I18n_translate("form.select_outer_viewport")) {
+	COMMENT (I18n_translate ("comment.viewport_is_selected_rectangle"))
 	COMMENT (U"It is where your next drawing will appear.")
 	COMMENT (U"The rectangle you select here will include the margins.")
 	COMMENT (U"")
@@ -319,17 +320,17 @@ DO
 	END_NO_NEW_DATA
 }
 
-FORM (GRAPHICS_ViewportText, U"Praat picture: Viewport text", U"Viewport text...") {
-	CHOICEx (horizontalAlignment, U"Horizontal alignment", 2, 0)
+FORM (GRAPHICS_ViewportText, I18n_translate("form.praat_picture_viewport_text"), I18n_translate("form.viewport_text")) {
+	CHOICEx (horizontalAlignment, I18n_translate("form.horizontal_alignment_picture"), 2, 0)
 		OPTION (U"left")
 		OPTION (U"centre")
 		OPTION (U"right")
-	CHOICEx (verticalAlignment, U"Vertical alignment", 2, 0)
+	CHOICEx (verticalAlignment, I18n_translate("form.vertical_alignment_picture"), 2, 0)
 		OPTION (U"bottom")
 		OPTION (U"half")
 		OPTION (U"top")
-	REAL (rotation, U"Rotation (degrees)", U"0")
-	TEXTFIELD (text, U"Text", U"", 3)
+	REAL (rotation, I18n_translate("form.rotation_degrees_picture"), U"0")
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 3)
 OK
 DO
 	double x1WC, x2WC, y1WC, y2WC;
@@ -405,8 +406,8 @@ DIRECT (GRAPHICS_Dashed_dotted_line) {
 		updatePenMenu ();
 }
 
-FORM (GRAPHICS_Line_width, U"Praat picture: Line width", nullptr) {
-	POSITIVE (lineWidth, U"Line width", U"1.0")
+FORM (GRAPHICS_Line_width, I18n_translate("form.praat_picture_line_width"), nullptr) {
+	POSITIVE (lineWidth, I18n_translate("form.line_width"), U"1.0")
 OK
 	SET_REAL (lineWidth, theCurrentPraatPicture -> lineWidth)
 DO
@@ -415,8 +416,8 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_Arrow_size, U"Praat picture: Arrow size", nullptr) {
-	POSITIVE (arrowSize, U"Arrow size", U"1.0")
+FORM (GRAPHICS_Arrow_size, I18n_translate("form.praat_picture_arrow_size"), nullptr) {
+	POSITIVE (arrowSize, I18n_translate("form.arrow_size"), U"1.0")
 OK
 	SET_REAL (arrowSize, theCurrentPraatPicture -> arrowSize)
 DO
@@ -425,10 +426,10 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_Speckle_size, U"Praat picture: Speckle size", nullptr) {
+FORM (GRAPHICS_Speckle_size, I18n_translate("form.praat_picture_speckle_size"), nullptr) {
 	COMMENT (U"Here you determine the diameter (in millimetres)")
 	COMMENT (U"of the dots that are drawn by \"speckle\" commands.")
-	POSITIVE (speckleSize, U"Speckle size (mm)", U"1.0")
+	POSITIVE (speckleSize, I18n_translate("form.speckle_size_mm"), U"1.0")
 OK
 	SET_REAL (speckleSize, theCurrentPraatPicture -> speckleSize)
 DO
@@ -464,8 +465,8 @@ DIRECT (GRAPHICS_Pink)    { setColour (Melder_PINK);    END_NO_NEW_DATA }
 DIRECT (GRAPHICS_Silver)  { setColour (Melder_SILVER);  END_NO_NEW_DATA }
 DIRECT (GRAPHICS_Grey)    { setColour (Melder_GREY);    END_NO_NEW_DATA }
 
-FORM (GRAPHICS_Colour, U"Praat picture: Colour", nullptr) {
-	COLOUR (colour, U"Colour (0-1, name, or {r,g,b})", U"0.0")
+FORM (GRAPHICS_Colour, I18n_translate("form.praat_picture_colour"), nullptr) {
+	COLOUR (colour, I18n_translate("form.colour_0_1"), U"0.0")
 OK
 DO
 	GRAPHICS_NONE
@@ -477,27 +478,27 @@ DO
 
 /***** "File" MENU *****/
 
-FORM_READ (GRAPHICS_Picture_readFromPraatPictureFile, U"Read picture from praat picture file", nullptr, false) {
+FORM_READ (GRAPHICS_Picture_readFromPraatPictureFile, I18n_translate("form.read_picture_from_praat_picture_file"), nullptr, false) {
 	Picture_readFromPraatPictureFile (praat_picture.get(), file);
 	END_NO_NEW_DATA
 }
 
-FORM_SAVE (GRAPHICS_Picture_writeToEpsFile, U"Save picture as Encapsulated PostScript file", nullptr, U"praat.eps") {
+FORM_SAVE (GRAPHICS_Picture_writeToEpsFile, I18n_translate("form.save_picture_as_eps_file"), nullptr, U"praat.eps") {
 	Picture_writeToEpsFile (praat_picture.get(), file, true, false);
 	END_NO_NEW_DATA
 }
 
-FORM_SAVE (GRAPHICS_Picture_writeToFontlessEpsFile_xipa, U"Save as fontless EPS file", nullptr, U"praat.eps") {
+FORM_SAVE (GRAPHICS_Picture_writeToFontlessEpsFile_xipa, I18n_translate("form.save_as_fontless_eps_file"), nullptr, U"praat.eps") {
 	Picture_writeToEpsFile (praat_picture.get(), file, false, false);
 	END_NO_NEW_DATA
 }
 
-FORM_SAVE (GRAPHICS_Picture_writeToFontlessEpsFile_silipa, U"Save as fontless EPS file", nullptr, U"praat.eps") {
+FORM_SAVE (GRAPHICS_Picture_writeToFontlessEpsFile_silipa, I18n_translate("form.save_as_fontless_eps_file"), nullptr, U"praat.eps") {
 	Picture_writeToEpsFile (praat_picture.get(), file, false, true);
 	END_NO_NEW_DATA
 }
 
-FORM_SAVE (GRAPHICS_Picture_writeToPdfFile, U"Save as PDF file", nullptr, U"praat.pdf") {
+FORM_SAVE (GRAPHICS_Picture_writeToPdfFile, I18n_translate("form.save_as_pdf_file"), nullptr, U"praat.pdf") {
 	if (theCurrentPraatPicture == & theForegroundPraatPicture) {
 		Picture_writeToPdfFile (praat_picture.get(), file);
 	} else {
@@ -512,7 +513,7 @@ FORM_SAVE (GRAPHICS_Picture_writeToPdfFile, U"Save as PDF file", nullptr, U"praa
 	END_NO_NEW_DATA
 }
 
-FORM_SAVE (GRAPHICS_Picture_writeToPngFile_300, U"Save as PNG file", nullptr, U"praat.png") {
+FORM_SAVE (GRAPHICS_Picture_writeToPngFile_300, I18n_translate("form.save_as_png_file"), nullptr, U"praat.png") {
 	if (theCurrentPraatPicture == & theForegroundPraatPicture) {
 		Picture_writeToPngFile_300 (praat_picture.get(), file);
 	} else {
@@ -526,7 +527,7 @@ FORM_SAVE (GRAPHICS_Picture_writeToPngFile_300, U"Save as PNG file", nullptr, U"
 	END_NO_NEW_DATA
 }
 
-FORM_SAVE (GRAPHICS_Picture_writeToPngFile_600, U"Save as PNG file", nullptr, U"praat.png") {
+FORM_SAVE (GRAPHICS_Picture_writeToPngFile_600, I18n_translate("form.save_as_png_file"), nullptr, U"praat.png") {
 	if (theCurrentPraatPicture == & theForegroundPraatPicture) {
 		Picture_writeToPngFile_600 (praat_picture.get(), file);
 	} else {
@@ -541,7 +542,7 @@ FORM_SAVE (GRAPHICS_Picture_writeToPngFile_600, U"Save as PNG file", nullptr, U"
 }
 
 
-FORM_SAVE (GRAPHICS_Picture_writeToPraatPictureFile, U"Save as Praat picture file", nullptr, U"praat.prapic") {
+FORM_SAVE (GRAPHICS_Picture_writeToPraatPictureFile, I18n_translate("form.save_as_praat_picture_file"), nullptr, U"praat.prapic") {
 	Picture_writeToPraatPictureFile (praat_picture.get(), file);
 	END_NO_NEW_DATA
 }
@@ -553,7 +554,7 @@ DIRECT (GRAPHICS_Page_setup) {
 }
 #endif
 
-FORM (GRAPHICS_PostScript_settings, U"PostScript settings", U"PostScript settings...") {
+FORM (GRAPHICS_PostScript_settings, I18n_translate("form.postscript_settings"), I18n_translate("form.postscript_settings_dialog")) {
 	#if defined (_WIN32)
 		BOOLEAN (allowDirectPostscript, U"Allow direct PostScript", true);
 	#endif
@@ -564,11 +565,11 @@ FORM (GRAPHICS_PostScript_settings, U"PostScript settings", U"PostScript setting
 				U"Paper size", kGraphicsPostscript_paperSize::DEFAULT)
 		CHOICE_ENUM (kGraphicsPostscript_orientation, orientation,
 				U"Orientation", kGraphicsPostscript_orientation::DEFAULT)
-		POSITIVE (magnification, U"Magnification", U"1.0");
+		POSITIVE (magnification, I18n_translate("form.magnification_picture"), U"1.0");
 		#if defined (linux)
-			TEXTFIELD (printCommand, U"Print command", U"lpr %s", 4)
+			TEXTFIELD (printCommand, I18n_translate("form.print_command_picture"), U"lpr %s", 4)
 		#else
-			TEXTFIELD (printCommand, U"Print command", U"lp -c %s", 4)
+			TEXTFIELD (printCommand, I18n_translate("form.print_command_picture"), U"lp -c %s", 4)
 		#endif
 	#endif
 	CHOICE_ENUM (kGraphicsPostscript_fontChoiceStrategy, fontChoiceStrategy,
@@ -617,7 +618,7 @@ DIRECT (GRAPHICS_Print) {
 }
 
 #ifdef _WIN32
-FORM_SAVE (GRAPHICS_Picture_writeToWindowsMetafile, U"Save as Windows metafile", nullptr, U"praat.emf") {
+FORM_SAVE (GRAPHICS_Picture_writeToWindowsMetafile, I18n_translate("form.save_as_windows_metafile"), nullptr, U"praat.emf") {
 	Picture_writeToWindowsMetafile (praat_picture.get(), file);
 	END_NO_NEW_DATA
 }
@@ -657,16 +658,16 @@ DIRECT (GRAPHICS_Erase_all) {
 
 /***** "World" MENU *****/
 
-FORM (GRAPHICS_Text, U"Praat picture: Text", U"Text...") {
-	REAL (horizontalPosition, U"Horizontal position", U"0.0")
+FORM (GRAPHICS_Text, I18n_translate("form.praat_picture_text"), I18n_translate("form.text_dialog")) {
+	REAL (horizontalPosition, I18n_translate("form.horizontal_position"), U"0.0")
 	OPTIONMENU_ENUM (kGraphics_horizontalAlignment, horizontalAlignment,
 			U"Horizontal alignment", kGraphics_horizontalAlignment::LEFT)
-	REAL (verticalPosition, U"Vertical position", U"0.0")
+	REAL (verticalPosition, I18n_translate("form.vertical_position"), U"0.0")
 	OPTIONMENUx (verticalAlignment, U"Vertical alignment", 2, 0)
 		OPTION (U"bottom")
 		OPTION (U"half")
 		OPTION (U"top")
-	TEXTFIELD (text, U"Text", U"", 4)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 4)
 	OK
 DO
 	GRAPHICS_NONE
@@ -677,19 +678,19 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_TextSpecial, U"Praat picture: Text special", nullptr) {
-	REAL (horizontalPosition, U"Horizontal position", U"0.0")
+FORM (GRAPHICS_TextSpecial, I18n_translate("form.praat_picture_text_special"), nullptr) {
+	REAL (horizontalPosition, I18n_translate("form.horizontal_position"), U"0.0")
 	OPTIONMENU_ENUM (kGraphics_horizontalAlignment, horizontalAlignment,
 			U"Horizontal alignment", kGraphics_horizontalAlignment::LEFT)
-	REAL (verticalPosition, U"Vertical position", U"0.0")
+	REAL (verticalPosition, I18n_translate("form.vertical_position"), U"0.0")
 	OPTIONMENUx (verticalAlignment, U"Vertical alignment", 2, 0)
 		OPTION (U"bottom")
 		OPTION (U"half")
 		OPTION (U"top")
 	OPTIONMENU_ENUM (kGraphics_font, font, U"Font", kGraphics_font::DEFAULT)
-	POSITIVE (fontSize, U"Font size", U"10")
+	POSITIVE (fontSize, I18n_translate("form.font_size_picture"), U"10")
 	SENTENCE (rotation, U"Rotation (degrees or dx;dy)", U"0")
-	TEXTFIELD (text, U"Text", U"", 4)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 4)
 OK
 DO
 	kGraphics_font currentFont = Graphics_inqFont (GRAPHICS);
@@ -714,22 +715,22 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_RectangleText_MaximalFit, U"Praat picture: Rectangle text (maximal fit)", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
+FORM (GRAPHICS_RectangleText_MaximalFit, I18n_translate("form.praat_picture_rectangle_text_maximal_fit"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
 	OPTIONMENU_ENUM (kGraphics_horizontalAlignment, horizontalAlignment,
 			U"Horizontal alignment", kGraphics_horizontalAlignment::LEFT)
 	REAL (minimumHorizontalMargin_in_textHeights, U"Minimal horizontal margin (in text heights)", U"0.10")
 	REAL (minimumHorizontalMargin_mm, U"Minimal horizontal margin (mm)", U"0.5")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OPTIONMENUx (verticalAlignment, U"Vertical alignment", 2, 0)
 		OPTION (U"bottom")
 		OPTION (U"half")
 		OPTION (U"top")
 	REAL (minimumVerticalMargin_in_textHeights, U"Minimal vertical margin (in text heights)", U"0.18")
 	REAL (minimumVerticalMargin_mm, U"Minimal vertical margin (mm)", U"0.25")
-	TEXTFIELD (text, U"Text", U"", 4)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 4)
 	OK
 DO
 	GRAPHICS_NONE
@@ -741,18 +742,18 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_RectangleText_WrapAndTruncate, U"Praat picture: Rectangle text (wrap & truncate)", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
+FORM (GRAPHICS_RectangleText_WrapAndTruncate, I18n_translate("form.praat_picture_rectangle_text_wrap_and_truncate"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
 	OPTIONMENU_ENUM (kGraphics_horizontalAlignment, horizontalAlignment,
 			U"Horizontal alignment", kGraphics_horizontalAlignment::LEFT)
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OPTIONMENUx (verticalAlignment, U"Vertical alignment", 2, 0)
 		OPTION (U"bottom")
 		OPTION (U"half")
 		OPTION (U"top")
-	TEXTFIELD (text, U"Text", U"", 4)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 4)
 	OK
 DO
 	GRAPHICS_NONE
@@ -763,11 +764,11 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawLine, U"Praat picture: Draw line", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_DrawLine, I18n_translate("form.praat_picture_draw_line"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -777,11 +778,11 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawArrow, U"Praat picture: Draw arrow", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_DrawArrow, I18n_translate("form.praat_picture_draw_arrow"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -791,11 +792,11 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawDoubleArrow, U"Praat picture: Draw double arrow", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_DrawDoubleArrow, I18n_translate("form.praat_picture_draw_double_arrow"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -819,10 +820,10 @@ Thing_define (PraatPictureFunction, Daata) {
 };
 Thing_implement (PraatPictureFunction, Daata, 0);
 
-FORM (GRAPHICS_DrawFunction, U"Praat picture: Draw function", nullptr) {
+FORM (GRAPHICS_DrawFunction, I18n_translate("form.praat_picture_draw_function"), nullptr) {
 	COMMENT (U"This command assumes that the x and y axes")
 	COMMENT (U"have been set by a Draw command or by \"Axes...\".")
-	REAL (fromX, U"From x", U"0.0")
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
 	REAL (toX, U"To x", U"0.0 (= all)")
 	NATURAL (numberOfHorizontalSteps, U"Number of horizontal steps", U"1000")
 	FORMULA (formula, U"Formula", U"x^2 - x^4")
@@ -856,11 +857,11 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawRectangle, U"Praat picture: Draw rectangle", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_DrawRectangle, I18n_translate("form.praat_picture_draw_rectangle"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -870,12 +871,12 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_PaintRectangle, U"Praat picture: Paint rectangle", nullptr) {
-	COLOUR (colour, U"Colour (0-1, name, or {r,g,b})", U"0.5")
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_PaintRectangle, I18n_translate("form.praat_picture_paint_rectangle"), nullptr) {
+	COLOUR (colour, I18n_translate("form.colour_0_1"), U"0.5")
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -886,11 +887,11 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawRoundedRectangle, U"Praat picture: Draw rounded rectangle", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_DrawRoundedRectangle, I18n_translate("form.praat_picture_draw_rounded_rectangle"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	POSITIVE (radius, U"Radius (mm)", U"3.0")
 	OK
 DO
@@ -901,12 +902,12 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_PaintRoundedRectangle, U"Praat picture: Paint rounded rectangle", nullptr) {
-	COLOUR (colour, U"Colour (0-1, name, or {r,g,b})", U"0.5")
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_PaintRoundedRectangle, I18n_translate("form.praat_picture_paint_rounded_rectangle"), nullptr) {
+	COLOUR (colour, I18n_translate("form.colour_0_1"), U"0.5")
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	POSITIVE (radius, U"Radius (mm)", U"3.0")
 	OK
 DO
@@ -918,7 +919,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawArc, U"Praat picture: Draw arc", nullptr) {
+FORM (GRAPHICS_DrawArc, I18n_translate("form.praat_picture_draw_arc"), nullptr) {
 	REAL (centreX, U"Centre x", U"0.0")
 	REAL (centreY, U"Centre y", U"0.0")
 	POSITIVE (radius, U"Radius (along x)", U"1.0")
@@ -933,11 +934,11 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawEllipse, U"Praat picture: Draw ellipse", nullptr) {
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_DrawEllipse, I18n_translate("form.praat_picture_draw_ellipse"), nullptr) {
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -947,12 +948,12 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_PaintEllipse, U"Praat picture: Paint ellipse", nullptr) {
-	COLOUR (colour, U"Colour (0-1, name, or {r,g,b})", U"0.5")
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+FORM (GRAPHICS_PaintEllipse, I18n_translate("form.praat_picture_paint_ellipse"), nullptr) {
+	COLOUR (colour, I18n_translate("form.colour_0_1"), U"0.5")
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -963,7 +964,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawCircle, U"Praat picture: Draw circle", nullptr) {
+FORM (GRAPHICS_DrawCircle, I18n_translate("form.praat_picture_draw_circle"), nullptr) {
 	REAL (centreX, U"Centre x", U"0.0")
 	REAL (centreY, U"Centre y", U"0.0")
 	POSITIVE (radius, U"Radius (along x)", U"1.0")
@@ -976,8 +977,8 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_PaintCircle, U"Praat picture: Paint circle", nullptr) {
-	COLOUR (colour, U"Colour (0-1, name, or {r,g,b})", U"0.5")
+FORM (GRAPHICS_PaintCircle, I18n_translate("form.praat_picture_paint_circle"), nullptr) {
+	COLOUR (colour, I18n_translate("form.colour_0_1"), U"0.5")
 	REAL (centreX, U"Centre x", U"0.0")
 	REAL (centreY, U"Centre y", U"0.0")
 	POSITIVE (radius, U"Radius (along x)", U"1.0")
@@ -991,7 +992,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_DrawCircle_mm, U"Praat picture: Draw circle (mm)", nullptr) {
+FORM (GRAPHICS_DrawCircle_mm, I18n_translate("form.praat_picture_draw_circle_mm"), nullptr) {
 	REAL (centreX, U"Centre x", U"0.0")
 	REAL (centreY, U"Centre y", U"0.0")
 	POSITIVE (diameter, U"Diameter (mm)", U"5.0")
@@ -1004,8 +1005,8 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_PaintCircle_mm, U"Praat picture: Paint circle (mm)", nullptr) {
-	COLOUR (colour, U"Colour (0-1, name, or {r,g,b})", U"0.5")
+FORM (GRAPHICS_PaintCircle_mm, I18n_translate("form.praat_picture_paint_circle_mm"), nullptr) {
+	COLOUR (colour, I18n_translate("form.colour_0_1"), U"0.5")
 	REAL (centreX, U"Centre x", U"0.0")
 	REAL (centreY, U"Centre y", U"0.0")
 	POSITIVE (diameter, U"Diameter (mm)", U"5.0")
@@ -1019,12 +1020,12 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_InsertPictureFromFile, U"Praat picture: Insert picture from file", U"Insert picture from file...") {
+FORM (GRAPHICS_InsertPictureFromFile, I18n_translate("form.insert_picture_from_file"), I18n_translate("form.insert_picture_from_file_dialog")) {
 	INFILE (fileName, U"File name", U"~/Desktop/paul.jpg")
-	REAL (fromX, U"From x", U"0.0")
-	REAL (toX, U"To x", U"1.0")
-	REAL (fromY, U"From y", U"0.0")
-	REAL (toY, U"To y", U"1.0")
+	REAL (fromX, I18n_translate("form.from_x"), U"0.0")
+	REAL (toX, I18n_translate("form.to_x"), U"1.0")
+	REAL (fromY, I18n_translate("form.from_y"), U"0.0")
+	REAL (toY, I18n_translate("form.to_y"), U"1.0")
 	OK
 DO
 	GRAPHICS_NONE
@@ -1034,7 +1035,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_Axes, U"Praat picture: Axes", U"Axes...") {
+FORM (GRAPHICS_Axes, I18n_translate("form.axes"), I18n_translate("form.axes_dialog")) {
 	REAL (left, U"left Left and right", U"0.0")
 	REAL (right, U"right Left and right", U"1.0")
 	REAL (bottom, U"left Bottom and top", U"0.0")
@@ -1064,9 +1065,9 @@ DIRECT (GRAPHICS_DrawInnerBox) {
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_TextLeft, U"Praat picture: Text left", U"Text left/right/top/bottom...") {
+FORM (GRAPHICS_TextLeft, I18n_translate("form.text_left"), I18n_translate("form.text_left_right_top_bottom_dialog")) {
 	BOOLEAN (farr, U"Far", true)
-	TEXTFIELD (text, U"Text", U"", 3)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 3)
 	OK
 DO
 	GRAPHICS_NONE
@@ -1074,9 +1075,9 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_TextRight, U"Praat picture: Text right", U"Text left/right/top/bottom...") {
+FORM (GRAPHICS_TextRight, I18n_translate("form.text_right"), I18n_translate("form.text_left_right_top_bottom_dialog")) {
 	BOOLEAN (farr, U"Far", true)
-	TEXTFIELD (text, U"Text", U"", 3)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 3)
 	OK
 DO
 	GRAPHICS_NONE
@@ -1084,9 +1085,9 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_TextTop, U"Praat picture: Text top", U"Text left/right/top/bottom...") {
+FORM (GRAPHICS_TextTop, I18n_translate("form.text_top"), I18n_translate("form.text_left_right_top_bottom_dialog")) {
 	BOOLEAN (farr, U"Far", true)
-	TEXTFIELD (text, U"Text", U"", 3)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 3)
 	OK
 DO
 	GRAPHICS_NONE
@@ -1094,9 +1095,9 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_TextBottom, U"Praat picture: Text bottom", U"Text left/right/top/bottom...") {
+FORM (GRAPHICS_TextBottom, I18n_translate("form.text_bottom"), I18n_translate("form.text_left_right_top_bottom_dialog")) {
 	BOOLEAN (farr, U"Far", true)
-	TEXTFIELD (text, U"Text", U"", 3)
+	TEXTFIELD (text, I18n_translate("form.text"), U"", 3)
 	OK
 DO
 	GRAPHICS_NONE
@@ -1111,7 +1112,7 @@ DO
 	BOOLEAN (drawTicks, U"Draw ticks", true) \
 	BOOLEAN (drawDottedLines, U"Draw dotted lines", true)
 
-FORM (GRAPHICS_MarksLeftEvery, U"Praat picture: Marks left every...", U"Marks left/right/top/bottom every...") {
+FORM (GRAPHICS_MarksLeftEvery, I18n_translate("form.marks_left_every"), I18n_translate("form.marks_left_right_top_bottom_every_dialog")) {
 	FIELDS_MARKS_EVERY
 	OK
 DO
@@ -1120,7 +1121,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_MarksRightEvery, U"Praat picture: Marks right every...", U"Marks left/right/top/bottom every...") {
+FORM (GRAPHICS_MarksRightEvery, I18n_translate("form.marks_right_every"), I18n_translate("form.marks_left_right_top_bottom_every_dialog")) {
 	FIELDS_MARKS_EVERY
 	OK
 DO
@@ -1129,7 +1130,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_MarksBottomEvery, U"Praat picture: Marks bottom every...", U"Marks left/right/top/bottom every...") {
+FORM (GRAPHICS_MarksBottomEvery, I18n_translate("form.marks_bottom_every"), I18n_translate("form.marks_left_right_top_bottom_every_dialog")) {
 	FIELDS_MARKS_EVERY
 	OK
 DO
@@ -1138,7 +1139,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_MarksTopEvery, U"Praat picture: Marks top every...", U"Marks left/right/top/bottom every...") {
+FORM (GRAPHICS_MarksTopEvery, I18n_translate("form.marks_top_every"), I18n_translate("form.marks_left_right_top_bottom_every_dialog")) {
 	FIELDS_MARKS_EVERY
 	OK
 DO
@@ -1153,7 +1154,7 @@ DO
 	BOOLEAN (drawTicks, U"Draw ticks", true) \
 	BOOLEAN (drawDottedLines, U"Draw dotted lines", true)
 
-FORM (GRAPHICS_MarksLeft, U"Praat picture: Marks left", U"Marks left/right/top/bottom...") {
+FORM (GRAPHICS_MarksLeft, I18n_translate("form.marks_left"), I18n_translate("form.marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS
 	OK
 DO
@@ -1164,7 +1165,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_MarksRight, U"Praat picture: Marks right", U"Marks left/right/top/bottom...") {
+FORM (GRAPHICS_MarksRight, I18n_translate("form.marks_right"), I18n_translate("form.marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS
 	OK
 DO
@@ -1175,7 +1176,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_MarksBottom, U"Praat picture: Marks bottom", U"Marks left/right/top/bottom...") {
+FORM (GRAPHICS_MarksBottom, I18n_translate("form.marks_bottom"), I18n_translate("form.marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS
 	OK
 DO
@@ -1186,7 +1187,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_MarksTop, U"Praat picture: Marks top", U"Marks left/right/top/bottom...") {
+FORM (GRAPHICS_MarksTop, I18n_translate("form.marks_top"), I18n_translate("form.marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS
 	OK
 DO
@@ -1203,7 +1204,7 @@ DO
 	BOOLEAN (drawTicks, U"Draw ticks", true) \
 	BOOLEAN (drawDottedLines, U"Draw dotted lines", true)
 
-FORM (GRAPHICS_LogarithmicMarksLeft, U"Praat picture: Logarithmic marks left", U"Logarithmic marks left/right/top/bottom...") {
+FORM (GRAPHICS_LogarithmicMarksLeft, I18n_translate("form.logarithmic_marks_left"), I18n_translate("form.logarithmic_marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS_LOGARITHMIC
 	OK
 DO
@@ -1212,7 +1213,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_LogarithmicMarksRight, U"Praat picture: Logarithmic marks right", U"Logarithmic marks left/right/top/bottom...") {
+FORM (GRAPHICS_LogarithmicMarksRight, I18n_translate("form.logarithmic_marks_right"), I18n_translate("form.logarithmic_marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS_LOGARITHMIC
 	OK
 DO
@@ -1221,7 +1222,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_LogarithmicMarksBottom, U"Praat picture: Logarithmic marks bottom", U"Logarithmic marks left/right/top/bottom...") {
+FORM (GRAPHICS_LogarithmicMarksBottom, I18n_translate("form.logarithmic_marks_bottom"), I18n_translate("form.logarithmic_marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS_LOGARITHMIC
 	OK
 DO
@@ -1230,7 +1231,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_LogarithmicMarksTop, U"Praat picture: Logarithmic marks top", U"Logarithmic marks left/right/top/bottom...") {
+FORM (GRAPHICS_LogarithmicMarksTop, I18n_translate("form.logarithmic_marks_top"), I18n_translate("form.logarithmic_marks_left_right_top_bottom_dialog")) {
 	FIELDS_MARKS_LOGARITHMIC
 	OK
 DO
@@ -1244,7 +1245,7 @@ static void sortBoundingBox (double *x1WC, double *x2WC, double *y1WC, double *y
 	Melder_sort (y1WC, y2WC);
 }
 
-FORM (GRAPHICS_OneMarkLeft, U"Praat picture: One mark left", U"One mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneMarkLeft, I18n_translate("form.one_mark_left"), I18n_translate("form.one_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"0.0")
 	BOOLEAN (writeNumber, U"Write number", true)
 	BOOLEAN (drawTick, U"Draw tick", true)
@@ -1266,7 +1267,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneMarkRight, U"Praat picture: One mark right", U"One mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneMarkRight, I18n_translate("form.one_mark_right"), I18n_translate("form.one_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"0.0")
 	BOOLEAN (writeNumber, U"Write number", true)
 	BOOLEAN (drawTick, U"Draw tick", true)
@@ -1288,7 +1289,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneMarkTop, U"Praat picture: One mark top", U"One mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneMarkTop, I18n_translate("form.one_mark_top"), I18n_translate("form.one_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"0.0")
 	BOOLEAN (writeNumber, U"Write number", true)
 	BOOLEAN (drawTick, U"Draw tick", true)
@@ -1310,7 +1311,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneMarkBottom, U"Praat picture: One mark bottom", U"One mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneMarkBottom, I18n_translate("form.one_mark_bottom"), I18n_translate("form.one_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"0.0")
 	BOOLEAN (writeNumber, U"Write number", true)
 	BOOLEAN (drawTick, U"Draw tick", true)
@@ -1332,7 +1333,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneLogarithmicMarkLeft, U"Praat picture: One logarithmic mark left", U"One logarithmic mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneLogarithmicMarkLeft, I18n_translate("form.one_logarithmic_mark_left"), I18n_translate("form.one_logarithmic_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"1.0")
 	BOOLEAN (writeNumber, U"Write number", 1)
 	BOOLEAN (drawTick, U"Draw tick", 1)
@@ -1354,7 +1355,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneLogarithmicMarkRight, U"Praat picture: One logarithmic mark right", U"One logarithmic mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneLogarithmicMarkRight, I18n_translate("form.one_logarithmic_mark_right"), I18n_translate("form.one_logarithmic_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"1.0")
 	BOOLEAN (writeNumber, U"Write number", 1)
 	BOOLEAN (drawTick, U"Draw tick", 1)
@@ -1376,7 +1377,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneLogarithmicMarkTop, U"Praat picture: One logarithmic mark top", U"One logarithmic mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneLogarithmicMarkTop, I18n_translate("form.one_logarithmic_mark_top"), I18n_translate("form.one_logarithmic_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"1.0")
 	BOOLEAN (writeNumber, U"Write number", 1)
 	BOOLEAN (drawTick, U"Draw tick", 1)
@@ -1398,7 +1399,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_OneLogarithmicMarkBottom, U"Praat picture: One logarithmic mark bottom", U"One logarithmic mark left/right/top/bottom...") {
+FORM (GRAPHICS_OneLogarithmicMarkBottom, I18n_translate("form.one_logarithmic_mark_bottom"), I18n_translate("form.one_logarithmic_mark_left_right_top_bottom_dialog")) {
 	REAL (position, U"Position", U"1.0")
 	BOOLEAN (writeNumber, U"Write number", 1)
 	BOOLEAN (drawTick, U"Draw tick", 1)
@@ -1420,7 +1421,7 @@ DO
 	GRAPHICS_NONE_END
 }
 
-FORM (GRAPHICS_HorizontalMmToWorldCoordinates, U"Compute horizontal distance in world coordinates", nullptr) {
+FORM (GRAPHICS_HorizontalMmToWorldCoordinates, I18n_translate("form.compute_horizontal_distance_in_world_coordinates"), nullptr) {
 	REAL (distance, U"Distance (mm)", U"10.0")
 	OK
 DO
@@ -1434,7 +1435,7 @@ DO
 	QUERY_GRAPHICS_FOR_REAL_END (U" (world coordinates)");
 }
 
-FORM (GRAPHICS_HorizontalWorldCoordinatesToMm, U"Compute horizontal distance in millimetres", nullptr) {
+FORM (GRAPHICS_HorizontalWorldCoordinatesToMm, I18n_translate("form.compute_horizontal_distance_in_millimetres"), nullptr) {
 	REAL (distance, U"Distance (wc)", U"0.1")
 	OK
 DO
@@ -1448,7 +1449,7 @@ DO
 	QUERY_GRAPHICS_FOR_REAL_END (U" mm")
 }
 
-FORM (GRAPHICS_VerticalMmToWorldCoordinates, U"Compute vertical distance in world coordinates", nullptr) {
+FORM (GRAPHICS_VerticalMmToWorldCoordinates, I18n_translate("form.compute_vertical_distance_world_coordinates"), nullptr) {
 	REAL (distance, U"Distance (mm)", U"10.0")
 	OK
 DO
@@ -1461,7 +1462,7 @@ DO
 	QUERY_GRAPHICS_FOR_REAL_END (U" (world coordinates)")
 }
 
-FORM (GRAPHICS_VerticalWorldCoordinatesToMm, U"Compute vertical distance in millimetres", nullptr) {
+FORM (GRAPHICS_VerticalWorldCoordinatesToMm, I18n_translate("form.compute_vertical_distance_millimetres"), nullptr) {
 	REAL (distance, U"Distance (wc)", U"1.0")
 	OK
 DO
@@ -1474,7 +1475,7 @@ DO
 	QUERY_GRAPHICS_FOR_REAL_END (U" mm")
 }
 
-FORM (GRAPHICS_TextWidth_worldCoordinates, U"Text width in world coordinates", nullptr) {
+FORM (GRAPHICS_TextWidth_worldCoordinates, I18n_translate("form.text_width_world_coordinates"), nullptr) {
 	TEXTFIELD (text, U"Text", U"Hello world", 3)
 	OK
 DO
@@ -1485,7 +1486,7 @@ DO
 	QUERY_GRAPHICS_FOR_REAL_END (U" (world coordinates)")
 }
 
-FORM (GRAPHICS_TextWidth_mm, U"Text width in millimetres", nullptr) {
+FORM (GRAPHICS_TextWidth_mm, I18n_translate("form.text_width_millimetres"), nullptr) {
 	TEXTFIELD (text, U"Text", U"Hello world", 3)
 	OK
 DO
@@ -1499,7 +1500,7 @@ DO
 	QUERY_GRAPHICS_FOR_REAL_END (U" mm")
 }
 
-FORM (GRAPHICS_PostScriptTextWidth_worldCoordinates, U"PostScript text width in world coordinates", nullptr) {
+FORM (GRAPHICS_PostScriptTextWidth_worldCoordinates, I18n_translate("form.postscript_text_width_world_coordinates"), nullptr) {
 	CHOICEx (phoneticFont, U"Phonetic font", 1, 0)
 		OPTION (U"XIPA")
 		OPTION (U"SILIPA")
@@ -1517,7 +1518,7 @@ DO
 }
 
 
-FORM (GRAPHICS_PostScriptTextWidth_mm, U"PostScript text width in millimetres", nullptr) {
+FORM (GRAPHICS_PostScriptTextWidth_mm, I18n_translate("form.postscript_text_width_millimetres"), nullptr) {
 	CHOICEx (phoneticFont, U"Phonetic font", 1, 0)
 		OPTION (U"XIPA")
 		OPTION (U"SILIPA")
@@ -1655,13 +1656,13 @@ static GuiMenu fileMenu, editMenu, marginsMenu, worldMenu, selectMenu, fontMenu,
 
 GuiMenu praat_picture_resolveMenu (conststring32 menu) {
 	return
-		str32equ (menu, U"File") ? fileMenu :
-		str32equ (menu, U"Edit") ? editMenu :
-		str32equ (menu, U"Margins") ? marginsMenu :
-		str32equ (menu, U"World") ? worldMenu :
-		str32equ (menu, U"Select") ? selectMenu :
-		str32equ (menu, U"Font") ? fontMenu :
-		str32equ (menu, U"Pen") ? penMenu :
+		str32equ (menu, U"File") || str32equ (menu, I18n_translate("menu.file")) ? fileMenu :
+		str32equ (menu, U"Edit") || str32equ (menu, I18n_translate("menu.edit")) ? editMenu :
+		str32equ (menu, U"Margins") || str32equ (menu, I18n_translate("menu.margins")) ? marginsMenu :
+		str32equ (menu, U"World") || str32equ (menu, I18n_translate("menu.world")) ? worldMenu :
+		str32equ (menu, U"Select") || str32equ (menu, I18n_translate("menu.select_picture")) ? selectMenu :
+		str32equ (menu, U"Font") || str32equ (menu, I18n_translate("menu.font")) ? fontMenu :
+		str32equ (menu, U"Pen") || str32equ (menu, I18n_translate("menu.pen")) ? penMenu :
 		str32equ (menu, U"Help") ? helpMenu :
 		editMenu;   // default
 }
@@ -1780,219 +1781,219 @@ void praat_picture_init (bool showPictureWindowAtStartUp) {
 		GuiWindow_addMenuBar (thePictureWindow);
 	}
 	if (! theCurrentPraatApplication -> batch) {
-		fileMenu =    GuiMenu_createInWindow (thePictureWindow, U"File", 0);
-		editMenu =    GuiMenu_createInWindow (thePictureWindow, U"Edit", 0);
-		marginsMenu = GuiMenu_createInWindow (thePictureWindow, U"Margins", 0);
-		worldMenu =   GuiMenu_createInWindow (thePictureWindow, U"World", 0);
-		selectMenu =  GuiMenu_createInWindow (thePictureWindow, U"Select", 0);
-		penMenu =     GuiMenu_createInWindow (thePictureWindow, U"Pen", 0);
-		fontMenu =    GuiMenu_createInWindow (thePictureWindow, U"Font", 0);
+		fileMenu =    GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.file"), 0);
+		editMenu =    GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.edit"), 0);
+		marginsMenu = GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.margins"), 0);
+		worldMenu =   GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.world"), 0);
+		selectMenu =  GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.select_picture"), 0);
+		penMenu =     GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.pen"), 0);
+		fontMenu =    GuiMenu_createInWindow (thePictureWindow, I18n_translate("menu.font"), 0);
 		helpMenu =    GuiMenu_createInWindow (thePictureWindow, U"Help", 0);
 	}
 
-	praat_addMenuCommand (U"Picture", U"File", U"Picture info || Picture settings report",
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.picture_info"),
 			nullptr, 0, GRAPHICS_Picture_settings_report);   // alternative GuiMenu_DEPRECATED_2007
-	praat_addMenuCommand (U"Picture", U"File", U"-- save --", nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.separator_save"), nullptr, 0, nullptr);
 	#if defined (macintosh) || defined (UNIX)
-		praat_addMenuCommand (U"Picture", U"File", U"Save as PDF file... || Write to PDF file...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_pdf"),
 				nullptr, 'S', GRAPHICS_Picture_writeToPdfFile);   // alternative GuiMenu_DEPRECATED_2011
 	#endif
-	praat_addMenuCommand (U"Picture", U"File", U"Save as 300-dpi PNG file...",
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_300dpi_png"),
 			nullptr, 0, GRAPHICS_Picture_writeToPngFile_300);
 	#if defined (_WIN32)
-		praat_addMenuCommand (U"Picture", U"File", U"Save as 600-dpi PNG file...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_600dpi_png"),
 				nullptr, 'S', GRAPHICS_Picture_writeToPngFile_600);
 	#endif
 	#if defined (macintosh) || defined (UNIX)
-		praat_addMenuCommand (U"Picture", U"File", U"Save as 600-dpi PNG file...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_600dpi_png"),
 				nullptr, 0, GRAPHICS_Picture_writeToPngFile_600);
 	#endif
-	praat_addMenuCommand (U"Picture", U"File", U"Save as EPS file", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Picture", U"File", U"PostScript settings...",
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_eps"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.postscript_settings"),
 				nullptr, GuiMenu_DEPTH_1 | GuiMenu_NO_API, GRAPHICS_PostScript_settings);
-		praat_addMenuCommand (U"Picture", U"File", U"Save as EPS file... || Write to EPS file...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_eps_file"),
 				nullptr, 1, GRAPHICS_Picture_writeToEpsFile);   // alternative GuiMenu_DEPRECATED_2011
-		praat_addMenuCommand (U"Picture", U"File", U"Save as fontless EPS file (XIPA)... || Write to fontless EPS file (XIPA)...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_fontless_eps_xipa"),
 				nullptr, 1, GRAPHICS_Picture_writeToFontlessEpsFile_xipa);   // alternative GuiMenu_DEPRECATED_2011
-		praat_addMenuCommand (U"Picture", U"File", U"Save as fontless EPS file (SILIPA)... || Write to fontless EPS file (SILIPA)...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_fontless_eps_silipa"),
 				nullptr, 1, GRAPHICS_Picture_writeToFontlessEpsFile_silipa);   // alternative GuiMenu_DEPRECATED_2011
 	#ifdef _WIN32
-		praat_addMenuCommand (U"Picture", U"File", U"Save as Windows metafile... || Write to Windows metafile...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_windows_metafile"),
 				nullptr, 0, GRAPHICS_Picture_writeToWindowsMetafile);   // alternative GuiMenu_DEPRECATED_2011
 	#endif
-	praat_addMenuCommand (U"Picture", U"File", U"-- praat picture file --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"File", U"Read from praat picture file...",
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.separator_praat_picture_file"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.read_from_praat_picture_file"),
 			nullptr, 0, GRAPHICS_Picture_readFromPraatPictureFile);
-	praat_addMenuCommand (U"Picture", U"File", U"Save as praat picture file... || Write to praat picture file...",
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.save_as_praat_picture_file"),
 			nullptr, 0, GRAPHICS_Picture_writeToPraatPictureFile);   // alternative GuiMenu_DEPRECATED_2011
-	praat_addMenuCommand (U"Picture", U"File", U"-- print --", nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.separator_print"), nullptr, 0, nullptr);
 	#if defined (macintosh)
-		praat_addMenuCommand (U"Picture", U"File", U"Page setup...",
+		praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.page_setup"),
 				nullptr, GuiMenu_NO_API, GRAPHICS_Page_setup);
 	#endif
-	praat_addMenuCommand (U"Picture", U"File", U"Print...", nullptr, 'P' | GuiMenu_NO_API, GRAPHICS_Print);
+	praat_addMenuCommand (U"Picture", U"File", I18n_translate("menu.print"), nullptr, 'P' | GuiMenu_NO_API, GRAPHICS_Print);
 
-	praat_addMenuCommand (U"Picture", U"Edit", U"Undo", nullptr, 'Z' | GuiMenu_NO_API, GRAPHICS_Undo);
+	praat_addMenuCommand (U"Picture", U"Edit", I18n_translate("menu.undo"), nullptr, 'Z' | GuiMenu_NO_API, GRAPHICS_Undo);
 	#if defined (macintosh) || defined (_WIN32)
-		praat_addMenuCommand (U"Picture", U"Edit", U"-- clipboard --", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Picture", U"Edit", U"Copy to clipboard", nullptr, 'C' | GuiMenu_NO_API, GRAPHICS_Copy_picture_to_clipboard);
+		praat_addMenuCommand (U"Picture", U"Edit", I18n_translate("menu.separator_clipboard"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Picture", U"Edit", I18n_translate("menu.copy_to_clipboard"), nullptr, 'C' | GuiMenu_NO_API, GRAPHICS_Copy_picture_to_clipboard);
 	#endif
-	praat_addMenuCommand (U"Picture", U"Edit", U"-- erase --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Edit", U"Erase all", nullptr, 'E', GRAPHICS_Erase_all);
+	praat_addMenuCommand (U"Picture", U"Edit", I18n_translate("menu.separator_erase"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Edit", I18n_translate("menu.erase_all"), nullptr, 'E', GRAPHICS_Erase_all);
 
-	praat_addMenuCommand (U"Picture", U"Margins", U"Draw inner box", nullptr, 0, GRAPHICS_DrawInnerBox);
-	praat_addMenuCommand (U"Picture", U"Margins", U"-- text --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Text left...", nullptr, 0, GRAPHICS_TextLeft);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Text right...", nullptr, 0, GRAPHICS_TextRight);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Text top...", nullptr, 0, GRAPHICS_TextTop);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Text bottom...", nullptr, 0, GRAPHICS_TextBottom);
-	praat_addMenuCommand (U"Picture", U"Margins", U"-- marks every --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks left every...", nullptr, 0, GRAPHICS_MarksLeftEvery);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks right every...", nullptr, 0, GRAPHICS_MarksRightEvery);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks bottom every...", nullptr, 0, GRAPHICS_MarksBottomEvery);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks top every...", nullptr, 0, GRAPHICS_MarksTopEvery);
-	praat_addMenuCommand (U"Picture", U"Margins", U"-- one mark --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One mark left...", nullptr, 0, GRAPHICS_OneMarkLeft);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One mark right...", nullptr, 0, GRAPHICS_OneMarkRight);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One mark bottom...", nullptr, 0, GRAPHICS_OneMarkBottom);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One mark top...", nullptr, 0, GRAPHICS_OneMarkTop);
-	praat_addMenuCommand (U"Picture", U"Margins", U"-- marks --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks left...", nullptr, 1, GRAPHICS_MarksLeft);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks right...", nullptr, 1, GRAPHICS_MarksRight);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks bottom...", nullptr, 1, GRAPHICS_MarksBottom);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Marks top...", nullptr, 1, GRAPHICS_MarksTop);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Logarithmic marks", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Logarithmic marks left...", nullptr, 1, GRAPHICS_LogarithmicMarksLeft);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Logarithmic marks right...", nullptr, 1, GRAPHICS_LogarithmicMarksRight);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Logarithmic marks bottom...", nullptr, 1, GRAPHICS_LogarithmicMarksBottom);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Logarithmic marks top...", nullptr, 1, GRAPHICS_LogarithmicMarksTop);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One logarithmic mark", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One logarithmic mark left...", nullptr, 1, GRAPHICS_OneLogarithmicMarkLeft);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One logarithmic mark right...", nullptr, 1, GRAPHICS_OneLogarithmicMarkRight);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One logarithmic mark bottom...", nullptr, 1, GRAPHICS_OneLogarithmicMarkBottom);
-	praat_addMenuCommand (U"Picture", U"Margins", U"One logarithmic mark top...", nullptr, 1, GRAPHICS_OneLogarithmicMarkTop);
-	praat_addMenuCommand (U"Picture", U"Margins", U"-- axes --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Margins", U"Axes...", nullptr, 0, GRAPHICS_Axes);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.draw_inner_box"), nullptr, 0, GRAPHICS_DrawInnerBox);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.separator_text"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.text_left"), nullptr, 0, GRAPHICS_TextLeft);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.text_right"), nullptr, 0, GRAPHICS_TextRight);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.text_top"), nullptr, 0, GRAPHICS_TextTop);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.text_bottom"), nullptr, 0, GRAPHICS_TextBottom);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.separator_marks_every"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_left_every"), nullptr, 0, GRAPHICS_MarksLeftEvery);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_right_every"), nullptr, 0, GRAPHICS_MarksRightEvery);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_bottom_every"), nullptr, 0, GRAPHICS_MarksBottomEvery);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_top_every"), nullptr, 0, GRAPHICS_MarksTopEvery);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.separator_one_mark"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_mark_left"), nullptr, 0, GRAPHICS_OneMarkLeft);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_mark_right"), nullptr, 0, GRAPHICS_OneMarkRight);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_mark_bottom"), nullptr, 0, GRAPHICS_OneMarkBottom);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_mark_top"), nullptr, 0, GRAPHICS_OneMarkTop);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.separator_marks"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_left"), nullptr, 1, GRAPHICS_MarksLeft);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_right"), nullptr, 1, GRAPHICS_MarksRight);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_bottom"), nullptr, 1, GRAPHICS_MarksBottom);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.marks_top"), nullptr, 1, GRAPHICS_MarksTop);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.logarithmic_marks"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.logarithmic_marks_left"), nullptr, 1, GRAPHICS_LogarithmicMarksLeft);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.logarithmic_marks_right"), nullptr, 1, GRAPHICS_LogarithmicMarksRight);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.logarithmic_marks_bottom"), nullptr, 1, GRAPHICS_LogarithmicMarksBottom);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.logarithmic_marks_top"), nullptr, 1, GRAPHICS_LogarithmicMarksTop);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_logarithmic_mark"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_logarithmic_mark_left"), nullptr, 1, GRAPHICS_OneLogarithmicMarkLeft);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_logarithmic_mark_right"), nullptr, 1, GRAPHICS_OneLogarithmicMarkRight);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_logarithmic_mark_bottom"), nullptr, 1, GRAPHICS_OneLogarithmicMarkBottom);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.one_logarithmic_mark_top"), nullptr, 1, GRAPHICS_OneLogarithmicMarkTop);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.separator_axes"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Margins", I18n_translate("menu.axes"), nullptr, 0, GRAPHICS_Axes);
 
-	praat_addMenuCommand (U"Picture", U"World", U"Text...", nullptr, 0, GRAPHICS_Text);
-	praat_addMenuCommand (U"Picture", U"World", U"Text special...", nullptr, 0, GRAPHICS_TextSpecial);
-	praat_addMenuCommand (U"Picture", U"World", U"Rectangle text (maximal fit)...", nullptr, 0, GRAPHICS_RectangleText_MaximalFit);
-	praat_addMenuCommand (U"Picture", U"World", U"Rectangle text (wrap & truncate)...", nullptr, 0, GRAPHICS_RectangleText_WrapAndTruncate);
-	praat_addMenuCommand (U"Picture", U"World", U"-- line --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw line...", nullptr, 0, GRAPHICS_DrawLine);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw arrow...", nullptr, 0, GRAPHICS_DrawArrow);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw two-way arrow...", nullptr, 0, GRAPHICS_DrawDoubleArrow);
-	praat_addMenuCommand (U"Picture", U"World", U"-- function --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw function...", nullptr, 0, GRAPHICS_DrawFunction);
-	praat_addMenuCommand (U"Picture", U"World", U"-- rectangle --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw rectangle...", nullptr, 0, GRAPHICS_DrawRectangle);
-	praat_addMenuCommand (U"Picture", U"World", U"Paint rectangle...", nullptr, 0, GRAPHICS_PaintRectangle);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw rounded rectangle...", nullptr, 0, GRAPHICS_DrawRoundedRectangle);
-	praat_addMenuCommand (U"Picture", U"World", U"Paint rounded rectangle...", nullptr, 0, GRAPHICS_PaintRoundedRectangle);
-	praat_addMenuCommand (U"Picture", U"World", U"-- arc --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw arc...", nullptr, 0, GRAPHICS_DrawArc);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw ellipse...", nullptr, 0, GRAPHICS_DrawEllipse);
-	praat_addMenuCommand (U"Picture", U"World", U"Paint ellipse...", nullptr, 0, GRAPHICS_PaintEllipse);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw circle...", nullptr, 0, GRAPHICS_DrawCircle);
-	praat_addMenuCommand (U"Picture", U"World", U"Paint circle...", nullptr, 0, GRAPHICS_PaintCircle);
-	praat_addMenuCommand (U"Picture", U"World", U"Draw circle (mm)...", nullptr, 0, GRAPHICS_DrawCircle_mm);
-	praat_addMenuCommand (U"Picture", U"World", U"Paint circle (mm)...", nullptr, 0, GRAPHICS_PaintCircle_mm);
-	praat_addMenuCommand (U"Picture", U"World", U"-- picture --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Insert picture from file...", nullptr, 0, GRAPHICS_InsertPictureFromFile);
-	praat_addMenuCommand (U"Picture", U"World", U"-- axes --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Axes...", nullptr, 0, GRAPHICS_Axes);
-	praat_addMenuCommand (U"Picture", U"World", U"Measure", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Horizontal mm to world coordinates... || Horizontal mm to wc...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.text"), nullptr, 0, GRAPHICS_Text);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.text_special"), nullptr, 0, GRAPHICS_TextSpecial);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.rectangle_text_maximal_fit"), nullptr, 0, GRAPHICS_RectangleText_MaximalFit);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.rectangle_text_wrap_and_truncate"), nullptr, 0, GRAPHICS_RectangleText_WrapAndTruncate);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_line"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_line"), nullptr, 0, GRAPHICS_DrawLine);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_arrow"), nullptr, 0, GRAPHICS_DrawArrow);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_two_way_arrow"), nullptr, 0, GRAPHICS_DrawDoubleArrow);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_function"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_function"), nullptr, 0, GRAPHICS_DrawFunction);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_rectangle"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_rectangle"), nullptr, 0, GRAPHICS_DrawRectangle);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.paint_rectangle"), nullptr, 0, GRAPHICS_PaintRectangle);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_rounded_rectangle"), nullptr, 0, GRAPHICS_DrawRoundedRectangle);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.paint_rounded_rectangle"), nullptr, 0, GRAPHICS_PaintRoundedRectangle);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_arc"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_arc"), nullptr, 0, GRAPHICS_DrawArc);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_ellipse"), nullptr, 0, GRAPHICS_DrawEllipse);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.paint_ellipse"), nullptr, 0, GRAPHICS_PaintEllipse);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_circle"), nullptr, 0, GRAPHICS_DrawCircle);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.paint_circle"), nullptr, 0, GRAPHICS_PaintCircle);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.draw_circle_mm"), nullptr, 0, GRAPHICS_DrawCircle_mm);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.paint_circle_mm"), nullptr, 0, GRAPHICS_PaintCircle_mm);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_picture"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.insert_picture_from_file"), nullptr, 0, GRAPHICS_InsertPictureFromFile);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_axes_world"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.axes_world"), nullptr, 0, GRAPHICS_Axes);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.measure"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.horizontal_mm_to_world_coordinates"),
 			nullptr, 1, GRAPHICS_HorizontalMmToWorldCoordinates);   // alternative GuiMenu_DEPRECATED_2016
-	praat_addMenuCommand (U"Picture", U"World", U"Horizontal world coordinates to mm... || Horizontal wc to mm...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.horizontal_world_coordinates_to_mm"),
 			nullptr, 1, GRAPHICS_HorizontalWorldCoordinatesToMm);
-	praat_addMenuCommand (U"Picture", U"World", U"Vertical mm to world coordinates... || Vertical mm to wc...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.vertical_mm_to_world_coordinates"),
 			nullptr, 1, GRAPHICS_VerticalMmToWorldCoordinates);
-	praat_addMenuCommand (U"Picture", U"World", U"Vertical world coordinates to mm... || Vertical wc to mm...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.vertical_world_coordinates_to_mm"),
 			nullptr, 1, GRAPHICS_VerticalWorldCoordinatesToMm);
-	praat_addMenuCommand (U"Picture", U"World", U"-- text measure --", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Picture", U"World", U"Text width (world coordinates)... || Text width (wc)...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.separator_text_measure"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.text_width_world_coordinates"),
 			nullptr, 1, GRAPHICS_TextWidth_worldCoordinates);
-	praat_addMenuCommand (U"Picture", U"World", U"Text width (mm)...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.text_width_mm"),
 			nullptr, 1, GRAPHICS_TextWidth_mm);
-	praat_addMenuCommand (U"Picture", U"World", U"PostScript text width (world coordinates)... || PostScript text width (wc)...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.postscript_text_width_world_coordinates"),
 			nullptr, 1, GRAPHICS_PostScriptTextWidth_worldCoordinates);   // alternative GuiMenu_DEPRECATED_2016
-	praat_addMenuCommand (U"Picture", U"World", U"PostScript text width (mm)...",
+	praat_addMenuCommand (U"Picture", U"World", I18n_translate("menu.postscript_text_width_mm"),
 			nullptr, 1, GRAPHICS_PostScriptTextWidth_mm);
 
 	praatButton_innerViewport = praat_addMenuCommand (U"Picture", U"Select",
-			U"Mouse selects inner viewport", nullptr, GuiMenu_RADIO_FIRST | GuiMenu_NO_API, GRAPHICS_MouseSelectsInnerViewport);
+			I18n_translate("menu.mouse_selects_inner_viewport"), nullptr, GuiMenu_RADIO_FIRST | GuiMenu_NO_API, GRAPHICS_MouseSelectsInnerViewport);
 	praatButton_outerViewport = praat_addMenuCommand (U"Picture", U"Select",
-			U"Mouse selects outer viewport", nullptr, GuiMenu_RADIO_NEXT | GuiMenu_NO_API, GRAPHICS_MouseSelectsOuterViewport);
-	praat_addMenuCommand (U"Picture", U"Select", U"-- select --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Select", U"Select inner viewport...",
+			I18n_translate("menu.mouse_selects_outer_viewport"), nullptr, GuiMenu_RADIO_NEXT | GuiMenu_NO_API, GRAPHICS_MouseSelectsOuterViewport);
+	praat_addMenuCommand (U"Picture", U"Select", I18n_translate("menu.separator_select"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Select", I18n_translate("menu.select_inner_viewport"),
 			nullptr, 0, GRAPHICS_SelectInnerViewport);
-	praat_addMenuCommand (U"Picture", U"Select", U"Select outer viewport... || Viewport...",
+	praat_addMenuCommand (U"Picture", U"Select", I18n_translate("menu.select_outer_viewport"),
 			nullptr, 0, GRAPHICS_SelectOuterViewport);
-	praat_addMenuCommand (U"Picture", U"Select", U"-- viewport drawing --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Select", U"Viewport text...",
+	praat_addMenuCommand (U"Picture", U"Select", I18n_translate("menu.separator_viewport_drawing"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Select", I18n_translate("menu.viewport_text"),
 			nullptr, 0, GRAPHICS_ViewportText);
 
 	praatButton_lines [Graphics_DRAWN] = praat_addMenuCommand (U"Picture", U"Pen",
-			U"Solid line", nullptr, GuiMenu_RADIO_FIRST, GRAPHICS_Solid_line);
+			I18n_translate("menu.solid_line"), nullptr, GuiMenu_RADIO_FIRST, GRAPHICS_Solid_line);
 	praat_addMenuCommand (U"Picture", U"Pen",
-			U"Plain line", nullptr, GuiMenu_RADIO_NEXT | GuiMenu_DEPRECATED_2006, GRAPHICS_Solid_line);
+			I18n_translate("menu.plain_line"), nullptr, GuiMenu_RADIO_NEXT | GuiMenu_DEPRECATED_2006, GRAPHICS_Solid_line);
 	praatButton_lines [Graphics_DOTTED] = praat_addMenuCommand (U"Picture", U"Pen",
-			U"Dotted line", nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_Dotted_line);
+			I18n_translate("menu.dotted_line"), nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_Dotted_line);
 	praatButton_lines [Graphics_DASHED] = praat_addMenuCommand (U"Picture", U"Pen",
-			U"Dashed line", nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_Dashed_line);
+			I18n_translate("menu.dashed_line"), nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_Dashed_line);
 	praatButton_lines [Graphics_DASHED_DOTTED] = praat_addMenuCommand (U"Picture", U"Pen",
-			U"Dashed-dotted line", nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_Dashed_dotted_line);
-	praat_addMenuCommand (U"Picture", U"Pen", U"-- line width --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Pen", U"Line width...", nullptr, 0, GRAPHICS_Line_width);
-	praat_addMenuCommand (U"Picture", U"Pen", U"Arrow size...", nullptr, 0, GRAPHICS_Arrow_size);
-	praat_addMenuCommand (U"Picture", U"Pen", U"Speckle size...", nullptr, 0, GRAPHICS_Speckle_size);
-	praat_addMenuCommand (U"Picture", U"Pen", U"-- colour --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Pen", U"Colour...", nullptr, 0, GRAPHICS_Colour);
-	praatButton_black   = praat_addMenuCommand (U"Picture", U"Pen", U"Black",   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Black);
-	praatButton_white   = praat_addMenuCommand (U"Picture", U"Pen", U"White",   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_White);
-	praatButton_red     = praat_addMenuCommand (U"Picture", U"Pen", U"Red",     nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Red);
-	praatButton_green   = praat_addMenuCommand (U"Picture", U"Pen", U"Green",   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Green);
-	praatButton_blue    = praat_addMenuCommand (U"Picture", U"Pen", U"Blue",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Blue);
-	praatButton_yellow  = praat_addMenuCommand (U"Picture", U"Pen", U"Yellow",  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Yellow);
-	praatButton_cyan    = praat_addMenuCommand (U"Picture", U"Pen", U"Cyan",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Cyan);
-	praatButton_magenta = praat_addMenuCommand (U"Picture", U"Pen", U"Magenta", nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Magenta);
-	praatButton_maroon  = praat_addMenuCommand (U"Picture", U"Pen", U"Maroon",  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Maroon);
-	praatButton_lime    = praat_addMenuCommand (U"Picture", U"Pen", U"Lime",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Lime);
-	praatButton_navy    = praat_addMenuCommand (U"Picture", U"Pen", U"Navy",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Navy);
-	praatButton_teal    = praat_addMenuCommand (U"Picture", U"Pen", U"Teal",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Teal);
-	praatButton_purple  = praat_addMenuCommand (U"Picture", U"Pen", U"Purple",  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Purple);
-	praatButton_olive   = praat_addMenuCommand (U"Picture", U"Pen", U"Olive",   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Olive);
-	praatButton_pink    = praat_addMenuCommand (U"Picture", U"Pen", U"Pink",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Pink);
-	praatButton_silver  = praat_addMenuCommand (U"Picture", U"Pen", U"Silver",  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Silver);
-	praatButton_grey    = praat_addMenuCommand (U"Picture", U"Pen", U"Grey",    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Grey);
+			I18n_translate("menu.dashed_dotted_line"), nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_Dashed_dotted_line);
+	praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.separator_line_width"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.line_width"), nullptr, 0, GRAPHICS_Line_width);
+	praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.arrow_size"), nullptr, 0, GRAPHICS_Arrow_size);
+	praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.speckle_size"), nullptr, 0, GRAPHICS_Speckle_size);
+	praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.separator_colour"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.colour"), nullptr, 0, GRAPHICS_Colour);
+	praatButton_black   = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.black"),   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Black);
+	praatButton_white   = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.white"),   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_White);
+	praatButton_red     = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.red"),     nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Red);
+	praatButton_green   = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.green"),   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Green);
+	praatButton_blue    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.blue"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Blue);
+	praatButton_yellow  = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.yellow"),  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Yellow);
+	praatButton_cyan    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.cyan"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Cyan);
+	praatButton_magenta = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.magenta"), nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Magenta);
+	praatButton_maroon  = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.maroon"),  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Maroon);
+	praatButton_lime    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.lime"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Lime);
+	praatButton_navy    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.navy"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Navy);
+	praatButton_teal    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.teal"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Teal);
+	praatButton_purple  = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.purple"),  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Purple);
+	praatButton_olive   = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.olive"),   nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Olive);
+	praatButton_pink    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.pink"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Pink);
+	praatButton_silver  = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.silver"),  nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Silver);
+	praatButton_grey    = praat_addMenuCommand (U"Picture", U"Pen", I18n_translate("menu.grey"),    nullptr, GuiMenu_CHECKBUTTON, GRAPHICS_Grey);
 
-	praat_addMenuCommand (U"Picture", U"Font", U"Font size...", nullptr, 0, GRAPHICS_Font_size);
-	praatButton_10 = praat_addMenuCommand (U"Picture", U"Font", U"10", nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_10);
-	praatButton_12 = praat_addMenuCommand (U"Picture", U"Font", U"12", nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_12);
-	praatButton_14 = praat_addMenuCommand (U"Picture", U"Font", U"14", nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_14);
-	praatButton_18 = praat_addMenuCommand (U"Picture", U"Font", U"18", nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_18);
-	praatButton_24 = praat_addMenuCommand (U"Picture", U"Font", U"24", nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_24);
-	praat_addMenuCommand (U"Picture", U"Font", U"-- font ---", nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.font_size"), nullptr, 0, GRAPHICS_Font_size);
+	praatButton_10 = praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.font_10"), nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_10);
+	praatButton_12 = praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.font_12"), nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_12);
+	praatButton_14 = praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.font_14"), nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_14);
+	praatButton_18 = praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.font_18"), nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_18);
+	praatButton_24 = praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.font_24"), nullptr, GuiMenu_CHECKBUTTON | GuiMenu_NO_API, GRAPHICS_24);
+	praat_addMenuCommand (U"Picture", U"Font", I18n_translate("menu.separator_font"), nullptr, 0, nullptr);
 	praatButton_fonts [(int) kGraphics_font::TIMES] = praat_addMenuCommand (U"Picture", U"Font",
-			U"Times", nullptr, GuiMenu_RADIO_FIRST, GRAPHICS_NONE__Times);
+			I18n_translate("menu.times"), nullptr, GuiMenu_RADIO_FIRST, GRAPHICS_NONE__Times);
 	praatButton_fonts [(int) kGraphics_font::HELVETICA] = praat_addMenuCommand (U"Picture", U"Font",
-			U"Helvetica", nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_NONE__Helvetica);
+			I18n_translate("menu.helvetica"), nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_NONE__Helvetica);
 	praatButton_fonts [(int) kGraphics_font::PALATINO] = praat_addMenuCommand (U"Picture", U"Font",
-			U"Palatino", nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_NONE__Palatino);
+			I18n_translate("menu.palatino"), nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_NONE__Palatino);
 	praatButton_fonts [(int) kGraphics_font::COURIER] = praat_addMenuCommand (U"Picture", U"Font",
-			U"Courier", nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_NONE__Courier);
+			I18n_translate("menu.courier"), nullptr, GuiMenu_RADIO_NEXT, GRAPHICS_NONE__Courier);
 
-	praat_addMenuCommand (U"Picture", U"Help", U"Praat Intro", nullptr, 0, HELP_PraatIntro_picture);
-	praat_addMenuCommand (U"Picture", U"Help", U"Picture window help", nullptr, '?', HELP_PictureWindowHelp);
-	praat_addMenuCommand (U"Picture", U"Help", U"-- text formatting help --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Picture", U"Help", U"About special symbols", nullptr, 0, HELP_AboutSpecialSymbols);
-	praat_addMenuCommand (U"Picture", U"Help", U"About text styles", nullptr, 0, HELP_AboutTextStyles);
-	praat_addMenuCommand (U"Picture", U"Help", U"Phonetic symbols", nullptr, 0, HELP_PhoneticSymbols);
-	praat_addMenuCommand (U"Picture", U"Help", U"-- manual --", nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.praat_intro"), nullptr, 0, HELP_PraatIntro_picture);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.picture_window_help"), nullptr, '?', HELP_PictureWindowHelp);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.separator_text_formatting_help"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.about_special_symbols"), nullptr, 0, HELP_AboutSpecialSymbols);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.about_text_styles"), nullptr, 0, HELP_AboutTextStyles);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.phonetic_symbols"), nullptr, 0, HELP_PhoneticSymbols);
+	praat_addMenuCommand (U"Picture", U"Help", I18n_translate("menu.separator_manual"), nullptr, 0, nullptr);
 	praat_addMenuCommand (U"Picture", U"Help",
-		Melder_cat (U"Search ", Melder_upperCaseAppName(), U" manual..."),
+		Melder_cat (I18n_translate("menu.search_manual_prefix"), U" ", Melder_upperCaseAppName(), I18n_translate("menu.search_manual_suffix")),
 		nullptr, 'M', HELP_SearchManual_Picture);
 
 	if (! theCurrentPraatApplication -> batch) {

@@ -17,6 +17,7 @@
  */
 
 #include "Collection.h"
+#include "i18n_simple.h"
 #include <string>
 
 /********** class Collection **********/
@@ -36,7 +37,7 @@ void _CollectionOfDaata_v1_copy (const _CollectionOfDaata* me, _CollectionOfDaat
 		Daata item = my at [i];
 		if (my _ownItems) {
 			Melder_require (Thing_isa (item, classDaata),
-				U"Cannot copy item of class ", Thing_className (item), U".");
+				I18n_translate("error.cannot_copy_item_of_class"), U" ", Thing_className (item), U".");
 			thy at [i] = Data_copy (item).releaseToAmbiguousOwner();
 		} else {
 			thy at [i] = item;   // reference copy: if me doesn't own the items, then thee shouldn't either   // NOTE: the items don't have to be Daata
@@ -51,9 +52,9 @@ bool _CollectionOfDaata_v1_equal (_CollectionOfDaata* me, _CollectionOfDaata* th
 		return false;
 	for (integer i = 1; i <= my size; i ++) {
 		Melder_require (Thing_isa (my at [i], classDaata),
-			U"Collection::equal: cannot compare items of class ", Thing_className (my at [i]), U".");
+			I18n_translate("error.collection_equal_cannot_compare_items_of_class"), U" ", Thing_className (my at [i]), U".");
 		Melder_require (Thing_isa (thy at [i], classDaata),
-			U"Collection::equal: cannot compare items of class ", Thing_className (thy at [i]), U".");
+			I18n_translate("error.collection_equal_cannot_compare_items_of_class"), U" ", Thing_className (thy at [i]), U".");
 		bool equal = Data_equal (my at [i], thy at [i]);
 		//Melder_casual (U"classCollection_equal: ", equal,
 		//	U", item ", i,
@@ -77,19 +78,19 @@ bool _CollectionOfDaata_v1_canWriteAsEncoding (_CollectionOfDaata* me, int encod
 
 void _CollectionOfDaata_v1_writeText (_CollectionOfDaata* me, MelderFile file) {
 	texputi32 (file, my size, U"size");
-	texputintro (file, U"item []: ", my size ? nullptr : U"(empty)");
+	texputintro (file, I18n_translate("form.item"), U" []: ", my size ? nullptr : I18n_translate("form.empty"));
 	for (integer i = 1; i <= my size; i ++) {
 		Daata thing = my at [i];
 		ClassInfo classInfo = thing -> classInfo;
-		texputintro (file, U"item [", Melder_integer (i), U"]:");
+		texputintro (file, I18n_translate("form.item"), U" [", Melder_integer (i), U"]:");
 		Melder_require (Thing_isa (thing, classDaata) && Data_canWriteText (thing),
-			U"Objects of class ", classInfo -> className, U" cannot be written.");
+			I18n_translate("error.objects_of_class_cannot_be_written"), U" ", classInfo -> className, U".");
 		texputw16 (file,
 			classInfo -> version > 0 ?
 				Melder_cat (classInfo -> className, U" ", classInfo -> version) :
 				classInfo -> className,
 			U"class", 0,0,0,0,0);
-		texputw16 (file, thing -> name.get(), U"name");
+		texputw16 (file, thing -> name.get(), I18n_translate("form.name"));
 		Data_writeText (thing, file);
 		texexdent (file);
 	}
@@ -101,13 +102,13 @@ void _CollectionOfDaata_v1_readText (_CollectionOfDaata* me, MelderReadText text
 		autostring8 line = Melder_32to8 (MelderReadText_readLine (text));
 		integer l_size;
 		Melder_require (line && sscanf (line.get(), "%td", & l_size) == 1 && l_size >= 0,
-			U"Collection::readText: cannot read size.");
+			I18n_translate("error.collection_read_text_cannot_read_size"));
 		my _grow (l_size);
 		for (integer i = 1; i <= l_size; i ++) {
 			do {
 				line = Melder_32to8 (MelderReadText_readLine (text));
 				if (! line)
-					Melder_throw (U"Missing object line.");
+					Melder_throw (I18n_translate("error.missing_object_line"));
 			} while (! strnequ (line.get(), "Object ", 7));
 
 			integer itemNumberRead;
@@ -115,16 +116,16 @@ void _CollectionOfDaata_v1_readText (_CollectionOfDaata* me, MelderReadText text
 			int_not_integer n = 0;   // %n
 			integer stringsRead = sscanf (line.get(), "Object %td: class %199s %1999s%n", & itemNumberRead, klas, nameTag, & n);
 			Melder_require (stringsRead >= 2,
-				U"Collection::readText: cannot read header of object ", i, U".");
+				I18n_translate("error.collection_read_text_cannot_read_header_of_object"), U" ", i, U".");
 			Melder_require (itemNumberRead == i,
-				U"Collection::readText: read item number ", itemNumberRead, U" while expecting ", i, U".");
+				I18n_translate("error.collection_read_text_read_item_number"), U" ", itemNumberRead, I18n_translate("error.while_expecting"), U" ", i, U".");
 			Melder_require (stringsRead < 3 || strequ (nameTag, "name"),
-				U"Collection::readText: wrong header at object ", i, U".");
+				I18n_translate("error.collection_read_text_wrong_header_at_object"), U" ", i, U".");
 
 			my at [i] = (Daata) Thing_newFromClassName (Melder_peek8to32 (klas), nullptr).releaseToAmbiguousOwner();
 			my size ++;
 			Melder_require (Thing_isa (my at [i], classDaata) && Data_canReadText (my at [i]),
-				U"Cannot read item of class ", Thing_className (my at [i]), U" in collection.");
+				I18n_translate("error.cannot_read_item_of_class_in_collection"), U" ", Thing_className (my at [i]), U".");
 			Data_readText (my at [i], text, -1);
 			if (stringsRead == 3) {
 				char *location = & line [n];
@@ -145,7 +146,7 @@ void _CollectionOfDaata_v1_readText (_CollectionOfDaata* me, MelderReadText text
 			my at [i] = (Daata) Thing_newFromClassName (className.get(), & elementFormatVersion).releaseToAmbiguousOwner();
 			my size ++;
 			Melder_require (Thing_isa (my at [i], classDaata) && Data_canReadText (my at [i]),
-				U"Cannot read item of class ", Thing_className (my at [i]), U" in collection.");
+				I18n_translate("error.cannot_read_item_of_class_in_collection"), U" ", Thing_className (my at [i]), U".");
 			autostring32 objectName = texgetw16 (text);
 			Thing_setName (my at [i], objectName.get());
 			Data_readText (my at [i], text, elementFormatVersion);
@@ -159,7 +160,7 @@ void _CollectionOfDaata_v1_writeBinary (_CollectionOfDaata* me, FILE *f) {
 		Daata thing = my at [i];
 		ClassInfo classInfo = thing -> classInfo;
 		Melder_require (Thing_isa (thing, classDaata) && Data_canWriteBinary (thing),
-			U"Objects of class ", classInfo -> className, U" cannot be written.");
+			I18n_translate("error.objects_of_class_cannot_be_written"), U" ", classInfo -> className, U".");
 		binputw8 (classInfo -> version > 0 ?
 			Melder_cat (classInfo -> className, U" ", classInfo -> version) : classInfo -> className, f);
 		binputw16 (thing -> name.get(), f);
@@ -171,18 +172,18 @@ void _CollectionOfDaata_v1_readBinary (_CollectionOfDaata* me, FILE *f, int form
 	if (formatVersion < 0) {
 		int32 l_size = bingeti32 (f);
 		if (l_size < 0)
-			Melder_throw (U"Empty collection.");
+			Melder_throw (I18n_translate("error.empty_collection"));
 		my _grow (l_size);
 		for (int32 i = 1; i <= l_size; i ++) {
 			char klas [200], name [2000];
 			Melder_require (fscanf (f, "%199s%1999s", klas, name) == 2,
-				U"Cannot read class and name.");
+				I18n_translate("error.cannot_read_class_and_name"));
 			my at [i] = (Daata) Thing_newFromClassName (Melder_peek8to32 (klas), nullptr).releaseToAmbiguousOwner();
 			my size ++;
 			Melder_require (Thing_isa (my at [i], classDaata),
-				U"Cannot read item of class ", Thing_className (my at [i]), U".");
+				I18n_translate("error.cannot_read_item_of_class"), U" ", Thing_className (my at [i]), U".");
 			Melder_require (fgetc (f) == ' ',
-				U"Cannot read space.");
+				I18n_translate("error.cannot_read_space"));
 			Data_readBinary (my at [i], f, -1);
 			if (strcmp (name, "?"))
 				Thing_setName (my at [i], Melder_peek8to32 (name));

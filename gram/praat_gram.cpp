@@ -24,6 +24,7 @@
 #include "Net.h"
 #include "NoulliGridEditor.h"
 #include "CubeGridEditor.h"
+#include "../sys/i18n_simple.h"
 
 #include "praat_TableOfReal.h"
 #include "praat_TimeFunction.h"
@@ -1708,21 +1709,21 @@ void praat_uvafon_gram_init () {
 	structNoulliGridEditor :: f_preferences ();
 	structCubeGridEditor :: f_preferences ();
 
-	praat_addMenuCommand (U"Objects", U"New", U"Constraint grammars", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"OT learning tutorial", nullptr, GuiMenu_DEPTH_1 | GuiMenu_NO_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.constraint_grammars"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.ot_learning_tutorial"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_NO_API,
 				HELP__OT_learning_tutorial);
 		praat_addMenuCommand (U"Objects", U"New", U"-- tableau grammars --", nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create NoCoda grammar", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_nocoda_grammar"), nullptr, 1,
 				CREATE_ONE__Create_NoCoda_grammar);
-		praat_addMenuCommand (U"Objects", U"New", U"Create place assimilation grammar", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_place_assimilation_grammar"), nullptr, 1,
 				CREATE_ONE__Create_NPA_grammar);
-		praat_addMenuCommand (U"Objects", U"New", U"Create place assimilation distribution", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_place_assimilation_distribution"), nullptr, 1,
 				CREATE_ONE__Create_NPA_distribution);
-		praat_addMenuCommand (U"Objects", U"New", U"Create tongue-root grammar...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_tongue_root_grammar"), nullptr, 1,
 				CREATE_ONE__Create_tongue_root_grammar);
-		praat_addMenuCommand (U"Objects", U"New", U"Create metrics grammar...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_metrics_grammar"), nullptr, 1,
 				CREATE_ONE__Create_metrics_grammar);
-		praat_addMenuCommand (U"Objects", U"New", U"Create multi-level metrics grammar...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_multi_level_metrics_grammar"), nullptr, 1,
 				CREATE_ONE__Create_multi_level_metrics_grammar);
 	praat_addAction1 (classOTGrammar, 1, U"Save as headerless spreadsheet file... || Write to headerless spreadsheet file...", nullptr, 0,
 			SAVE_ONE__OTGrammar_writeToHeaderlessSpreadsheetFile);   // alternative COMPATIBILITY <= 2011
@@ -1789,9 +1790,9 @@ void praat_uvafon_gram_init () {
 				QUERY_ONE_WEAK_FOR_STRING__OTGrammar_inputToOutput);
 		praat_addAction1 (classOTGrammar, 0, U"Input to outputs...", nullptr, 0,
 				CONVERT_EACH_WEAK_TO_ONE__OTGrammar_inputToOutputs);
-		praat_addAction1 (classOTGrammar, 0, U"To output Distributions...", nullptr, 0,
+		praat_addAction1 (classOTGrammar, 0, I18n_translate("menu.to_output_distributions_otgrammar"), nullptr, 0,
 				CONVERT_EACH_WEAK_TO_ONE__OTGrammar_to_Distributions);
-		praat_addAction1 (classOTGrammar, 0, U"To PairDistribution...", nullptr, 0,
+		praat_addAction1 (classOTGrammar, 0, I18n_translate("menu.to_pairdistribution_otgrammar"), nullptr, 0,
 				CONVERT_EACH_WEAK_TO_ONE__OTGrammar_to_PairDistribution);
 	praat_addAction1 (classOTGrammar, 0, U"Modify ranking -", nullptr, 0, nullptr);
 		praat_addAction1 (classOTGrammar, 0, U"Set ranking...", nullptr, 1,
@@ -1855,7 +1856,7 @@ void praat_uvafon_gram_init () {
 				QUERY_ONE_WEAK_FOR_STRING__OTMulti_generateOptimalForm);
 		praat_addAction1 (classOTMulti, 0, U"Get outputs...", nullptr, 1,
 				CONVERT_EACH_WEAK_TO_ONE__OTMulti_generateOptimalForms);
-		praat_addAction1 (classOTMulti, 0, U"To output Distribution...", nullptr, 1,
+		praat_addAction1 (classOTMulti, 0, I18n_translate("menu.to_output_distribution_otmulti"), nullptr, 1,
 				CONVERT_EACH_WEAK_TO_ONE__OTMulti_to_Distribution);
 	praat_addAction1 (classOTMulti, 0, U"Modify ranking", nullptr, 0, nullptr);
 		praat_addAction1 (classOTMulti, 0, U"Set ranking...", nullptr, 0,
@@ -1915,14 +1916,14 @@ void praat_uvafon_gram_init () {
 	praat_addAction2 (classOTMulti, 1, classStrings, 1, U"Get outputs...", nullptr, 0,
 			CONVERT_ONE_WEAK_AND_ONE_TO_ONE__OTMulti_Strings_generateOptimalForms);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Symmetric neural networks", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create empty Network...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.symmetric_neural_networks"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_empty_network"), nullptr, 1,
 				CREATE_ONE__Create_empty_Network);
-		praat_addMenuCommand (U"Objects", U"New", U"Create rectangular Network...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_rectangular_network"), nullptr, 1,
 				CREATE_ONE__Create_rectangular_Network);
-		praat_addMenuCommand (U"Objects", U"New", U"Create rectangular Network (vertical)...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_rectangular_network_vertical"), nullptr, 1,
 				CREATE_ONE__Create_rectangular_Network_vertical);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Net as deep belief network...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_net_as_deep_belief_network"), nullptr, 1,
 				CREATE_ONE__CreateNetAsDeepBeliefNetwork);
 
 	praat_addAction1 (classNetwork, 0, U"Draw...", nullptr, 0,
@@ -2021,7 +2022,7 @@ void praat_uvafon_gram_init () {
 			MODIFY_FIRST_OF_ONE_AND_ONE__Net_PatternList_learnByLayer);
 	praat_addAction2 (classNet, 1, classPatternList, 1, U"Learn (two phases)...", nullptr, 0,
 			MODIFY_FIRST_OF_ONE_AND_ONE__Net_PatternList_learn_twoPhases);
-	praat_addAction2 (classNet, 1, classPatternList, 1, U"To ActivationList", nullptr, 0,
+	praat_addAction2 (classNet, 1, classPatternList, 1, I18n_translate("menu.to_activationlist_net_patternlist"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Net_PatternList_to_ActivationList);
 
 	praat_addAction1 (classNoulliGrid, 1, U"View & Edit", nullptr, GuiMenu_ATTRACTIVE,

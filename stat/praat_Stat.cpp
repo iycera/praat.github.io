@@ -24,6 +24,7 @@
 #include "TableEditor.h"
 #include "RealTier.h"
 #include "../kar/UnicodeData.h"
+#include "../sys/i18n_simple.h"
 
 #include "praat_TableOfReal.h"
 
@@ -32,17 +33,17 @@
 // MARK: Help
 
 DIRECT (HELP__Distributions_help) {
-	HELP (U"Distributions")
+	HELP (I18n_translate("help.distributions"))
 }
 
 DIRECT (HELP__Table_help) {
-	HELP (U"Table")
+	HELP (I18n_translate("help.table"))
 }
 
 // MARK: Query
 
-FORM (QUERY_ONE_FOR_REAL__Distributionses_getMeanAbsoluteDifference, U"Get mean difference", nullptr) {
-	NATURAL (columnNumber, U"Column number", U"1")
+FORM (QUERY_ONE_FOR_REAL__Distributionses_getMeanAbsoluteDifference, I18n_translate("form.get_mean_difference"), nullptr) {
+	NATURAL (columnNumber, I18n_translate("form.column_number"), U"1")
 	OK
 DO
 	QUERY_TWO_FOR_REAL (Distributions)
@@ -50,9 +51,9 @@ DO
 	QUERY_TWO_FOR_REAL_END (U" (mean absolute difference between columns ", columnNumber, U")")
 }
 
-FORM (QUERY_ONE_FOR_REAL__Distributions_getProbability, U"Get probability", nullptr) {
-	NATURAL (columnNumber, U"Column number", U"1")
-	SENTENCE (string, U"String", U"")
+FORM (QUERY_ONE_FOR_REAL__Distributions_getProbability, I18n_translate("form.get_probability"), nullptr) {
+	NATURAL (columnNumber, I18n_translate("form.column_number"), U"1")
+	SENTENCE (string, I18n_translate("form.string"), U"")
 	OK
 DO
 	QUERY_ONE_FOR_REAL (Distributions)
@@ -65,14 +66,14 @@ DO
 DIRECT (COMBINE_ALL_TO_ONE__Distributionses_add) {
 	COMBINE_ALL_TO_ONE (Distributions)
 		autoDistributions result = Distributions_addMany (& list);
-	COMBINE_ALL_TO_ONE_END (U"added")
+	COMBINE_ALL_TO_ONE_END (I18n_translate("form.added"))
 }
 
 // MARK: Generate
 
-FORM (CONVERT_EACH_TO_ONE__Distributions_to_Strings, U"To Strings", nullptr) {
-	NATURAL (columnNumber, U"Column number", U"1")
-	NATURAL (numberOfStrings, U"Number of strings", U"1000")
+FORM (CONVERT_EACH_TO_ONE__Distributions_to_Strings, I18n_translate("form.to_strings"), nullptr) {
+	NATURAL (columnNumber, I18n_translate("form.column_number"), U"1")
+	NATURAL (numberOfStrings, I18n_translate("form.number_of_strings"), U"1000")
 	OK
 DO
 	CONVERT_EACH_TO_ONE (Distributions)
@@ -80,8 +81,8 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (CONVERT_EACH_TO_ONE__Distributions_to_Strings_exact, U"To Strings (exact)", nullptr) {
-	NATURAL (columnNumber, U"Column number", U"1")
+FORM (CONVERT_EACH_TO_ONE__Distributions_to_Strings_exact, I18n_translate("form.to_strings_exact"), nullptr) {
+	NATURAL (columnNumber, I18n_translate("form.column_number"), U"1")
 	OK
 DO
 	CONVERT_EACH_TO_ONE (Distributions)
@@ -93,7 +94,7 @@ DO
 
 // MARK: Draw
 
-FORM (GRAPHICS_EACH__LogisticRegression_drawBoundary, U"LogisticRegression: Draw boundary", nullptr) {
+FORM (GRAPHICS_EACH__LogisticRegression_drawBoundary, I18n_translate("form.logisticregression_draw_boundary"), nullptr) {
 	SENTENCE (horizontalFactor, U"Horizontal factor", U"")
 	REAL (fromHorizontal, U"left Horizontal range", U"0.0")
 	REAL (toHorizontal, U"right Horizontal range", U"0.0 (= auto)")
@@ -142,7 +143,7 @@ DIRECT (QUERY_ONE_FOR_INTEGER__PairDistribution_getNumberOfPairs) {
 	QUERY_ONE_FOR_INTEGER_END (U" pairs")
 }
 
-FORM (QUERY_ONE_FOR_STRING__PairDistribution_getString1, U"Get string1", nullptr) {
+FORM (QUERY_ONE_FOR_STRING__PairDistribution_getString1, I18n_translate("form.get_string1"), nullptr) {
 	NATURAL (pairNumber, U"Pair number", U"1")
 	OK
 DO
@@ -151,7 +152,7 @@ DO
 	QUERY_ONE_FOR_STRING_END
 }
 
-FORM (QUERY_ONE_FOR_STRING__PairDistribution_getString2, U"Get string2", nullptr) {
+FORM (QUERY_ONE_FOR_STRING__PairDistribution_getString2, I18n_translate("form.get_string2"), nullptr) {
 	NATURAL (pairNumber, U"Pair number", U"1")
 	OK
 DO
@@ -160,7 +161,7 @@ DO
 	QUERY_ONE_FOR_STRING_END
 }
 
-FORM (QUERY_ONE_FOR_REAL__PairDistribution_getWeight, U"Get weight", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PairDistribution_getWeight, I18n_translate("form.get_weight"), nullptr) {
 	NATURAL (pairNumber, U"Pair number", U"1")
 	OK
 DO
@@ -171,7 +172,7 @@ DO
 
 // MARK: Modify
 
-FORM (MODIFY_EACH__PairDistribution_setWeight, U"Set weight", nullptr) {
+FORM (MODIFY_EACH__PairDistribution_setWeight, I18n_translate("form.set_weight"), nullptr) {
 	NATURAL (pairNumber, U"Pair number", U"1")
 	REAL (newWeight, U"New weight", U"10.0")
 	OK
@@ -195,7 +196,7 @@ DIRECT (MODIFY_EACH__PairDistribution_swapInputsAndOutputs) {
 
 // MARK: Generate
 
-FORM (CONVERT_ONE_TO_MULTIPLE__PairDistribution_to_Stringses, U"Generate two Strings objects", nullptr) {
+FORM (CONVERT_ONE_TO_MULTIPLE__PairDistribution_to_Stringses, I18n_translate("form.generate_two_strings_objects"), nullptr) {
 	NATURAL (number, U"Number", U"1000")
 	SENTENCE (nameOfFirstStrings, U"Name of first Strings", U"input")
 	SENTENCE (nameOfSecondStrings, U"Name of second Strings", U"output")
@@ -217,7 +218,7 @@ DIRECT (CONVERT_EACH_TO_ONE__PairDistribution_to_Table) {
 
 // MARK: - PAIRDISTRIBUTION & DISTRIBUTIONS
 
-FORM (QUERY_ONE_AND_ONE_FOR_REAL__PairDistribution_Distributions_getFractionCorrect, U"PairDistribution & Distributions: Get fraction correct", nullptr) {
+FORM (QUERY_ONE_AND_ONE_FOR_REAL__PairDistribution_Distributions_getFractionCorrect, I18n_translate("form.pairdistribution_distributions_get_fraction_correct"), nullptr) {
 	NATURAL (columnNumber, U"Column number", U"1")
 	OK
 DO
@@ -230,7 +231,7 @@ DO
 
 // MARK: New
 
-FORM (NEW1_Table_createWithColumnNames, U"Create Table with column names", nullptr) {
+FORM (NEW1_Table_createWithColumnNames, I18n_translate("form.create_table_with_column_names"), nullptr) {
 	WORD (name, U"Name", U"table")
 	INTEGER (numberOfRows, U"Number of rows", U"10")
 	STRINGARRAY (columnNames, U"Column names", { U"speaker", U"dialect", U"age_yr", U"vowel", U"F0_Hz", U"F1_Hz", U"F2_Hz" })
@@ -241,7 +242,7 @@ DO
 	CREATE_ONE_END (name)
 }
 
-FORM (NEW1_Table_createWithoutColumnNames, U"Create Table without column names", nullptr) {
+FORM (NEW1_Table_createWithoutColumnNames, I18n_translate("form.create_table_without_column_names"), nullptr) {
 	WORD (name, U"Name", U"table")
 	INTEGER (numberOfRows, U"Number of rows", U"10")
 	NATURAL (numberOfColumns, U"Number of columns", U"3")
@@ -254,25 +255,25 @@ DO
 
 // MARK: Open
 
-FORM_READ (READ1_Table_readFromTableFile, U"Read Table from table file", nullptr, true) {
+FORM_READ (READ1_Table_readFromTableFile, I18n_translate("form.read_table_from_table_file"), nullptr, true) {
 	READ_ONE
 		autoTable result = Table_readFromTableFile (file);
 	READ_ONE_END
 }
 
-FORM_READ (READ1_Table_readFromCommaSeparatedFile, U"Read Table from comma-separated file", nullptr, true) {
+FORM_READ (READ1_Table_readFromCommaSeparatedFile, I18n_translate("form.read_table_from_comma_separated_file"), nullptr, true) {
 	READ_ONE
 		autoTable result = Table_readFromCharacterSeparatedTextFile (file, U',', true);
 	READ_ONE_END
 }
 
-FORM_READ (READ1_Table_readFromSemicolonSeparatedFile, U"Read Table from semicolon-separated file", nullptr, true) {
+FORM_READ (READ1_Table_readFromSemicolonSeparatedFile, I18n_translate("form.read_table_from_semicolon_separated_file"), nullptr, true) {
 	READ_ONE
 		autoTable result = Table_readFromCharacterSeparatedTextFile (file, U';', true);
 	READ_ONE_END
 }
 
-FORM_READ (READ1_Table_readFromTabSeparatedFile, U"Read Table from tab-separated file", nullptr, true) {
+FORM_READ (READ1_Table_readFromTabSeparatedFile, I18n_translate("form.read_table_from_tab_separated_file"), nullptr, true) {
 	READ_ONE
 		autoTable result = Table_readFromCharacterSeparatedTextFile (file, U'\t', false);
 	READ_ONE_END
@@ -280,19 +281,19 @@ FORM_READ (READ1_Table_readFromTabSeparatedFile, U"Read Table from tab-separated
 
 // MARK: Save
 
-FORM_SAVE (SAVE_ONE__Table_writeToTabSeparatedFile, U"Save Table as tab-separated file", nullptr, U"Table") {
+FORM_SAVE (SAVE_ONE__Table_writeToTabSeparatedFile, I18n_translate("form.save_table_as_tab_separated_file"), nullptr, U"Table") {
 	SAVE_ONE (Table)
 		Table_writeToTabSeparatedFile (me, file);
 	SAVE_ONE_END
 }
 
-FORM_SAVE (SAVE_ONE__Table_writeToCommaSeparatedFile, U"Save Table as comma-separated file", nullptr, U"Table") {
+FORM_SAVE (SAVE_ONE__Table_writeToCommaSeparatedFile, I18n_translate("form.save_table_as_comma_separated_file"), nullptr, U"Table") {
 	SAVE_ONE (Table)
 		Table_writeToCommaSeparatedFile (me, file);
 	SAVE_ONE_END
 }
 
-FORM_SAVE (SAVE_ONE__Table_writeToSemicolonSeparatedFile, U"Save Table as semicolon-separated file", nullptr, U"Table") {
+FORM_SAVE (SAVE_ONE__Table_writeToSemicolonSeparatedFile, I18n_translate("form.save_table_as_semicolon_separated_file"), nullptr, U"Table") {
 	SAVE_ONE (Table)
 		Table_writeToSemicolonSeparatedFile (me, file);
 	SAVE_ONE_END
@@ -314,7 +315,7 @@ DIRECT (EDITOR_ONE__Table_viewAndEdit) {
 
 // MARK: Tabulate
 
-FORM (INFO_ONE__Table_list, U"Table: List", nullptr) {
+FORM (INFO_ONE__Table_list, I18n_translate("form.table_list"), nullptr) {
 	BOOLEAN (includeRowNumbers, U"Include row numbers", true)
 	OK
 DO
@@ -325,7 +326,7 @@ DO
 
 // MARK: Draw
 
-FORM (GRAPHICS_EACH__Table_scatterPlot, U"Scatter plot", nullptr) {
+FORM (GRAPHICS_EACH__Table_scatterPlot, I18n_translate("form.scatter_plot"), nullptr) {
 	SENTENCE (horizontalColumnName, U"Horizontal column", U"")
 	REAL (fromHorizontal, U"left Horizontal range", U"0.0")
 	REAL (toHorizontal, U"right Horizontal range", U"0.0 (= auto)")
@@ -346,7 +347,7 @@ DO
 	GRAPHICS_EACH_END
 }
 
-FORM (GRAPHICS_EACH__Table_scatterPlot_mark, U"Scatter plot (marks)", nullptr) {
+FORM (GRAPHICS_EACH__Table_scatterPlot_mark, I18n_translate("form.scatter_plot_marks"), nullptr) {
 	SENTENCE (horizontalColumnName, U"Horizontal column", U"")
 	REAL (fromHorizontal, U"left Horizontal range", U"0.0")
 	REAL (toHorizontal, U"right Horizontal range", U"0.0 (= auto)")
@@ -368,7 +369,7 @@ DO
 	GRAPHICS_EACH_END
 }
 
-FORM (GRAPHICS_EACH__Table_drawEllipse, U"Draw ellipse (standard deviation)", nullptr) {
+FORM (GRAPHICS_EACH__Table_drawEllipse, I18n_translate("form.draw_ellipse_standard_deviation"), nullptr) {
 	SENTENCE (horizontalColumnName, U"Horizontal column", U"")
 	REAL (fromHorizontal, U"left Horizontal range", U"0.0")
 	REAL (toHorizontal, U"right Horizontal range", U"0.0 (= auto)")
@@ -1082,25 +1083,25 @@ void praat_uvafon_stat_init () {
 
 	structTableEditor :: f_preferences ();
 
-	praat_addMenuCommand (U"Objects", U"New", U"Tables", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Table with column names...",
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.tables"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_table_with_column_names"),
 				nullptr, 1, NEW1_Table_createWithColumnNames);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Table without column names... || Create Table...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_table_without_column_names"),
 				nullptr, 1, NEW1_Table_createWithoutColumnNames);   // alternative GuiMenu_DEPRECATED_2006
-		praat_addMenuCommand (U"Objects", U"New", U"Create TableOfReal...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_tableofreal"),
 				nullptr, 1, NEW1_TableOfReal_create);
 
-	praat_addMenuCommand (U"Objects", U"Open", U"-- open table --",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.separator_open_table"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Table from tab-separated file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_table_from_tab_separated_file"),
 			nullptr, 0, READ1_Table_readFromTabSeparatedFile);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Table from comma-separated file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_table_from_comma_separated_file"),
 			nullptr, 0, READ1_Table_readFromCommaSeparatedFile);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Table from semicolon-separated file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_table_from_semicolon_separated_file"),
 			nullptr, 0, READ1_Table_readFromSemicolonSeparatedFile);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Table from whitespace-separated file... || Read Table from table file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_table_from_whitespace_separated_file"),
 			nullptr, 0, READ1_Table_readFromTableFile);   // alternative GuiMenu_DEPRECATED_2011
-	praat_addMenuCommand (U"Objects", U"Open", U"Read TableOfReal from headerless spreadsheet file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_tableofreal_from_headerless_spreadsheet_file"),
 			nullptr, 0, READ1_TableOfReal_readFromHeaderlessSpreadsheetFile);
 
 	praat_addAction1 (classDistributions, 0, U"Distributions help", nullptr, 0,
@@ -1116,10 +1117,10 @@ void praat_uvafon_stat_init () {
 				U"Append", 1, nullptr);
 		praat_addAction1 (classDistributions, 0, U"Add",
 				U"-- add --", 1, COMBINE_ALL_TO_ONE__Distributionses_add);
-praat_addAction1 (classDistributions, 0, U"Generate", nullptr, 0, nullptr);
-	praat_addAction1 (classDistributions, 0, U"To Strings...",
+	praat_addAction1 (classDistributions, 0, U"Generate", nullptr, 0, nullptr);
+	praat_addAction1 (classDistributions, 0, I18n_translate("menu.to_strings_distributions"),
 			nullptr, 0, CONVERT_EACH_TO_ONE__Distributions_to_Strings);
-	praat_addAction1 (classDistributions, 0, U"To Strings (exact)...",
+	praat_addAction1 (classDistributions, 0, I18n_translate("menu.to_strings_exact_distributions"),
 			nullptr, 0, CONVERT_EACH_TO_ONE__Distributions_to_Strings_exact);
 
 	praat_addAction1 (classLogisticRegression, 0, U"Draw boundary...",
@@ -1127,9 +1128,9 @@ praat_addAction1 (classDistributions, 0, U"Generate", nullptr, 0, nullptr);
 
 	praat_addAction1 (classPairDistribution, 0, U"PairDistribution help",
 			nullptr, 0, HELP__PairDistribution_help);
-	praat_addAction1 (classPairDistribution, 0, U"To Table",
+		praat_addAction1 (classPairDistribution, 0, I18n_translate("menu.to_table_pairdistribution"),
 			nullptr, 0, CONVERT_EACH_TO_ONE__PairDistribution_to_Table);
-	praat_addAction1 (classPairDistribution, 1, U"To Stringses...",
+		praat_addAction1 (classPairDistribution, 1, I18n_translate("menu.to_stringses_pairdistribution"),
 			nullptr, 0, CONVERT_ONE_TO_MULTIPLE__PairDistribution_to_Stringses);
 	praat_addAction1 (classPairDistribution, 0, U"Query -", nullptr, 0, nullptr);
 		praat_addAction1 (classPairDistribution, 1, U"Get number of pairs",
@@ -1276,9 +1277,9 @@ praat_addAction1 (classDistributions, 0, U"Generate", nullptr, 0, nullptr);
 		praat_addAction1 (classTable, 0, U"Rename column (by number)... || Set column label (index)...",   // alternative deprecated 2023
 				nullptr, 1, MODIFY_EACH__Table_renameColumn_byNumber);
 	praat_addAction1 (classTable, 0, U"Analyse -", nullptr, 0, nullptr);
-		praat_addAction1 (classTable, 0, U"To linear regression",
+		praat_addAction1 (classTable, 0, I18n_translate("menu.to_linear_regression_table"),
 				nullptr, 1, CONVERT_EACH_TO_ONE__Table_to_LinearRegression);
-		praat_addAction1 (classTable, 0, U"To logistic regression...",
+		praat_addAction1 (classTable, 0, I18n_translate("menu.to_logistic_regression_table"),
 				nullptr, 1, CONVERT_EACH_TO_ONE__Table_to_LogisticRegression);
 	praat_addAction1 (classTable, 0, U"Synthesize -", nullptr, 0, nullptr);
 		praat_addAction1 (classTable, 0, U"Append",
@@ -1298,7 +1299,7 @@ praat_addAction1 (classDistributions, 0, U"Generate", nullptr, 0, nullptr);
 		praat_addAction1 (classTable, 0, U"Rows to columns...",
 				nullptr, 1, CONVERT_EACH_TO_ONE__Table_rowsToColumns);
 	praat_addAction1 (classTable, 0, U"Convert -", nullptr, 0, nullptr);
-		praat_addAction1 (classTable, 0, U"To RealTier...",
+		praat_addAction1 (classTable, 0, I18n_translate("menu.to_realtier_table"),
 				nullptr, 1, CONVERT_EACH_TO_ONE__Table_to_RealTier);
 		praat_addAction1 (classTable, 0, U"Down to TableOfReal...",
 				nullptr, 1, CONVERT_EACH_TO_ONE__Table_downto_TableOfReal);

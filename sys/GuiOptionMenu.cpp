@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiOptionMenu, GuiControl, 0);
 
@@ -40,7 +41,7 @@ Thing_implement (GuiOptionMenu, GuiControl, 0);
 		[self setMenu:nil];
 
 		forget (me);
-		trace (U"deleting an option menu");
+		trace (I18n_translate("debug.deleting_an_option_menu"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {

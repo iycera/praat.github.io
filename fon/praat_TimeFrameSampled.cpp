@@ -17,6 +17,7 @@
  */
 
 #include "praat_TimeFrameSampled.h"
+#include "../sys/i18n_simple.h"
 
 // MARK: - TIMEFRAMESAMPLED
 
@@ -26,8 +27,8 @@ DIRECT (INTEGER_TimeFrameSampled_getNumberOfFrames) {
 	QUERY_ONE_FOR_REAL_END (U" frames");
 }
 
-FORM (REAL_TimeFrameSampled_getFrameNumberFromTime, U"Get frame number from time", U"Get frame number from time...") {
-	REAL (time, U"Time (s)", U"0.5")
+FORM (REAL_TimeFrameSampled_getFrameNumberFromTime, I18n_translate("form.get_frame_number_from_time"), I18n_translate("form.get_frame_number_from_time_dialog")) {
+	REAL (time, I18n_translate("form.time_s"), U"0.5")
 	OK
 DO
 	QUERY_ONE_FOR_REAL (Sampled)
@@ -41,8 +42,8 @@ DIRECT (REAL_TimeFrameSampled_getTimeStep) {
 	QUERY_ONE_FOR_REAL_END (U" seconds")
 }
 
-FORM (REAL_TimeFrameSampled_getTimeFromFrameNumber, U"Get time from frame number", U"Get time from frame number...") {
-	NATURAL (frameNumber, U"Frame number", U"1")
+FORM (REAL_TimeFrameSampled_getTimeFromFrameNumber, I18n_translate("form.get_time_from_frame_number"), I18n_translate("form.get_time_from_frame_number_dialog")) {
+	NATURAL (frameNumber, I18n_translate("form.frame_number"), U"1")
 	OK
 DO
 	QUERY_ONE_FOR_REAL (Sampled)

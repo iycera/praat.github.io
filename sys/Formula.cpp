@@ -25,6 +25,7 @@
 #include "Ui.h"
 #include "praatP.h"
 #include "praat_script.h"
+#include "i18n_simple.h"
 #include "../kar/UnicodeData.h"
 #include "../kar/longchar.h"
 #include "UiPause.h"
@@ -1915,7 +1916,7 @@ static void parseExpression () {
 static void Formula_parseExpression () {
 	ilabel = ilexan = iparse = 0;
 	if (lexan [1]. symbol == END_)
-		Melder_throw (U"Empty formula.");
+		Melder_throw (I18n_translate("error.empty_formula"));
 	parseExpression ();
 	fit (END_);
 	newparse (END_);
@@ -2136,7 +2137,7 @@ static integer praat_findObjectById (integer id) {
 	integer IOBJECT;
 	WHERE_DOWN (ID == id)
 		return IOBJECT;
-	Melder_throw (U"No object with number ", id, U".");
+	Melder_throw (I18n_translate("error.no_object_with_number"), U" ", id, U".");
 }
 
 static integer praat_findObjectByName (conststring32 name) {
@@ -2146,7 +2147,7 @@ static integer praat_findObjectByName (conststring32 name) {
 		MelderString_copy (& buffer, name);
 		char32 *spaceLocation = str32chr (buffer.string, U' ');
 		if (! spaceLocation)
-			Melder_throw (U"Missing space in object name “", name, U"”.");
+			Melder_throw (I18n_translate("error.missing_space_in_object_name"), U" ", name, U".");
 		*spaceLocation = U'\0';
 		conststring32 className = & buffer.string [0], givenName = spaceLocation + 1;
 		WHERE_DOWN (1) {
@@ -2161,7 +2162,7 @@ static integer praat_findObjectByName (conststring32 name) {
 				return IOBJECT;
 		}
 	}
-	Melder_throw (U"No object with name “", name, U"”.");
+	Melder_throw (I18n_translate("error.no_object_with_name"), U" ", name, U".");
 }
 
 static void Formula_evaluateConstants () {
@@ -2389,7 +2390,7 @@ inline static void pushNumber (const double x) {
 	 */
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_NUMBER;
@@ -2400,7 +2401,7 @@ inline static void pushNumber (const double x) {
 static void pushNumericVector (autoVEC x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_NUMERIC_VECTOR;
@@ -2410,7 +2411,7 @@ static void pushNumericVector (autoVEC x) {
 static void pushNumericVectorReference (VEC x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_NUMERIC_VECTOR;
@@ -2420,7 +2421,7 @@ static void pushNumericVectorReference (VEC x) {
 static void pushNumericMatrix (autoMAT x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_NUMERIC_MATRIX;
@@ -2430,7 +2431,7 @@ static void pushNumericMatrix (autoMAT x) {
 static void pushNumericMatrixReference (MAT x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_NUMERIC_MATRIX;
@@ -2440,7 +2441,7 @@ static void pushNumericMatrixReference (MAT x) {
 static void pushString (autostring32 x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	//stackel -> reset();   // incorporated in next statement
 	stackel -> setString (x.move());
@@ -2449,7 +2450,7 @@ static void pushString (autostring32 x) {
 static void pushStringVector (autoSTRVEC x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_STRING_ARRAY;
@@ -2459,7 +2460,7 @@ static void pushStringVector (autoSTRVEC x) {
 static void pushStringVectorReference (STRVEC x) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_STRING_ARRAY;
@@ -2469,7 +2470,7 @@ static void pushStringVectorReference (STRVEC x) {
 static void pushObject (Daata object) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_OBJECT;
@@ -2479,7 +2480,7 @@ static void pushObject (Daata object) {
 static void pushVariable (InterpreterVariable var) {
 	if (++ stackPointer > stackPointerMax)
 		if (++ stackPointerMax > Formula_MAXIMUM_STACK_SIZE)
-			Melder_throw (U"Formula: stack overflow. Please simplify your formulas.");
+			Melder_throw (I18n_translate("error.formula_stack_overflow"));
 	const Stackel stackel = & theStack [stackPointer];
 	stackel -> reset();
 	stackel -> which = Stackel_VARIABLE;
@@ -2492,7 +2493,7 @@ static void do_not () {
 	if (x->which == Stackel_NUMBER) {
 		pushNumber (isundef (x->number) ? undefined : x->number == 0.0 ? 1.0 : 0.0);
 	} else {
-		Melder_throw (U"Cannot negate (“not”) ", x->whichText(), U".");
+		Melder_throw (I18n_translate("error.cannot_negate_not"), U" ", x->whichText(), U".");
 	}
 }
 static void do_eq () {

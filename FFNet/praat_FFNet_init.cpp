@@ -40,6 +40,7 @@
 #include "FFNet_PatternList_Categories.h"
 
 #include "praat_FFNet.h"
+#include "../sys/i18n_simple.h"
 
 /* Routines to be removed sometime in the future:
 20040422, 2.4.04: FFNet_drawWeightsToLayer  use FFNet_drawWeights
@@ -564,17 +565,17 @@ DO
 void praat_uvafon_FFNet_init () {
 	Thing_recognizeClassesByName (classFFNet, nullptr);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Feedforward neural networks", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create FFNet...", nullptr, 1, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.feedforward_neural_networks"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_ffnet"), nullptr, 1, 
 			CREATE_ONE__FFNet_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Create iris example...", nullptr, 1, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_iris_example"), nullptr, 1, 
 			CREATE_MULTIPLE__FFNet_createIrisExample);
-	praat_addMenuCommand (U"Objects", U"New", U"Advanced", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create FFNet (linear outputs)...", nullptr, 2, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.advanced"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_ffnet_linear_outputs"), nullptr, 2, 
 			CREATE_ONE__FFNet_create_linearOutputs);
-	praat_addMenuCommand (U"Objects", U"New", U"Create PatternList... || Create Pattern...",
-			nullptr, 2, CREATE_ONE__PatternList_create);   // alternative GuiMenu_DEPRECATED_2015
-	praat_addMenuCommand (U"Objects", U"New", U"Create Categories...", nullptr, 2, 
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_patternlist"), nullptr, 2, 
+			CREATE_ONE__PatternList_create);   // alternative GuiMenu_DEPRECATED_2015
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_categories"), nullptr, 2, 
 			CREATE_ONE__Categories_create);
 
 	praat_addAction1 (classFFNet, 0, U"FFNet help", nullptr, 0, 
@@ -635,7 +636,7 @@ void praat_uvafon_FFNet_init () {
 			HINT__hint_FFNet_PatternList_Categories_learn);
 
 	praat_addAction2 (classFFNet, 1, classActivationList, 1, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction2 (classFFNet, 1, classActivationList, 1, U"To Categories...", nullptr, 0, 
+	praat_addAction2 (classFFNet, 1, classActivationList, 1, I18n_translate("menu.to_categories_activationlist"), nullptr, 0, 
 			CONVERT_ONE_AND_ONE_TO_ONE__FFNet_ActivationList_to_Categories);
 
 	praat_addAction2 (classFFNet, 1, classEigen, 1, U"Draw", nullptr, 0, nullptr);
@@ -643,7 +644,7 @@ void praat_uvafon_FFNet_init () {
 			GRAPHICS_ONE_AND_ONE__FFNet_Eigen_drawIntersection);
 
 	praat_addAction2 (classFFNet, 1, classCategories, 1, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction2 (classFFNet, 1, classCategories, 1, U"To ActivationList", nullptr, 0, 
+	praat_addAction2 (classFFNet, 1, classCategories, 1, I18n_translate("menu.to_activationlist_categories"), nullptr, 0, 
 			CONVERT_ONE_AND_ONE_TO_ONE__FFNet_Categories_to_ActivationList);
 
 	praat_addAction2 (classFFNet, 1, classMatrix, 1, U"Modify", nullptr, 0, nullptr);
@@ -654,9 +655,9 @@ void praat_uvafon_FFNet_init () {
 	praat_addAction2 (classFFNet, 1, classPatternList, 1, U"Draw activation...", nullptr, 0,
 			GRAPHICS_ONE_AND_ONE__FFNet_PatternList_drawActivation);
 	praat_addAction2 (classFFNet, 1, classPatternList, 1, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction2 (classFFNet, 1, classPatternList, 1, U"To Categories...", nullptr, 0,
+	praat_addAction2 (classFFNet, 1, classPatternList, 1, I18n_translate("menu.to_categories_patternlist"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__FFNet_PatternList_to_Categories);
-	praat_addAction2 (classFFNet, 1, classPatternList, 1, U"To ActivationList...", nullptr, 0,
+	praat_addAction2 (classFFNet, 1, classPatternList, 1, I18n_translate("menu.to_activationlist_patternlist"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__FFNet_PatternList_to_ActivationList);
 
 	praat_addAction3 (classFFNet, 1, classPatternList, 1, classActivationList, 1, U"Get total costs...", nullptr, 0,
@@ -682,7 +683,7 @@ void praat_uvafon_FFNet_init () {
 	praat_addAction2 (classFFNet, 1, classPCA, 1, U"Draw decision plane...", nullptr, 0,
 			GRAPHICS_ONE_AND_ONE__FFNet_PCA_drawDecisionPlaneInEigenspace);
 	
-	praat_addAction2 (classPatternList, 1, classCategories, 1, U"To FFNet...", nullptr, 0, 
+	praat_addAction2 (classPatternList, 1, classCategories, 1, I18n_translate("menu.to_ffnet_patternlist_categories"), nullptr, 0, 
 			CONVERT_ONE_AND_ONE_TO_ONE__PatternList_Categories_to_FFNet);
 	
 	INCLUDE_MANPAGES (manual_FFNet_init)

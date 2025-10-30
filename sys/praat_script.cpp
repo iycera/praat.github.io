@@ -18,6 +18,7 @@
  */
 
 #include "praatP.h"
+#include "i18n_simple.h"
 #include "praat_script.h"
 #include "UiPause.h"
 #include "DemoEditor.h"
@@ -34,7 +35,7 @@ static integer praat_findObjectFromString (Interpreter interpreter, conststring3
 			MelderString_copy (& buffer, string);
 			char32 *space = str32chr (buffer.string, U' ');
 			if (! space)
-				Melder_throw (U"Missing space in name.");
+				Melder_throw (I18n_translate ("error.missing_space_in_name"));
 			*space = U'\0';
 			char32 *className = & buffer.string [0], *givenName = space + 1;
 			WHERE_DOWN (1) {
@@ -51,7 +52,7 @@ static integer praat_findObjectFromString (Interpreter interpreter, conststring3
 				if (str32equ (klas -> className, Thing_className (OBJECT)) && str32equ (givenName, object -> name.get()))
 					return IOBJECT;
 			}
-			Melder_throw (U"No object with that name.");
+			Melder_throw (I18n_translate ("error.no_object_with_that_name"));
 		} else {
 			/*
 				Find the object by its ID.
@@ -61,10 +62,10 @@ static integer praat_findObjectFromString (Interpreter interpreter, conststring3
 			integer id = (integer) value;
 			WHERE (ID == id)
 				return IOBJECT;
-			Melder_throw (U"No object with number ", id, U".");
+			Melder_throw (I18n_translate ("error.no_object_with_number"), id);
 		}
 	} catch (MelderError) {
-		Melder_throw (U"Object \"", string, U"\" does not exist.");
+		Melder_throw (I18n_translate ("error.object_does_not_exist"), string);
 	}
 }
 
@@ -96,7 +97,7 @@ Editor praat_findEditorFromString (conststring32 string) {
 			}
 		}
 	}
-	Melder_throw (U"Editor \"", string, U"\" does not exist.");
+	Melder_throw (I18n_translate ("error.editor_does_not_exist"), string);
 }
 
 Editor praat_findEditorById (integer id) {
@@ -110,7 +111,7 @@ Editor praat_findEditorById (integer id) {
 			}
 		}
 	}
-	Melder_throw (U"Editor ", id, U" does not exist.");
+	Melder_throw (I18n_translate ("error.editor_number_does_not_exist"), id);
 }
 
 static int parseCommaSeparatedArguments (Interpreter interpreter, char32 *arguments, structStackel *args) {
@@ -119,7 +120,7 @@ static int parseCommaSeparatedArguments (Interpreter interpreter, char32 *argume
 		bool endOfArguments = *p == U'\0';
 		if (endOfArguments || (*p == U',' && depth == 0)) {
 			if (narg == MAXIMUM_NUMBER_OF_FIELDS)
-				Melder_throw (U"Cannot have more than ", MAXIMUM_NUMBER_OF_FIELDS, U" arguments");
+				Melder_throw (I18n_translate ("error.cannot_have_more_than_maximum_fields"), MAXIMUM_NUMBER_OF_FIELDS);
 			*p = U'\0';
 			Formula_Result result;
 			Interpreter_anyExpression (interpreter, arguments, & result);
@@ -184,7 +185,7 @@ bool praat_executeCommand (Interpreter interpreter, char32 *command) {
 		interpreter -> returnType = kInterpreter_ReturnType::VOID_;   // clear return type to its default
 
 	static struct structStackel args [1 + MAXIMUM_NUMBER_OF_FIELDS];
-	//trace (U"praat_executeCommand: ", Melder_pointer (interpreter), U": ", command);
+	//trace (I18n_translate ("debug.praat_execute_command"), Melder_pointer (interpreter), U": ", command);
 	if (command [0] == U'\0' || command [0] == U'#' || command [0] == U'!' || command [0] == U';')
 		/* Skip empty lines and comments. */;
 	else if ((command [0] == U'.' || command [0] == U'+' || command [0] == U'-') && Melder_isAsciiUpperCaseLetter (command [1])) {   // selection?
@@ -197,7 +198,7 @@ bool praat_executeCommand (Interpreter interpreter, char32 *command) {
 			praat_select (IOBJECT); 
 		praat_show ();
 	} else if (Melder_isLetter (command [0]) && ! Melder_isUpperCaseLetter (command [0])) {   // all directives start with an ASCII lower-case letter
-		if (str32nequ (command, U"select ", 7)) {
+		if (str32nequ (command, I18n_translate ("form.select"), 7)) {
 			if (str32nequ (command + 7, U"all", 3) && (command [10] == U'\0' || command [10] == U' ' || command [10] == U'\t')) {
 				praat_selectAll ();
 				praat_show ();

@@ -25,15 +25,17 @@
 #include "TextGrid_extensions.h"
 #include "TextGrid_Sound.h"
 #include "WordList.h"
+#include "../sys/i18n_simple.h"
 
 #include "praat_TimeTier.h"
 #include "praat_uvafon_init.h"
 
-static const conststring32 STRING_FROM_FREQUENCY_HZ = U"left Frequency range (Hz)";
-static const conststring32 STRING_TO_FREQUENCY_HZ = U"right Frequency range (Hz)";
-static const conststring32 STRING_TIER_NUMBER = U"Tier number";
-static const conststring32 STRING_INTERVAL_NUMBER = U"Interval number";
-static const conststring32 STRING_POINT_NUMBER = U"Point number";
+// Use macros to defer I18n_translate calls until runtime
+#define STRING_FROM_FREQUENCY_HZ I18n_translate("form.left_frequency_range_hz")
+#define STRING_TO_FREQUENCY_HZ I18n_translate("form.right_frequency_range_hz")
+#define STRING_TIER_NUMBER I18n_translate("form.tier_number")
+#define STRING_INTERVAL_NUMBER I18n_translate("form.interval_number")
+#define STRING_POINT_NUMBER I18n_translate("form.point_number")
 
 // MARK: - ANYTIER (generic)
 
@@ -1615,91 +1617,91 @@ void praat_uvafon_TextGrid_init () {
 
 	praat_addAction1 (classTextGrid, 1, U"Save as chronological text file...", nullptr, 0, SAVE_TextGrid_writeToChronologicalTextFile);
 	praat_addAction1 (classTextGrid, 1,   U"Write to chronological text file...", nullptr, GuiMenu_HIDDEN, SAVE_TextGrid_writeToChronologicalTextFile);
-	praat_addAction1 (classTextGrid, 0, U"TextGrid help", nullptr, 0, HELP_TextGrid_help);
-	praat_addAction1 (classTextGrid, 1, U"View & Edit alone || View & Edit || Edit", nullptr, 0, EDITOR_ONE_WITH_ONE_TextGrid_viewAndEdit);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.help"), nullptr, 0, HELP_TextGrid_help);
+	praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.view_edit_alone"), nullptr, 0, EDITOR_ONE_WITH_ONE_TextGrid_viewAndEdit);
 			// alternative COMPATIBILITY <= 2011
-	praat_addAction1 (classTextGrid, 1, U"View & Edit with Sound?", nullptr, GuiMenu_ATTRACTIVE | GuiMenu_NO_API, HINT_TextGrid_Sound_viewAndEdit);
-	praat_addAction1 (classTextGrid, 0, U"Draw -", nullptr, 0, nullptr);
-	praat_addAction1 (classTextGrid, 0, U"Draw...", nullptr, 1, GRAPHICS_TextGrid_draw);
-	praat_addAction1 (classTextGrid, 1, U"Draw with Sound?", nullptr, 1, HINT_TextGrid_Sound_draw);
-	praat_addAction1 (classTextGrid, 1, U"Draw with Pitch?", nullptr, 1, HINT_TextGrid_Pitch_draw);
-	praat_addAction1 (classTextGrid, 1, U"Tabulate -", nullptr, 0, nullptr);
-		praat_addAction1 (classTextGrid, 0, U"Down to Table...", nullptr, 1, NEW_TextGrid_downto_Table);
-		praat_addAction1 (classTextGrid, 1, U"List...", nullptr, 1, LIST_TextGrid_list);
-		praat_addAction1 (classTextGrid, 0, U"Tabulate occurrences...", nullptr, 1, NEW_TextGrid_tabulateOccurrences);
-	praat_addAction1 (classTextGrid, 0, U"Query -", nullptr, 0, nullptr);
+	praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.view_edit_with_sound"), nullptr, GuiMenu_ATTRACTIVE | GuiMenu_NO_API, HINT_TextGrid_Sound_viewAndEdit);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.draw"), nullptr, 0, nullptr);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.draw_dialog"), nullptr, 1, GRAPHICS_TextGrid_draw);
+	praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.draw_with_sound"), nullptr, 1, HINT_TextGrid_Sound_draw);
+	praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.draw_with_pitch"), nullptr, 1, HINT_TextGrid_Pitch_draw);
+	praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.tabulate"), nullptr, 0, nullptr);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.down_to_table"), nullptr, 1, NEW_TextGrid_downto_Table);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.list"), nullptr, 1, LIST_TextGrid_list);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.tabulate_occurrences"), nullptr, 1, NEW_TextGrid_tabulateOccurrences);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.query"), nullptr, 0, nullptr);
 		praat_TimeFunction_query_init (classTextGrid);
-		praat_addAction1 (classTextGrid, 1, U"-- query textgrid --", nullptr, 1, nullptr);
-		praat_addAction1 (classTextGrid, 1, U"Get number of tiers", nullptr, 1, INTEGER_TextGrid_getNumberOfTiers);
-		praat_addAction1 (classTextGrid, 1, U"Get tier name...", nullptr, 1, STRING_TextGrid_getTierName);
-		praat_addAction1 (classTextGrid, 1, U"Is interval tier...", nullptr, 1, BOOLEAN_TextGrid_isIntervalTier);
-		praat_addAction1 (classTextGrid, 1, U"-- query tier --", nullptr, 1, nullptr);
-		praat_addAction1 (classTextGrid, 1, U"Query interval tier", nullptr, 1, nullptr);
-			praat_addAction1 (classTextGrid, 1, U"Get number of intervals...", nullptr, GuiMenu_DEPTH_2, INTEGER_TextGrid_getNumberOfIntervals);
-			praat_addAction1 (classTextGrid, 1, U"Get start time of interval... || Get starting point... || Get start point...", nullptr, GuiMenu_DEPTH_2,
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_textgrid"), nullptr, 1, nullptr);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_number_of_tiers"), nullptr, 1, INTEGER_TextGrid_getNumberOfTiers);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_tier_name"), nullptr, 1, STRING_TextGrid_getTierName);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.is_interval_tier"), nullptr, 1, BOOLEAN_TextGrid_isIntervalTier);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_tier"), nullptr, 1, nullptr);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_interval_tier"), nullptr, 1, nullptr);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_number_of_intervals"), nullptr, GuiMenu_DEPTH_2, INTEGER_TextGrid_getNumberOfIntervals);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_start_time_of_interval"), nullptr, GuiMenu_DEPTH_2,
 					REAL_TextGrid_getStartTimeOfInterval);   // alternatives COMPATIBLITY < 2016
-			praat_addAction1 (classTextGrid, 1, U"Get end time of interval... || Get end point...", nullptr, GuiMenu_DEPTH_2,
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_end_time_of_interval"), nullptr, GuiMenu_DEPTH_2,
 					REAL_TextGrid_getEndTimeOfInterval);   // alternatives COMPATIBLITY < 2016
-			praat_addAction1 (classTextGrid, 1, U"Get label of interval...", nullptr, GuiMenu_DEPTH_2, STRING_TextGrid_getLabelOfInterval);
-			praat_addAction1 (classTextGrid, 1, U"-- query interval from time --", nullptr, GuiMenu_DEPTH_2, nullptr);
-			praat_addAction1 (classTextGrid, 1, U"Get interval at time...", nullptr, 2, INTEGER_TextGrid_getIntervalAtTime);
-			praat_addAction1 (classTextGrid, 1, U"Get low interval at time...", nullptr, 2, INTEGER_TextGrid_getLowIntervalAtTime);
-			praat_addAction1 (classTextGrid, 1, U"Get high interval at time...", nullptr, 2, INTEGER_TextGrid_getHighIntervalAtTime);
-			praat_addAction1 (classTextGrid, 1, U"Get interval edge from time...", nullptr, 2, INTEGER_TextGrid_getIntervalEdgeFromTime);
-			praat_addAction1 (classTextGrid, 1, U"Get interval boundary from time...", nullptr, 2, INTEGER_TextGrid_getIntervalBoundaryFromTime);
-			praat_addAction1 (classTextGrid, 1, U"-- query interval labels --", nullptr, 2, nullptr);
-			praat_addAction1 (classTextGrid, 1, U"Count intervals where...", nullptr, 2, INTEGER_TextGrid_countIntervalsWhere);
-		praat_addAction1 (classTextGrid, 1, U"Query point tier", nullptr, 1, nullptr);
-			praat_addAction1 (classTextGrid, 1, U"Get number of points...", nullptr, 2, INTEGER_TextGrid_getNumberOfPoints);
-			praat_addAction1 (classTextGrid, 1, U"Get time of point...", nullptr, 2, REAL_TextGrid_getTimeOfPoint);
-			praat_addAction1 (classTextGrid, 1, U"Get label of point...", nullptr, 2, STRING_TextGrid_getLabelOfPoint);
-			praat_addAction1 (classTextGrid, 1, U"-- query point from time --", nullptr, 2, nullptr);
-			praat_addAction1 (classTextGrid, 1, U"Get low index from time...", nullptr, 2, INTEGER_TextGrid_getLowIndexFromTime);
-			praat_addAction1 (classTextGrid, 1, U"Get high index from time...", nullptr, 2, INTEGER_TextGrid_getHighIndexFromTime);
-			praat_addAction1 (classTextGrid, 1, U"Get nearest index from time...", nullptr, 2, INTEGER_TextGrid_getNearestIndexFromTime);
-			praat_addAction1 (classTextGrid, 1, U"-- query point labels --", nullptr, 2, nullptr);
-			praat_addAction1 (classTextGrid, 1, U"Count points where...", nullptr, 2, INTEGER_TextGrid_countPointsWhere);
-		praat_addAction1 (classTextGrid, 1, U"-- query labels --", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2015, nullptr);
-		praat_addAction1 (classTextGrid, 1, U"Count labels...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2015, INTEGER_TextGrid_countLabels);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_label_of_interval"), nullptr, GuiMenu_DEPTH_2, STRING_TextGrid_getLabelOfInterval);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_interval_from_time"), nullptr, GuiMenu_DEPTH_2, nullptr);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_interval_at_time"), nullptr, 2, INTEGER_TextGrid_getIntervalAtTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_low_interval_at_time"), nullptr, 2, INTEGER_TextGrid_getLowIntervalAtTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_high_interval_at_time"), nullptr, 2, INTEGER_TextGrid_getHighIntervalAtTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_interval_edge_from_time"), nullptr, 2, INTEGER_TextGrid_getIntervalEdgeFromTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_interval_boundary_from_time"), nullptr, 2, INTEGER_TextGrid_getIntervalBoundaryFromTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_interval_labels"), nullptr, 2, nullptr);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.count_intervals_where"), nullptr, 2, INTEGER_TextGrid_countIntervalsWhere);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_point_tier"), nullptr, 1, nullptr);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_number_of_points"), nullptr, 2, INTEGER_TextGrid_getNumberOfPoints);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_time_of_point"), nullptr, 2, REAL_TextGrid_getTimeOfPoint);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_label_of_point"), nullptr, 2, STRING_TextGrid_getLabelOfPoint);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_point_from_time"), nullptr, 2, nullptr);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_low_index_from_time"), nullptr, 2, INTEGER_TextGrid_getLowIndexFromTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_high_index_from_time"), nullptr, 2, INTEGER_TextGrid_getHighIndexFromTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.get_nearest_index_from_time"), nullptr, 2, INTEGER_TextGrid_getNearestIndexFromTime);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_point_labels"), nullptr, 2, nullptr);
+			praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.count_points_where"), nullptr, 2, INTEGER_TextGrid_countPointsWhere);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.query_labels"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2015, nullptr);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.count_labels"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2015, INTEGER_TextGrid_countLabels);
 				// replace with Count intervals where... or Count points where...
-	praat_addAction1 (classTextGrid, 0, U"Modify -", nullptr, 0, nullptr);
-		praat_addAction1 (classTextGrid, 0, U"Convert to backslash trigraphs", nullptr, 1, MODIFY_TextGrid_convertToBackslashTrigraphs);
-		praat_addAction1 (classTextGrid, 0, U"Convert to Unicode", nullptr, 1, MODIFY_TextGrid_convertToUnicode);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.modify"), nullptr, 0, nullptr);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.convert_to_backslash_trigraphs"), nullptr, 1, MODIFY_TextGrid_convertToBackslashTrigraphs);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.convert_to_unicode"), nullptr, 1, MODIFY_TextGrid_convertToUnicode);
 		praat_TimeFunction_modify_init (classTextGrid);
-		praat_addAction1 (classTextGrid, 0, U"-- modify tiers --", nullptr, 1, nullptr);
-		praat_addAction1 (classTextGrid, 0, U"Insert interval tier...", nullptr, 1, MODIFY_TextGrid_insertIntervalTier);
-		praat_addAction1 (classTextGrid, 0, U"Insert point tier...", nullptr, 1, MODIFY_TextGrid_insertPointTier);
-		praat_addAction1 (classTextGrid, 0, U"Duplicate tier...", nullptr, 1, MODIFY_TextGrid_duplicateTier);
-		praat_addAction1 (classTextGrid, 0, U"Remove tier...", nullptr, 1, MODIFY_TextGrid_removeTier);
-		praat_addAction1 (classTextGrid, 1, U"-- modify tier --", nullptr, 1, nullptr);
-		praat_addAction1 (classTextGrid, 0, U"Modify interval tier", nullptr, 1, nullptr);
-			praat_addAction1 (classTextGrid, 0, U"Insert boundary...", nullptr, 2, MODIFY_TextGrid_insertBoundary);
-			praat_addAction1 (classTextGrid, 0, U"Remove left boundary...", nullptr, 2, MODIFY_TextGrid_removeLeftBoundary);
-			praat_addAction1 (classTextGrid, 0, U"Remove right boundary...", nullptr, 2, MODIFY_TextGrid_removeRightBoundary);
-			praat_addAction1 (classTextGrid, 0, U"Remove boundary at time...", nullptr, 2, MODIFY_TextGrid_removeBoundaryAtTime);
-			praat_addAction1 (classTextGrid, 0, U"Set interval text...", nullptr, 2, MODIFY_TextGrid_setIntervalText);
-		praat_addAction1 (classTextGrid, 0, U"Modify point tier", nullptr, 1, nullptr);
-			praat_addAction1 (classTextGrid, 0, U"Insert point...", nullptr, 2, MODIFY_TextGrid_insertPoint);
-			praat_addAction1 (classTextGrid, 0, U"Remove point...", nullptr, 2, MODIFY_TextGrid_removePoint);
-			praat_addAction1 (classTextGrid, 0, U"Remove points...", nullptr, 2, MODIFY_TextGrid_removePoints);
-			praat_addAction1 (classTextGrid, 0, U"Set point text...", nullptr, 2, MODIFY_TextGrid_setPointText);
-praat_addAction1 (classTextGrid, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classTextGrid, 0, U"Extract one tier...", nullptr, 0, NEW1_TextGrid_extractOneTier);
-	praat_addAction1 (classTextGrid, 0,   U"Extract tier...", nullptr, GuiMenu_DEPRECATED_2010,
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.modify_tiers"), nullptr, 1, nullptr);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.insert_interval_tier"), nullptr, 1, MODIFY_TextGrid_insertIntervalTier);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.insert_point_tier"), nullptr, 1, MODIFY_TextGrid_insertPointTier);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.duplicate_tier"), nullptr, 1, MODIFY_TextGrid_duplicateTier);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.remove_tier"), nullptr, 1, MODIFY_TextGrid_removeTier);
+		praat_addAction1 (classTextGrid, 1, I18n_translate("textgrid.modify_tier"), nullptr, 1, nullptr);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.modify_interval_tier"), nullptr, 1, nullptr);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.insert_boundary"), nullptr, 2, MODIFY_TextGrid_insertBoundary);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.remove_left_boundary"), nullptr, 2, MODIFY_TextGrid_removeLeftBoundary);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.remove_right_boundary"), nullptr, 2, MODIFY_TextGrid_removeRightBoundary);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.remove_boundary_at_time"), nullptr, 2, MODIFY_TextGrid_removeBoundaryAtTime);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.set_interval_text"), nullptr, 2, MODIFY_TextGrid_setIntervalText);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.modify_point_tier"), nullptr, 1, nullptr);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.insert_point"), nullptr, 2, MODIFY_TextGrid_insertPoint);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.remove_point"), nullptr, 2, MODIFY_TextGrid_removePoint);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.remove_points"), nullptr, 2, MODIFY_TextGrid_removePoints);
+			praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.set_point_text"), nullptr, 2, MODIFY_TextGrid_setPointText);
+praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.analyse"), nullptr, 0, nullptr);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.extract_one_tier"), nullptr, 0, NEW1_TextGrid_extractOneTier);
+		praat_addAction1 (classTextGrid, 0,   I18n_translate("textgrid.extract_tier"), nullptr, GuiMenu_DEPRECATED_2010,
 			NEW1_TextGrid_extractTier);   // replace imprecisely with Extract one tier...
-	praat_addAction1 (classTextGrid, 0, U"Extract part...", nullptr, 0, NEW_TextGrid_extractPart);
-	praat_addAction1 (classTextGrid, 0, U"Analyse interval tier -", nullptr, 0, nullptr);
-		praat_addAction1 (classTextGrid, 0, U"Get starting points...", nullptr, 1, NEW_TextGrid_getStartingPoints);
-		praat_addAction1 (classTextGrid, 0, U"Get end points...", nullptr, 1, NEW_TextGrid_getEndPoints);
-		praat_addAction1 (classTextGrid, 0, U"Get centre points...", nullptr, 1, NEW_TextGrid_getCentrePoints);
-	praat_addAction1 (classTextGrid, 0, U"Analyse point tier -", nullptr, 0, nullptr);
-		praat_addAction1 (classTextGrid, 0, U"Get points...", nullptr, 1, NEW_TextGrid_getPoints);
-		praat_addAction1 (classTextGrid, 0, U"Get points (preceded)...", nullptr, 1, NEW_TextGrid_getPoints_preceded);
-		praat_addAction1 (classTextGrid, 0, U"Get points (followed)...", nullptr, 1, NEW_TextGrid_getPoints_followed);
-praat_addAction1 (classTextGrid, 0, U"Synthesize", nullptr, 0, nullptr);
-	praat_addAction1 (classTextGrid, 0, U"Merge", nullptr, GuiMenu_DEPRECATED_2025, NEW1_TextGrids_merge_OLD);
-	praat_addAction1 (classTextGrid, 0, U"Merge...", nullptr, 0, NEW1_TextGrids_merge);
-	praat_addAction1 (classTextGrid, 0, U"Concatenate", nullptr, 0, NEW1_TextGrids_concatenate);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.extract_part"), nullptr, 0, NEW_TextGrid_extractPart);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.analyse_interval_tier"), nullptr, 0, nullptr);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.get_starting_points"), nullptr, 1, NEW_TextGrid_getStartingPoints);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.get_end_points"), nullptr, 1, NEW_TextGrid_getEndPoints);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.get_centre_points"), nullptr, 1, NEW_TextGrid_getCentrePoints);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.analyse_point_tier"), nullptr, 0, nullptr);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.get_points"), nullptr, 1, NEW_TextGrid_getPoints);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.get_points_preceded"), nullptr, 1, NEW_TextGrid_getPoints_preceded);
+		praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.get_points_followed"), nullptr, 1, NEW_TextGrid_getPoints_followed);
+praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.synthesize"), nullptr, 0, nullptr);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.merge_old"), nullptr, GuiMenu_DEPRECATED_2025, NEW1_TextGrids_merge_OLD);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.merge"), nullptr, 0, NEW1_TextGrids_merge);
+	praat_addAction1 (classTextGrid, 0, I18n_translate("textgrid.concatenate"), nullptr, 0, NEW1_TextGrids_concatenate);
 
 	praat_addAction1 (classTextTier, 0, U"TextTier help", nullptr, 0, HELP_TextTier_help);
 	praat_addAction1 (classTextTier, 0, U"Query -", nullptr, 0, nullptr);

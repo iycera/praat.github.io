@@ -24,6 +24,7 @@
 #include "ScriptEditor.h"
 #include "Graphics.h"   // colours
 #include "NUM2.h"   // get elements of ranges
+#include "i18n_simple.h"
 
 #include "enums_getText.h"
 #include "Ui_enums.h"
@@ -34,8 +35,8 @@ kUi_realMatrixFormat theRealMatrixFormat;
 kUi_stringArrayFormat theStringArrayFormat;
 
 void Ui_prefs () {
-	Preferences_addEnum (U"Ui.realMatrixFormat", & theRealMatrixFormat, kUi_realMatrixFormat, (int) kUi_realMatrixFormat::DEFAULT);
-	Preferences_addEnum (U"Ui.stringArrayFormat", & theStringArrayFormat, kUi_stringArrayFormat, (int) kUi_stringArrayFormat::DEFAULT);
+	Preferences_addEnum (I18n_translate("preferences.ui_real_matrix_format"), & theRealMatrixFormat, kUi_realMatrixFormat, (int) kUi_realMatrixFormat::DEFAULT);
+	Preferences_addEnum (I18n_translate("preferences.ui_string_array_format"), & theStringArrayFormat, kUi_stringArrayFormat, (int) kUi_stringArrayFormat::DEFAULT);
 }
 
 static conststring32 formatNumericMatrix (constMAT cells, kUi_realMatrixFormat format) {
@@ -71,7 +72,7 @@ static conststring32 formatNumericMatrix (constMAT cells, kUi_realMatrixFormat f
 				MelderString_append (& buffer, U" }");
 			}
 		} break; case kUi_realMatrixFormat::UNDEFINED: {
-			Melder_fatal (U"Unknown numeric matrix format.");
+			Melder_fatal (I18n_translate("error.unknown_numeric_matrix_format"));
 		}
 	}
 	return buffer.string;
@@ -146,7 +147,7 @@ static conststring32 formatStringArray (constSTRVEC strings, kUi_stringArrayForm
 				MelderString_append (& buffer, U" }");
 			}
 		} break; case kUi_stringArrayFormat::UNDEFINED: {
-			Melder_fatal (U"Unknown string array format.");
+			Melder_fatal (I18n_translate("error.unknown_string_array_format"));
 		}
 	}
 	return buffer.string;
@@ -319,9 +320,9 @@ static void UiField_widgetToValue (UiField me) {
 		case _kUiField_type::CHANNEL_:
 		{
 			autostring32 text = GuiText_getString (my text);
-			if (my type == _kUiField_type::CHANNEL_ && (str32equ (text.get(), U"Left") || str32equ (text.get(), U"Mono"))) {
+			if (my type == _kUiField_type::CHANNEL_ && (str32equ (text.get(), I18n_translate("form.left")) || str32equ (text.get(), I18n_translate("form.mono")))) {
 				my integerValue = 1;
-			} else if (my type == _kUiField_type::CHANNEL_ && (str32equ (text.get(), U"Right") || str32equ (text.get(), U"Stereo"))) {
+			} else if (my type == _kUiField_type::CHANNEL_ && (str32equ (text.get(), I18n_translate("form.right")) || str32equ (text.get(), I18n_translate("form.stereo")))) {
 				my integerValue = 2;
 			} else {
 				double realValue;
@@ -381,7 +382,7 @@ static void UiField_widgetToValue (UiField me) {
 						my realVectorValue = copy_VEC (result);
 					}
 				} break; case kUi_realVectorFormat::UNDEFINED: {
-					Melder_fatal (U"Unknown real vector format.");
+					Melder_fatal (I18n_translate("error.unknown_real_vector_format"));
 				}
 			}
 			if (my type == _kUiField_type::POSITIVEVECTOR_)
@@ -477,7 +478,7 @@ static void UiField_widgetToValue (UiField me) {
 						}
 					}
 				} break; case kUi_stringArrayFormat::UNDEFINED: {
-					Melder_fatal (U"Unknown string array format.");
+					Melder_fatal (I18n_translate("error.unknown_string_array_format"));
 				}
 			}
 			if (my stringArrayVariable)

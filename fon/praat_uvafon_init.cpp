@@ -28,6 +28,7 @@
 #include "Matrix_and_Pitch.h"
 #include "Matrix_and_PointProcess.h"
 #include "Matrix_and_Polygon.h"
+#include "../sys/i18n_simple.h"
 #include "Matrix_extensions.h"
 #include "Movie.h"
 #include "ParamCurve.h"
@@ -67,28 +68,28 @@
 #include "praat_ExperimentMFC.h"
 #include "praat_uvafon_init.h"
 
-static const conststring32 STRING_FROM_FREQUENCY_HZ = U"left Frequency range (Hz)";
-static const conststring32 STRING_TO_FREQUENCY_HZ = U"right Frequency range (Hz)";
+static const conststring32 STRING_FROM_FREQUENCY_HZ = I18n_translate("form.left_frequency_range_hz");
+static const conststring32 STRING_TO_FREQUENCY_HZ = I18n_translate("form.right_frequency_range_hz");
 
 // MARK: - COCHLEAGRAM
 
 // MARK: Help
 
 DIRECT (HELP_Cochleagram_help) {
-	HELP (U"Cochleagram")
+	HELP (I18n_translate("help.cochleagram"))
 }
 
 // MARK: Movie
 
 DIRECT (MOVIE_Cochleagram_playMovie) {
-	MOVIE_ONE (Cochleagram, U"Cochleagram movie", 300, 300)
+	MOVIE_ONE (Cochleagram, I18n_translate("form.cochleagram_movie"), 300, 300)
 		Matrix_playMovie (me, graphics);
 	MOVIE_ONE_END
 }
 
 // MARK: Info
 
-FORM (REAL_Cochleagram_difference, U"Cochleagram difference", nullptr) {
+FORM (REAL_Cochleagram_difference, I18n_translate("form.cochleagram_difference"), nullptr) {
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	OK
 DO
@@ -115,7 +116,7 @@ FORM (MODIFY_Cochleagram_formula, U"Cochleagram Formula", U"Cochleagram: Formula
 	COMMENT (U"`x` is time in seconds, `y` is place in Bark")
 	COMMENT (U"y := y1; for row := 1 to nrow do { x := x1; "
 		"for col := 1 to ncol do { self [row, col] := `formula` ; x := x + dx } y := y + dy }")
-	FORMULA (formula, U"Formula", U"self")
+	FORMULA (formula, I18n_translate("form.formula"), U"self")
 	OK
 DO
 	MODIFY_EACH_WEAK (Cochleagram)
@@ -126,7 +127,7 @@ DO
 // MARK: Analyse
 
 FORM (NEW_Cochleagram_to_Excitation, U"From Cochleagram to Excitation", nullptr) {
-	REAL (time, U"Time (s)", U"0.0")
+	REAL (time, I18n_translate("form.time_s"), U"0.0")
 	OK
 DO
 	CONVERT_EACH_TO_ONE (Cochleagram)
@@ -253,7 +254,7 @@ DIRECT (REAL_Excitation_getLoudness) {
 FORM (MODIFY_Excitation_formula, U"Excitation Formula", U"Excitation: Formula...") {
 	COMMENT (U"`x` is the place in Bark, `col` is the bin number")
 	COMMENT (U"x := 0;   for col := 1 to ncol do { self [1, col] := `formula` ; x := x + dx }")
-	FORMULA (formula, U"Formula", U"self")
+	FORMULA (formula, I18n_translate("form.formula"), U"self")
 	OK
 DO
 	MODIFY_EACH_WEAK (Excitation)
@@ -337,11 +338,11 @@ DO
 FORM (LIST_Formant_list, U"Formant: List", nullptr) {
 	BOOLEAN (includeFrameNumber, U"Include frame number", false)
 	BOOLEAN (includeTime, U"Include time", true)
-	NATURAL (numberOfTimeDecimals, U"Number of time decimals", U"6")
+	NATURAL (numberOfTimeDecimals, I18n_translate("form.number_of_time_decimals"), U"6")
 	BOOLEAN (includeIntensity, U"Include intensity", false)
-	NATURAL (numberOfIntensityDecimals, U"Number of intensity decimals", U"3")
+	NATURAL (numberOfIntensityDecimals, I18n_translate("form.number_of_intensity_decimals"), U"3")
 	BOOLEAN (includeNumberOfFormants, U"Include number of formants", true)
-	NATURAL (numberOfFrequencyDecimals, U"Number of frequency decimals", U"3")
+	NATURAL (numberOfFrequencyDecimals, I18n_translate("form.number_of_frequency_decimals"), U"3")
 	BOOLEAN (includeBandwidths, U"Include bandwidths", true)
 	OK
 DO
@@ -357,11 +358,11 @@ DO
 FORM (NEW_Formant_downto_Table, U"Formant: Down to Table", nullptr) {
 	BOOLEAN (includeFrameNumber, U"Include frame number", false)
 	BOOLEAN (includeTime, U"Include time", true)
-	NATURAL (numberOfTimeDecimals, U"Number of time decimals", U"6")
+	NATURAL (numberOfTimeDecimals, I18n_translate("form.number_of_time_decimals"), U"6")
 	BOOLEAN (includeIntensity, U"Include intensity", false)
-	NATURAL (numberOfIntensityDecimals, U"Number of intensity decimals", U"3")
+	NATURAL (numberOfIntensityDecimals, I18n_translate("form.number_of_intensity_decimals"), U"3")
 	BOOLEAN (includeNumberOfFormants, U"Include number of formants", true)
-	NATURAL (numberOfFrequencyDecimals, U"Number of frequency decimals", U"3")
+	NATURAL (numberOfFrequencyDecimals, I18n_translate("form.number_of_frequency_decimals"), U"3")
 	BOOLEAN (includeBandwidths, U"Include bandwidths", true)
 	OK
 DO
@@ -376,7 +377,7 @@ DO
 // MARK: Query
 
 FORM (REAL_Formant_getValueAtTime, U"Formant: Get value", U"Formant: Get value at time...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	REAL (time, U"Time (s)", U"0.5")
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	CHOICE (interpolation, U"Interpolation", 1)   // ignored
@@ -389,7 +390,7 @@ DO
 }
 
 FORM (REAL_Formant_getBandwidthAtTime, U"Formant: Get bandwidth", U"Formant: Get bandwidth at time...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	REAL (time, U"Time (s)", U"0.5")
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	CHOICE (interpolation, U"Interpolation", 1)   // ignored
@@ -402,7 +403,7 @@ DO
 }
 
 FORM (REAL_Formant_getMinimum, U"Formant: Get minimum", U"Formant: Get minimum...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	CHOICEx (interpolation, U"Interpolation", 2, 0)
@@ -416,7 +417,7 @@ DO
 }
 
 FORM (REAL_Formant_getMaximum, U"Formant: Get maximum", U"Formant: Get maximum...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	CHOICEx (interpolation, U"Interpolation", 2, 0)
@@ -430,7 +431,7 @@ DO
 }
 
 FORM (REAL_Formant_getTimeOfMinimum, U"Formant: Get time of minimum", U"Formant: Get time of minimum...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	CHOICEx (interpolation, U"Interpolation", 2, 0)
@@ -444,7 +445,7 @@ DO
 }
 
 FORM (REAL_Formant_getTimeOfMaximum, U"Formant: Get time of maximum", U"Formant: Get time of maximum...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	CHOICEx (interpolation, U"Interpolation", 2, 0)
@@ -464,7 +465,7 @@ DIRECT (INTEGER_Formant_getMaximumNumberOfFormants) {
 }
 
 FORM (REAL_Formant_getMean, U"Formant: Get mean", U"Formant: Get mean...") {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	OK
@@ -492,7 +493,7 @@ DO
 }
 
 FORM (REAL_Formant_getQuantile, U"Formant: Get quantile", nullptr) {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	REAL (quantile, U"Quantile", U"0.50 (= median)")
@@ -504,7 +505,7 @@ DO
 }
 
 FORM (REAL_Formant_getQuantileOfBandwidth, U"Formant: Get quantile of bandwidth", nullptr) {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	REAL (quantile, U"Quantile", U"0.50 (= median)")
@@ -516,7 +517,7 @@ DO
 }
 
 FORM (REAL_Formant_getStandardDeviation, U"Formant: Get standard deviation", nullptr) {
-	NATURAL (formantNumber, U"Formant number", U"1")
+	NATURAL (formantNumber, I18n_translate("form.formant_number"), U"1")
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	CHOICE_ENUM (kFormant_unit, unit, U"Unit", kFormant_unit::HERTZ)
 	OK
@@ -720,7 +721,7 @@ DO
 FORM (MODIFY_Harmonicity_formula, U"Harmonicity Formula", U"Harmonicity: Formula...") {
 	COMMENT (U"`x` is time")
 	COMMENT (U"for col := 1 to ncol do { self [col] := `formula` ; x := x + dx }")
-	FORMULA (formula, U"Formula", U"self")
+	FORMULA (formula, I18n_translate("form.formula"), U"self")
 	OK
 DO
 	MODIFY_EACH_WEAK (Harmonicity)
@@ -2605,9 +2606,9 @@ DIRECT (NEW_Spectrum_to_SpectrumTier_peaks) {
 
 // MARK: New
 
-FORM (NEW1_Strings_createFromTexts, U"Create Strings from texts", nullptr) {
-	WORD (name, U"Name", U"texts")
-	STRINGARRAY_LINES (10, texts, U"Texts", { U"one line", U"another line", U"yet another line" })
+FORM (NEW1_Strings_createFromTexts, I18n_translate("form.create_strings_from_texts"), nullptr) {
+	WORD (name, I18n_translate("form.name"), U"texts")
+	STRINGARRAY_LINES (10, texts, I18n_translate("form.texts"), { U"one line", U"another line", U"yet another line" })
 	OK
 DO
 	CREATE_ONE
@@ -2615,8 +2616,8 @@ DO
 	CREATE_ONE_END (name);
 }
 
-FORM (NEW1_Strings_createAsFileList, U"Create Strings as file list", U"Create Strings as file list...") {
-	SENTENCE (name, U"Name", U"fileList")
+FORM (NEW1_Strings_createAsFileList, I18n_translate("form.create_strings_as_file_list"), nullptr) {
+	SENTENCE (name, I18n_translate("form.name"), U"fileList")
 	static structMelderFolder homeFolder { };
 	Melder_getHomeDir (& homeFolder);
 	static conststring32 homeFolderPath = MelderFolder_peekPath (& homeFolder);
@@ -2632,7 +2633,7 @@ FORM (NEW1_Strings_createAsFileList, U"Create Strings as file list", U"Create St
 	#else
 		Melder_sprint (defaultGlob,kMelder_MAXPATH+1, homeFolderPath, U"/*.wav");
 	#endif
-	FOLDER (path, U"File path", defaultGlob)
+	FOLDER (path, I18n_translate("form.file_path"), defaultGlob)
 	OK
 DO
 	CREATE_ONE
@@ -2640,8 +2641,8 @@ DO
 	CREATE_ONE_END (name)
 }
 
-FORM (NEW1_Strings_createAsFolderList, U"Create Strings as folder list", U"Create Strings as folder list...") {
-	SENTENCE (name, U"Name", U"folderList")
+FORM (NEW1_Strings_createAsFolderList, I18n_translate("form.create_strings_as_folder_list"), nullptr) {
+	SENTENCE (name, I18n_translate("form.name"), U"folderList")
 	static structMelderFolder homeFolder { };
 	Melder_getHomeDir (& homeFolder);
 	static conststring32 homeFolderPath = MelderFolder_peekPath (& homeFolder);
@@ -2657,7 +2658,7 @@ FORM (NEW1_Strings_createAsFolderList, U"Create Strings as folder list", U"Creat
 	#else
 		Melder_sprint (defaultGlob,kMelder_MAXPATH+1, homeFolderPath, U"/*");
 	#endif
-	FOLDER (path, U"Path", defaultGlob)
+	FOLDER (path, I18n_translate("form.path"), defaultGlob)
 	OK
 DO
 	CREATE_ONE
@@ -3078,102 +3079,102 @@ void praat_uvafon_init () {
 
 	praat_addMenuCommand (U"Objects", U"New", U"-- new textgrid --",
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create TextGrid...",
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_textgrid"),
 			nullptr, 0, NEW1_TextGrid_create);
 	praat_uvafon_TextGrid_init ();
 	praat_Tiers_init ();
-	praat_addMenuCommand (U"Objects", U"New", U"Create Corpus...",
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_corpus"),
 			nullptr, 0, NEW1_Corpus_create);
 
 	praat_addMenuCommand (U"Objects", U"New", U"-- new stats --",
 			nullptr, 0, nullptr);
 	INCLUDE_LIBRARY (praat_uvafon_stat_init)   // from stat
-	praat_addMenuCommand (U"Objects", U"New", U"Stats", nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.stats"), nullptr, 0, nullptr);
 	INCLUDE_LIBRARY (praat_MDS_new_init)   // from dwtools
 
-	praat_addMenuCommand (U"Objects", U"New", U"Generics", nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.generics"), nullptr, 0, nullptr);
 		praat_Matrix_init ();
-		praat_addMenuCommand (U"Objects", U"New", U"Polygon", nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Polygon from values...", nullptr, 2,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.polygon"), nullptr, 1, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_polygon_from_values"), nullptr, 2,
 			NEW1_Polygon_createFromValues);
 		praat_addMenuCommand (U"Objects", U"New", U"-- new strings --",
 				nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Strings", nullptr, 1, nullptr);
-			praat_addMenuCommand (U"Objects", U"New", U"Create Strings from texts...",
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.strings"), nullptr, 1, nullptr);
+			praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_strings_from_texts"),
 					nullptr, 2, NEW1_Strings_createFromTexts);
-			praat_addMenuCommand (U"Objects", U"New", U"Create Strings as file list...",
+			praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_strings_as_file_list"),
 					nullptr, 2, NEW1_Strings_createAsFileList);
-			praat_addMenuCommand (U"Objects", U"New", U"Create Strings as folder list... || Create Strings as directory list...",
+			praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_strings_as_folder_list"),
 					nullptr, 2, NEW1_Strings_createAsFolderList);
 		praat_addMenuCommand (U"Objects", U"New", U"-- new David generics --",
 				nullptr, 1, nullptr);
 		INCLUDE_LIBRARY (praat_David_generics_new_init)
 
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Strings from raw text file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_strings_from_raw_text_file"),
 			nullptr, 0, READ1_Strings_readFromRawTextFile);
 
-	praat_addMenuCommand (U"Objects", U"Open", U"-- read tier --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read from special annotation file...", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"Open", U"Read TextGrid from Xwaves... || Read TextGrid from ESPS label file...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.separator_read_tier"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_from_special_annotation_file"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_textgrid_from_xwaves"),
 				nullptr, 1, READ1_TextGrid_readFromEspsLabelFile);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read Sound with adjacent annotation files...", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"Open", U"Read Sound with adjacent annotation files (Buckeye)...",
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_sound_with_adjacent_annotation_files"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_sound_with_adjacent_annotation_files_buckeye"),
 				nullptr, 1, NEW_Sound_readWithAdjacentAnnotationFiles_buckeye);
-		praat_addMenuCommand (U"Objects", U"Open", U"Read Sound with adjacent annotation files (TIMIT)...",
+		praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_sound_with_adjacent_annotation_files_timit"),
 				nullptr, 1, NEW_Sound_readWithAdjacentAnnotationFiles_timit);
 
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Praat Intro", nullptr, '?', HELP_PraatIntro);
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.praat_intro"), nullptr, '?', HELP_PraatIntro);
 	#ifndef macintosh
-		praat_addMenuCommand (U"Objects", U"Help", U"Objects window", nullptr, 0, HELP_ObjectWindow);
+		praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.objects_window"), nullptr, 0, HELP_ObjectWindow);
 	#endif
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Frequently asked questions",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.frequently_asked_questions"),
 			nullptr, 0, HELP_FrequentlyAskedQuestions);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"-- reference help --",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.separator_reference_help"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Types of objects",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.types_of_objects"),
 			nullptr, 0, HELP_TypesOfObjects);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Editors",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.editors"),
 			nullptr, 0, HELP_Editors);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"-- version help --",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.separator_version_help"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"What’s new?",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.whats_new"),
 			nullptr, 0, HELP_WhatsNew);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Acknowledgments",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.acknowledgments"),
 			nullptr, 0, HELP_Acknowledgments);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"License",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.license"),
 			nullptr, 0, HELP_License);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"-- privacy help --",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.separator_privacy_help"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Privacy and security",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.privacy_and_security"),
 			nullptr, 0, HELP_PrivacyAndSecurity);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Checking for updates?",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.checking_for_updates"),
 			nullptr, 0, HELP_CheckingForUpdates);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Reporting a problem?",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.reporting_a_problem"),
 			nullptr, 0, HELP_ReportingAProblem);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"-- shell help --",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.separator_shell_help"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Formulas tutorial",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.formulas_tutorial"),
 			nullptr, 0, HELP_FormulasTutorial);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Scripting tutorial",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.scripting_tutorial"),
 			nullptr, 0, HELP_ScriptingTutorial);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Functions",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.functions"),
 			nullptr, 0, HELP_Functions);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"-- control help --",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.separator_control_help"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Demo window",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.demo_window"),
 			nullptr, 0, HELP_DemoWindow);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Interoperability",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.interoperability"),
 			nullptr, 0, HELP_Interoperability);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", U"Programming",
+	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.programming"),
 			nullptr, 0, HELP_Programming);
 #ifdef macintosh
-	praat_addMenuCommand (U"Objects", U"Help", U"Praat Intro",
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.praat_intro"),
 			nullptr, '?', HELP_PraatIntro);
-	praat_addMenuCommand (U"Objects", U"Help", U"Objects window help",
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.objects_window_help"),
 			nullptr, 0, HELP_ObjectWindow);
-	praat_addMenuCommand (U"Objects", U"Help", U"-- manual --",
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.separator_manual"),
 			nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Help", U"Search Praat manual...",
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.search_praat_manual"),
 			nullptr, 'M', HELP_SearchManual_Fon);
 #endif
 
@@ -3191,18 +3192,18 @@ praat_addAction1 (classCochleagram, 0, U"Modify", nullptr, 0, nullptr);
 	praat_addAction1 (classCochleagram, 0, U"Formula...",
 			nullptr, 0, MODIFY_Cochleagram_formula);
 praat_addAction1 (classCochleagram, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classCochleagram, 0, U"To Excitation (slice)...",
+	praat_addAction1 (classCochleagram, 0, I18n_translate("menu.to_excitation_slice_cochleagram"),
 			nullptr, 0, NEW_Cochleagram_to_Excitation);
 praat_addAction1 (classCochleagram, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classCochleagram, 0, U"To Matrix",
+	praat_addAction1 (classCochleagram, 0, I18n_translate("menu.to_matrix_cochleagram"),
 			nullptr, 0, NEW_Cochleagram_to_Matrix);
 
 	praat_addAction1 (classCorpus, 1, U"View & Edit", nullptr, GuiMenu_ATTRACTIVE, EDITOR_ONE_Corpus_edit);
 
 praat_addAction1 (classDistributions, 0, U"Learn", nullptr, 0, nullptr);
-	praat_addAction1 (classDistributions, 1, U"To Transition...",
+	praat_addAction1 (classDistributions, 1, I18n_translate("menu.to_transition_distributions"),
 			nullptr, 0, NEW_Distributions_to_Transition);
-	praat_addAction1 (classDistributions, 2, U"To Transition (noise)...",
+	praat_addAction1 (classDistributions, 2, I18n_translate("menu.to_transition_noise_distributions"),
 			nullptr, 0, NEW1_Distributions_to_Transition_noise);
 
 	praat_addAction1 (classExcitation, 0, U"Excitation help",
@@ -3211,7 +3212,7 @@ praat_addAction1 (classExcitation, 0, U"Draw", nullptr, 0, nullptr);
 	praat_addAction1 (classExcitation, 0, U"Draw...",
 			nullptr, 0, GRAPHICS_Excitation_draw);
 praat_addAction1 (classExcitation, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classExcitation, 0, U"To Formant...",
+	praat_addAction1 (classExcitation, 0, I18n_translate("menu.to_formant_excitation"),
 			nullptr, 0, NEW_Excitation_to_Formant);
 praat_addAction1 (classExcitation, 1, U"Query -", nullptr, 0, nullptr);
 	praat_addAction1 (classExcitation, 1, U"Get loudness",
@@ -3220,7 +3221,7 @@ praat_addAction1 (classExcitation, 0, U"Modify", nullptr, 0, nullptr);
 	praat_addAction1 (classExcitation, 0, U"Formula...",
 			nullptr, 0, MODIFY_Excitation_formula);
 praat_addAction1 (classExcitation, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classExcitation, 0, U"To Matrix",
+	praat_addAction1 (classExcitation, 0, I18n_translate("menu.to_matrix_excitation"),
 			nullptr, 0, NEW_Excitation_to_Matrix);
 
 	praat_addAction1 (classFormant, 0, U"Formant help",
@@ -3286,8 +3287,8 @@ praat_addAction1 (classFormant, 0, U"Convert", nullptr, 0, nullptr);
 			nullptr, GuiMenu_HIDDEN, NEW_Formant_downto_FormantTier);
 	praat_addAction1 (classFormant, 0, U"Down to FormantGrid",
 			nullptr, 0, NEW_Formant_downto_FormantGrid);
-praat_addAction1 (classFormant, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classFormant, 0, U"To Matrix...",
+	praat_addAction1 (classFormant, 0, U"Hack", nullptr, 0, nullptr);
+	praat_addAction1 (classFormant, 0, I18n_translate("menu.to_matrix_formant"),
 			nullptr, 0, NEW_Formant_to_Matrix);
 
 	praat_addAction1 (classHarmonicity, 0, U"Harmonicity help",
@@ -3323,8 +3324,8 @@ praat_addAction1 (classHarmonicity, 0, U"Modify", nullptr, 0, nullptr);
 	praat_TimeFunction_modify_init (classHarmonicity);
 	praat_addAction1 (classHarmonicity, 0, U"Formula...",
 			nullptr, 0, MODIFY_Harmonicity_formula);
-praat_addAction1 (classHarmonicity, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classHarmonicity, 0, U"To Matrix",
+	praat_addAction1 (classHarmonicity, 0, U"Hack", nullptr, 0, nullptr);
+	praat_addAction1 (classHarmonicity, 0, I18n_translate("menu.to_matrix_harmonicity"),
 			nullptr, 0, NEW_Harmonicity_to_Matrix);
 
 	praat_addAction1 (classIntensity, 0, U"Intensity help",
@@ -3361,10 +3362,10 @@ praat_addAction1 (classHarmonicity, 0, U"Hack", nullptr, 0, nullptr);
 		praat_TimeFunction_modify_init (classIntensity);
 		praat_addAction1 (classIntensity, 0, U"Formula...",
 				nullptr, 1, MODIFY_Intensity_formula);
-praat_addAction1 (classIntensity, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classIntensity, 0, U"To IntensityTier (peaks)",
+	praat_addAction1 (classIntensity, 0, U"Analyse", nullptr, 0, nullptr);
+	praat_addAction1 (classIntensity, 0, I18n_translate("menu.to_intensitytier_peaks_intensity"),
 			nullptr, 0, NEW_Intensity_to_IntensityTier_peaks);
-	praat_addAction1 (classIntensity, 0, U"To IntensityTier (valleys)",
+	praat_addAction1 (classIntensity, 0, I18n_translate("menu.to_intensitytier_valleys_intensity"),
 			nullptr, 0, NEW_Intensity_to_IntensityTier_valleys);
 praat_addAction1 (classIntensity, 0, U"Convert", nullptr, 0, nullptr);
 	praat_addAction1 (classIntensity, 0, U"Down to IntensityTier",
@@ -3420,8 +3421,8 @@ praat_addAction1 (classIntensity, 0, U"Convert", nullptr, 0, nullptr);
 praat_addAction1 (classLtas, 0, U"Modify", nullptr, 0, nullptr);
 	praat_addAction1 (classLtas, 0, U"Formula...",
 			nullptr, 0, MODIFY_Ltas_formula);
-praat_addAction1 (classLtas, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classLtas, 0, U"To SpectrumTier (peaks)",
+	praat_addAction1 (classLtas, 0, U"Analyse", nullptr, 0, nullptr);
+	praat_addAction1 (classLtas, 0, I18n_translate("menu.to_spectrumtier_peaks_ltas"),
 			nullptr, 0, NEW_Ltas_to_SpectrumTier_peaks);
 praat_addAction1 (classLtas, 0, U"Convert", nullptr, 0, nullptr);
 	praat_addAction1 (classLtas, 0, U"Compute trend line...",
@@ -3433,8 +3434,8 @@ praat_addAction1 (classLtas, 0, U"Combine", nullptr, 0, nullptr);
 			nullptr, GuiMenu_DEPRECATED_2005, NEW1_Ltases_merge);
 	praat_addAction1 (classLtas, 0, U"Average",
 			nullptr, 0, NEW1_Ltases_average);
-praat_addAction1 (classLtas, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classLtas, 0, U"To Matrix",
+	praat_addAction1 (classLtas, 0, U"Hack", nullptr, 0, nullptr);
+	praat_addAction1 (classLtas, 0, I18n_translate("menu.to_matrix_ltas"),
 			nullptr, 0, NEW_Ltas_to_Matrix);
 
 	praat_addAction1 (classManipulation, 0, U"Manipulation help",
@@ -3485,11 +3486,11 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 				nullptr, 1, PLAY_Pitch_hum);
 		praat_addAction1 (classPitch, 0, U"-- to sound --",
 				nullptr, 1, nullptr);
-		praat_addAction1 (classPitch, 0, U"To Sound (pulses)",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_sound_pulses_pitch"),
 				nullptr, 1, NEW_Pitch_to_Sound_pulses);
-		praat_addAction1 (classPitch, 0, U"To Sound (hum)",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_sound_hum_pitch"),
 				nullptr, 1, NEW_Pitch_to_Sound_hum);
-		praat_addAction1 (classPitch, 0, U"To Sound (sine)...",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_sound_sine_pitch"),
 				nullptr, 1, NEW_Pitch_to_Sound_sine);
 	praat_addAction1 (classPitch, 0, U"Draw -", nullptr, 0, nullptr);
 		praat_addAction1 (classPitch, 0, U"Draw...",
@@ -3578,18 +3579,18 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 		praat_addAction1 (classPitch, 0, U"Formula...",
 				nullptr, 1, MODIFY_Pitch_formula);
 	praat_addAction1 (classPitch, 0, U"Annotate -", nullptr, 0, nullptr);
-		praat_addAction1 (classPitch, 0, U"To TextGrid...",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_textgrid_pitch"),
 				nullptr, 1, NEW_Pitch_to_TextGrid);
 		praat_addAction1 (classPitch, 0, U"-- to single tier --",
 				nullptr, GuiMenu_HIDDEN + GuiMenu_DEPTH_1, nullptr);
-		praat_addAction1 (classPitch, 0, U"To TextTier",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_texttier_pitch"),
 				nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1, NEW_Pitch_to_TextTier);
-		praat_addAction1 (classPitch, 0, U"To IntervalTier",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_intervaltier_pitch"),
 				nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1, NEW_Pitch_to_IntervalTier);
 	praat_addAction1 (classPitch, 0, U"Analyse -", nullptr, 0, nullptr);
-		praat_addAction1 (classPitch, 0, U"To PointProcess",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_pointprocess_pitch"),
 				nullptr, 1, NEW_Pitch_to_PointProcess);
-	praat_addAction1 (classPitch, 0, U"Convert -", nullptr, 0, nullptr);
+	praat_addAction1 (classPitch, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classPitch, 0, U"Interpolate",
 				nullptr, 1, NEW_Pitch_interpolate);
 		praat_addAction1 (classPitch, 0, U"Smooth...",
@@ -3603,7 +3604,7 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 				nullptr, 1, nullptr);
 		praat_addAction1 (classPitch, 0, U"Down to PitchTier",
 				nullptr, 1, NEW_Pitch_downto_PitchTier);
-		praat_addAction1 (classPitch, 0, U"To Matrix",
+		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_matrix_pitch"),
 				nullptr, 1, NEW_Pitch_to_Matrix);
 
 	praat_addAction1 (classPolygon, 0, U"Polygon help",
@@ -3627,7 +3628,7 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 		praat_addAction1 (classPolygon, 0, U"Salesperson...",
 				nullptr, 1, MODIFY_Polygon_salesperson);
 	praat_addAction1 (classPolygon, 0, U"Hack -", nullptr, 0, nullptr);
-		praat_addAction1 (classPolygon, 0, U"To Matrix", nullptr, 1, NEW_Polygon_to_Matrix);
+		praat_addAction1 (classPolygon, 0, I18n_translate("menu.to_matrix_polygon"), nullptr, 1, NEW_Polygon_to_Matrix);
 
 	praat_addAction1 (classSpectrogram, 0, U"Spectrogram help",
 			nullptr, 0, HELP_Spectrogram_help);
@@ -3643,112 +3644,112 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 		praat_addAction1 (classSpectrogram, 0, U"Paint...",
 				nullptr, 1, GRAPHICS_Spectrogram_paint);
 	praat_addAction1 (classSpectrogram, 0, U"Analyse -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrogram, 0, U"To Spectrum (slice)...",
+		praat_addAction1 (classSpectrogram, 0, I18n_translate("menu.to_spectrum_slice_spectrogram"),
 				nullptr, 1, NEW_Spectrogram_to_Spectrum);
 	praat_addAction1 (classSpectrogram, 0, U"Synthesize -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrogram, 0, U"To Sound...",
+		praat_addAction1 (classSpectrogram, 0, I18n_translate("menu.to_sound_spectrogram"),
 				nullptr, 1, NEW_Spectrogram_to_Sound);
 	praat_addAction1 (classSpectrogram, 0, U"Modify -", nullptr, 0, nullptr);
 		praat_TimeFunction_modify_init (classSpectrogram);
 		praat_addAction1 (classSpectrogram, 0, U"Formula...",
 				nullptr, 1, MODIFY_Spectrogram_formula);
 	praat_addAction1 (classSpectrogram, 0, U"Hack -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrogram, 0, U"To Matrix",
+		praat_addAction1 (classSpectrogram, 0, I18n_translate("menu.to_matrix_spectrogram"),
 				nullptr, 1, NEW_Spectrogram_to_Matrix);
 
-	praat_addAction1 (classSpectrum, 0, U"Spectrum help",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.spectrum_help"),
 			nullptr, 0, HELP_Spectrum_help);
-	praat_addAction1 (classSpectrum, 1, U"View & Edit || Edit",
+	praat_addAction1 (classSpectrum, 1, I18n_translate("menu.view_and_edit"),
 			nullptr, GuiMenu_ATTRACTIVE, EDITOR_ONE_Spectrum_viewAndEdit);
-	praat_addAction1 (classSpectrum, 0, U"Sound -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 0, U"To Sound || To Sound (fft)",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.sound_with_dash"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_sound_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Sound);   // alternative GuiMenu_DEPRECATED_2004
-	praat_addAction1 (classSpectrum, 0, U"Draw -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 0, U"Draw...",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.draw_with_dash"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.draw"),
 				nullptr, 1, GRAPHICS_Spectrum_draw);
-		praat_addAction1 (classSpectrum, 0, U"Draw (log freq)...",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.draw_log_freq"),
 				nullptr, 1, GRAPHICS_Spectrum_drawLogFreq);
-	praat_addAction1 (classSpectrum, 0, U"Tabulate -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 1, U"Tabulate...",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.tabulate_with_dash"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.tabulate"),
 				nullptr, 1, NEW_Spectrum_tabulate);
-		praat_addAction1 (classSpectrum, 1, U"Tabulate (verbose)",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.tabulate_verbose"),
 				nullptr, 1, NEW_Spectrum_tabulate_verbose);
-	praat_addAction1 (classSpectrum, 1, U"Query -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 1, U"Frequency domain", nullptr, 1, nullptr);
-			praat_addAction1 (classSpectrum, 1, U"Get lowest frequency",
+	praat_addAction1 (classSpectrum, 1, I18n_translate("menu.query_with_dash"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.frequency_domain"), nullptr, 1, nullptr);
+			praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_lowest_frequency"),
 					nullptr, 2, REAL_Spectrum_getLowestFrequency);
-			praat_addAction1 (classSpectrum, 1, U"Get highest frequency",
+			praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_highest_frequency"),
 					nullptr, 2, REAL_Spectrum_getHighestFrequency);
-		praat_addAction1 (classSpectrum, 1, U"Frequency sampling", nullptr, 1, nullptr);
-			praat_addAction1 (classSpectrum, 1, U"Get number of bins",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.frequency_sampling"), nullptr, 1, nullptr);
+			praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_number_of_bins"),
 					nullptr, 2, INTEGER_Spectrum_getNumberOfBins);
-			praat_addAction1 (classSpectrum, 1, U"Get bin width",
+			praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_bin_width"),
 					nullptr, 2, REAL_Spectrum_getBinWidth);
-			praat_addAction1 (classSpectrum, 1, U"Get frequency from bin number... || Get frequency from bin...",
+			praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_frequency_from_bin"),
 					nullptr, 2, REAL_Spectrum_getFrequencyFromBin);   // alternative GuiMenu_DEPRECATED_2004
-			praat_addAction1 (classSpectrum, 1, U"Get bin number from frequency... || Get bin from frequency...",
+			praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_bin_from_frequency"),
 					nullptr, 2, REAL_Spectrum_getBinNumberFromFrequency);
 		praat_addAction1 (classSpectrum, 1, U"-- get content --",
 				nullptr, 1, nullptr);
-		praat_addAction1 (classSpectrum, 1, U"Get real value in bin...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_real_value_in_bin"),
 				nullptr, 1, REAL_Spectrum_getRealValueInBin);
-		praat_addAction1 (classSpectrum, 1, U"Get imaginary value in bin...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_imaginary_value_in_bin"),
 				nullptr, 1, REAL_Spectrum_getImaginaryValueInBin);
 		praat_addAction1 (classSpectrum, 1, U"-- get energy --",
 				nullptr, 1, nullptr);
-		praat_addAction1 (classSpectrum, 1, U"Get band energy...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_band_energy"),
 				nullptr, 1, REAL_Spectrum_getBandEnergy);
-		praat_addAction1 (classSpectrum, 1, U"Get band density...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_band_density"),
 				nullptr, 1, REAL_Spectrum_getBandDensity);
-		praat_addAction1 (classSpectrum, 1, U"Get band energy difference...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_band_energy_difference"),
 				nullptr, 1, REAL_Spectrum_getBandEnergyDifference);
-		praat_addAction1 (classSpectrum, 1, U"Get band density difference...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_band_density_difference"),
 				nullptr, 1, REAL_Spectrum_getBandDensityDifference);
 		praat_addAction1 (classSpectrum, 1, U"-- get moments --",
 				nullptr, 1, nullptr);
-		praat_addAction1 (classSpectrum, 1, U"Get centre of gravity...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_centre_of_gravity"),
 				nullptr, 1, REAL_Spectrum_getCentreOfGravity);
-		praat_addAction1 (classSpectrum, 1, U"Get standard deviation...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_standard_deviation"),
 				nullptr, 1, REAL_Spectrum_getStandardDeviation);
-		praat_addAction1 (classSpectrum, 1, U"Get skewness...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_skewness"),
 				nullptr, 1, REAL_Spectrum_getSkewness);
-		praat_addAction1 (classSpectrum, 1, U"Get kurtosis...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_kurtosis"),
 				nullptr, 1, REAL_Spectrum_getKurtosis);
-		praat_addAction1 (classSpectrum, 1, U"Get central moment...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_central_moment"),
 				nullptr, 1, REAL_Spectrum_getCentralMoment);
 		praat_addAction1 (classSpectrum, 1, U"-- search --",
 				nullptr, 1, nullptr);
-		praat_addAction1 (classSpectrum, 1, U"Get frequency of nearest maximum...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_frequency_of_nearest_maximum"),
 				nullptr, 1, REAL_Spectrum_getFrequencyOfNearestMaximum);
-		praat_addAction1 (classSpectrum, 1, U"Get sound pressure level of nearest maximum...",
+		praat_addAction1 (classSpectrum, 1, I18n_translate("spectrum.get_sound_pressure_level_of_nearest_maximum"),
 				nullptr, 1, REAL_Spectrum_getSoundPressureLevelOfNearestMaximum);
-	praat_addAction1 (classSpectrum, 0, U"Modify -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 0, U"Formula...",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.modify_with_dash"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.formula"),
 				nullptr, 1, MODIFY_Spectrum_formula);
-		praat_addAction1 (classSpectrum, 0, U"Filter (pass Hann band)...",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.filter_pass_hann_band"),
 				nullptr, 1, MODIFY_Spectrum_passHannBand);
-		praat_addAction1 (classSpectrum, 0, U"Filter (stop Hann band)...",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.filter_stop_hann_band"),
 				nullptr, 1, MODIFY_Spectrum_stopHannBand);
-	praat_addAction1 (classSpectrum, 0, U"Analyse -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 0, U"To Excitation...",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.analyse_with_dash"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_excitation_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Excitation);
-		praat_addAction1 (classSpectrum, 0, U"To SpectrumTier (peaks)",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_spectrumtier_peaks_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_SpectrumTier_peaks);
-		praat_addAction1 (classSpectrum, 0, U"To Formant (peaks)...",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_formant_peaks_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Formant_peaks);
-		praat_addAction1 (classSpectrum, 0, U"To Ltas...",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_ltas_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Ltas);
-		praat_addAction1 (classSpectrum, 0, U"To Ltas (1-to-1)",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_ltas_1to1_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Ltas_1to1);
-		praat_addAction1 (classSpectrum, 0, U"To Spectrogram",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_spectrogram_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Spectrogram);
-	praat_addAction1 (classSpectrum, 0, U"Convert -", nullptr, 0, nullptr);
-		praat_addAction1 (classSpectrum, 0, U"Cepstral smoothing...",
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.cepstral_smoothing"),
 				nullptr, 1, NEW_Spectrum_cepstralSmoothing);
-		praat_addAction1 (classSpectrum, 0, U"LPC smoothing...",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.lpc_smoothing"),
 				nullptr, 1, NEW_Spectrum_lpcSmoothing);
-		praat_addAction1 (classSpectrum, 0, U"Hack", nullptr, 1, nullptr);
-			praat_addAction1 (classSpectrum, 0, U"To Matrix",
+		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.hack"), nullptr, 1, nullptr);
+			praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_matrix_spectrum"),
 					nullptr, 2, NEW_Spectrum_to_Matrix);
 
 	praat_addAction1 (classStrings, 0, U"Strings help", nullptr, 0, HELP_Strings_help);
@@ -3784,14 +3785,14 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 				nullptr, 1, MODIFY_Strings_genericize);   // alternative GuiMenu_DEPRECATED_2016
 		praat_addAction1 (classStrings, 0, U"Convert to Unicode || Nativize",
 				nullptr, 1, MODIFY_Strings_nativize);
-	praat_addAction1 (classStrings, 0, U"Convert -", nullptr, 0, nullptr);
+	praat_addAction1 (classStrings, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classStrings, 0, U"Replace all...",
 				nullptr, 1, NEW_Strings_replaceAll);
-praat_addAction1 (classStrings, 0, U"Analyze", nullptr, 0, nullptr);
-	praat_addAction1 (classStrings, 0, U"To Distributions",
+	praat_addAction1 (classStrings, 0, U"Analyze", nullptr, 0, nullptr);
+	praat_addAction1 (classStrings, 0, I18n_translate("menu.to_distributions_strings"),
 			nullptr, 0, NEW_Strings_to_Distributions);
 praat_addAction1 (classStrings, 0, U"Synthesize", nullptr, 0, nullptr);
-	praat_addAction1 (classStrings, 0, U"To WordList",
+	praat_addAction1 (classStrings, 0, I18n_translate("menu.to_wordlist_strings"),
 			nullptr, 0, NEW_Strings_to_WordList);
 
 	praat_addAction1 (classTransition, 0, U"Transition help", nullptr, 0, HELP_Transition_help);
@@ -3807,17 +3808,17 @@ praat_addAction1 (classTransition, 0, U"Synthesize", nullptr, 0, nullptr);
 	praat_addAction1 (classTransition, 0, U"Power...",
 			nullptr, 0, NEW_Transition_power);
 praat_addAction1 (classTransition, 0, U"Cast", nullptr, 0, nullptr);
-	praat_addAction1 (classTransition, 0, U"To Matrix",
+	praat_addAction1 (classTransition, 0, I18n_translate("menu.to_matrix_transition"),
 			nullptr, 0, NEW_Transition_to_Matrix);
 
 	praat_addAction2 (classDistributions, 1, classTransition, 1, U"Map",
 			nullptr, 0, NEW1_Distributions_Transition_map);
-	praat_addAction2 (classDistributions, 1, classTransition, 1, U"To Transition...",
+	praat_addAction2 (classDistributions, 1, classTransition, 1, I18n_translate("menu.to_transition_distributions"),
 			nullptr, 0, NEW1_Distributions_to_Transition_adj);
-	praat_addAction2 (classDistributions, 2, classTransition, 1, U"To Transition (noise)...",
+	praat_addAction2 (classDistributions, 2, classTransition, 1, I18n_translate("menu.to_transition_noise"),
 			nullptr, 0, NEW1_Distributions_to_Transition_noise_adj);
 
-	praat_addAction2 (classFormant, 1, classPointProcess, 1, U"To FormantTier",
+	praat_addAction2 (classFormant, 1, classPointProcess, 1, I18n_translate("menu.to_formanttier"),
 			nullptr, 0, NEW1_Formant_PointProcess_to_FormantTier);
 	praat_addAction2 (classFormant, 1, classSound, 1, U"Filter",
 			nullptr, 0, NEW1_Sound_Formant_filter);
@@ -3833,7 +3834,7 @@ praat_addAction2 (classIntensity, 1, classPitch, 1, U"Query", nullptr, 0, nullpt
 	praat_addAction2 (classIntensity, 1, classPitch, 1, U"Get mean absolute slope",
 			nullptr, 0, REAL_Pitch_Intensity_getMeanAbsoluteSlope);
 
-	praat_addAction2 (classIntensity, 1, classPointProcess, 1, U"To IntensityTier",
+	praat_addAction2 (classIntensity, 1, classPointProcess, 1, I18n_translate("menu.to_intensitytier_pointprocess"),
 			nullptr, 0, NEW1_Intensity_PointProcess_to_IntensityTier);
 
 	praat_addAction2 (classManipulation, 1, classSound, 1, U"Replace original sound",
@@ -3844,24 +3845,24 @@ praat_addAction2 (classIntensity, 1, classPitch, 1, U"Query", nullptr, 0, nullpt
 			nullptr, 0, MODIFY_Manipulation_replacePitchTier);
 	praat_addAction2 (classManipulation, 1, classDurationTier, 1, U"Replace duration tier",
 			nullptr, 0, MODIFY_Manipulation_replaceDurationTier);
-	praat_addAction2 (classManipulation, 1, classTextTier, 1, U"To Manipulation",
+	praat_addAction2 (classManipulation, 1, classTextTier, 1, I18n_translate("menu.to_manipulation_texttier"),
 			nullptr, 0, NEW1_Manipulation_TextTier_to_Manipulation);
 	praat_addAction2 (classPitch, 1, classPitchTier, 1, U"Draw...",
 			nullptr, 0, GRAPHICS_PitchTier_Pitch_draw);
-	praat_addAction2 (classPitch, 1, classPitchTier, 1, U"To Pitch",
+	praat_addAction2 (classPitch, 1, classPitchTier, 1, I18n_translate("menu.to_pitch_pitchtier"),
 			nullptr, 0, NEW1_Pitch_PitchTier_to_Pitch);
-	praat_addAction2 (classPitch, 1, classPointProcess, 1, U"To PitchTier",
+	praat_addAction2 (classPitch, 1, classPointProcess, 1, I18n_translate("menu.to_pitchtier_pointprocess"),
 			nullptr, 0, NEW1_Pitch_PointProcess_to_PitchTier);
 	praat_addAction3 (classPitch, 1, classPointProcess, 1, classSound, 1, U"Voice report...",
 			nullptr, 0, INFO_Sound_Pitch_PointProcess_voiceReport);
-	praat_addAction2 (classPitch, 1, classSound, 1, U"To PointProcess (cc)",
+	praat_addAction2 (classPitch, 1, classSound, 1, I18n_translate("menu.to_pointprocess_cc"),
 			nullptr, 0, NEW1_Sound_Pitch_to_PointProcess_cc);
-	praat_addAction2 (classPitch, 1, classSound, 1, U"To PointProcess (peaks)...",
+	praat_addAction2 (classPitch, 1, classSound, 1, I18n_translate("menu.to_pointprocess_peaks_pitch_sound"),
 			nullptr, 0, NEW1_Sound_Pitch_to_PointProcess_peaks);
-	praat_addAction2 (classPitch, 1, classSound, 1, U"To Manipulation",
+	praat_addAction2 (classPitch, 1, classSound, 1, I18n_translate("menu.to_manipulation_pitch_sound"),
 			nullptr, 0, NEW1_Sound_Pitch_to_Manipulation);
 
-	praat_addAction4 (classDurationTier, 1, classPitchTier, 1, classPointProcess, 1, classSound, 1, U"To Sound...",
+	praat_addAction4 (classDurationTier, 1, classPitchTier, 1, classPointProcess, 1, classSound, 1, I18n_translate("menu.to_sound_duration_pointprocess"),
 			nullptr, 0, NEW1_Sound_Point_Pitch_Duration_to_Sound);
 
 	Melder_stopwatch ();

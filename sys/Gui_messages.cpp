@@ -31,6 +31,7 @@
 #include "Script.h"
 #include "Notebook.h"
 #include "GuiTrust.h"
+#include "i18n_simple.h"
 
 //#include <QuartzCore/CoreAnimation.h>
 
@@ -52,7 +53,7 @@ static bool waitWhileProgress (double progress, conststring32 message, GuiDialog
 		// Until then, the button click attaches a g_object data key named "pressed" to the cancelButton
 		// which this function reads out in order to tell whether interruption has occurred
 		while (gtk_events_pending ()) {
-			trace (U"event pending");
+			trace (I18n_translate ("debug.event_pending"));
 			gtk_main_iteration ();
 		}
 	#elif motif
@@ -104,15 +105,15 @@ static bool waitWhileProgress (double progress, conststring32 message, GuiDialog
 			GuiLabel_setText (label2, U"");
 		}
 		#if gtk
-			trace (U"update the progress bar");
+			trace (I18n_translate ("debug.update_the_progress_bar"));
 			GuiProgressBar_setValue (scale, progress);
 			while (gtk_events_pending ()) {
-				trace (U"event pending");
+				trace (I18n_translate ("debug.event_pending"));
 				gtk_main_iteration ();
 			}
-			trace (U"check whether the cancel button has the \"pressed\" key set");
+			trace (I18n_translate ("debug.check_cancel_button_pressed_key"));
 			if (g_object_steal_data (G_OBJECT (cancelButton -> d_widget), "pressed")) {
-				trace (U"the cancel button has been pressed");
+				trace (I18n_translate ("debug.cancel_button_has_been_pressed"));
 				return false;   // don't continue
 			}
 		#elif motif
@@ -129,7 +130,7 @@ static bool waitWhileProgress (double progress, conststring32 message, GuiDialog
 			}
 		#endif
 	}
-	trace (U"continue");
+	trace (I18n_translate ("debug.continue"));
 	return true;
 }
 
@@ -151,8 +152,8 @@ static GuiButton theProgressCancelButton = nullptr;
 #endif
 
 static void _Melder_dia_init (GuiDialog *dia, GuiProgressBar *scale, GuiLabel *label1, GuiLabel *label2, GuiButton *cancelButton, bool hasMonitor) {
-	trace (U"creating the dialog");
-	*dia = GuiDialog_create (Melder_topShell, 200, 100, 500, hasMonitor ? 530 : 200, U"Work in progress",
+	trace (I18n_translate ("debug.creating_the_dialog"));
+	*dia = GuiDialog_create (Melder_topShell, 200, 100, 500, hasMonitor ? 530 : 200, I18n_translate ("dialog.work_in_progress"),
 		#if gtk || cocoa
 			progress_dia_close, nullptr,
 		#else
@@ -160,16 +161,16 @@ static void _Melder_dia_init (GuiDialog *dia, GuiProgressBar *scale, GuiLabel *l
 		#endif
 		GuiDialog_Modality::MODELESS);
 
-	trace (U"creating the labels");
-	*label1 = GuiLabel_createShown (*dia, 3, 503, 0, Gui_LABEL_HEIGHT, U"label1", 0);
-	*label2 = GuiLabel_createShown (*dia, 3, 503, 30, 30 + Gui_LABEL_HEIGHT, U"label2", 0);
+	trace (I18n_translate ("debug.creating_the_labels"));
+	*label1 = GuiLabel_createShown (*dia, 3, 503, 0, Gui_LABEL_HEIGHT, I18n_translate ("label.label1"), 0);
+	*label2 = GuiLabel_createShown (*dia, 3, 503, 30, 30 + Gui_LABEL_HEIGHT, I18n_translate ("label.label2"), 0);
 
-	trace (U"creating the scale");
+	trace (I18n_translate ("debug.creating_the_scale"));
 	*scale = GuiProgressBar_createShown (*dia, 3, -3, 70, 110, 0);
 
-	trace (U"creating the cancel button");
+	trace (I18n_translate ("debug.creating_the_cancel_button"));
 	*cancelButton = GuiButton_createShown (*dia, 0, 500, 170, 170 + Gui_PUSHBUTTON_HEIGHT,
-		U"Interrupt",
+		I18n_translate ("button.interrupt"),
 		#if gtk
 			progress_cancel_btn_press, nullptr,
 		#elif cocoa
@@ -178,7 +179,7 @@ static void _Melder_dia_init (GuiDialog *dia, GuiProgressBar *scale, GuiLabel *l
 			nullptr, nullptr,
 		#endif
 		0);
-	trace (U"end");
+		trace (I18n_translate ("debug.end"));
 }
 
 static void gui_progress (double progress, conststring32 message) {
@@ -193,7 +194,7 @@ static void gui_progress (double progress, conststring32 message) {
 		if (! dia)
 			_Melder_dia_init (& dia, & scale, & label1, & label2, & theProgressCancelButton, false);
 		if (! waitWhileProgress (progress, message, dia, scale, label1, label2, theProgressCancelButton))
-			Melder_throw (U"Interrupted!");
+			Melder_throw (I18n_translate ("error.interrupted"));
 		lastTime = now;
 	}
 }
@@ -230,7 +231,7 @@ static void * gui_monitor (double progress, conststring32 message) {
 			Graphics_clearWs (graphics.get());
 		}
 		if (! waitWhileProgress (progress, message, dia, scale, label1, label2, cancelButton))
-			Melder_throw (U"Interrupted!");
+			Melder_throw (I18n_translate ("error.interrupted"));
 		lastTime = now;
 		if (progress == 0.0)
 			return graphics.get();
@@ -333,12 +334,12 @@ static void gui_error (conststring32 message) {
 	*/
 	Melder_casual (U"PRAAT ERROR MESSAGE:\n", message, U"(END OF PRAAT ERROR MESSAGE)");
 	#if gtk
-		trace (U"create dialog");
+		trace (I18n_translate ("debug.create_dialog"));
 		GuiObject dialog = gtk_message_dialog_new (GTK_WINDOW (Melder_topShell -> d_gtkWindow), GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "%s", Melder_peek32to8 (message));
-		trace (U"run dialog");
+		trace (I18n_translate ("debug.run_dialog"));
 		gtk_dialog_run (GTK_DIALOG (dialog));
-		trace (U"destroy dialog");
+		trace (I18n_translate ("debug.destroy_dialog"));
 		gtk_widget_destroy (GTK_WIDGET (dialog));
 	#elif motif
 		MessageBox (nullptr, Melder_peek32toW (message), L"Message", MB_OK | MB_TOPMOST | MB_ICONWARNING);   // or (HWND) XtWindow ((GuiObject) Melder_topShell)
@@ -349,14 +350,14 @@ static void gui_error (conststring32 message) {
 		theMessageFund = (char *) malloc (theMessageFund_SIZE);
 		if (! theMessageFund) {
 			#if gtk
-				GuiObject dialog = gtk_message_dialog_new (GTK_WINDOW (Melder_topShell -> d_gtkWindow), GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "Praat is very low on memory.\nSave your work and quit Praat.\nIf you don't do that, Praat may crash.");
+			GuiObject dialog = gtk_message_dialog_new (GTK_WINDOW (Melder_topShell -> d_gtkWindow), GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", Melder_peek32to8 (I18n_translate ("warning.low_memory")));
 				gtk_dialog_run (GTK_DIALOG (dialog));
 				gtk_widget_destroy (GTK_WIDGET (dialog));
 			#elif motif
-				MessageBox (nullptr, L"Praat is very low on memory.\nSave your work and quit Praat.\nIf you don't do that, Praat may crash.", L"Message", MB_OK);
+				MessageBox (nullptr, Melder_peek32toW (I18n_translate ("warning.low_memory")), L"Message", MB_OK);
 			#elif cocoa
-				mac_message (NSCriticalAlertStyle, U"Praat is very low on memory.\nSave your work and quit Praat.\nIf you don't do that, Praat may crash.");
+				mac_message (NSCriticalAlertStyle, I18n_translate ("warning.low_memory"));
 			#endif
 		}
 	}
@@ -382,41 +383,35 @@ static void gui_trust (void *void_interpreter, conststring32 action) {
 		Script script = interpreter -> scriptReference;
 		Notebook notebook = interpreter -> notebookReference;
 		if (! script && ! notebook)
-			Melder_throw (U"We expected a script or a notebook.");
+			Melder_throw (I18n_translate ("error.expected_script_or_notebook"));
 		if (script && script -> trusted || notebook && notebook -> trusted)
 			return;   // the request should be granted
 		conststring32 paragraphs [1+5] = { };
 		if (script) {
-			paragraphs [1] = U"The script";
+			paragraphs [1] = I18n_translate ("trust.the_script");
 			paragraphs [2] = Melder_cat (U"“", script -> string.get(), U"”");
 		} else if (notebook) {
-			paragraphs [1] = U"The notebook";
+			paragraphs [1] = I18n_translate ("trust.the_notebook");
 			paragraphs [2] = Melder_cat (U"“", notebook -> string.get(), U"”");
 		} else
-			paragraphs [1] =  U"Your untitled script or notebook";
-		paragraphs [3] = U"requests permission to:";
+			paragraphs [1] =  I18n_translate ("trust.untitled_script_or_notebook");
+		paragraphs [3] = I18n_translate ("trust.requests_permission_to");
 		paragraphs [4] = action;
-		conststring32 option1 = U"CANCEL\n(because I don’t want the requested action to happen)";
+		conststring32 option1 = I18n_translate ("trust.cancel_option");
 		conststring32 option2 =
 			script ?
-				U"Yes, I allow this script to perform the action that it requests\n(and ask me again next time)"
+				I18n_translate ("trust.allow_script_once")
 			: notebook ?
-				U"Yes, I allow this notebook to perform the action that it requests\n(and ask me again next time)"
+				I18n_translate ("trust.allow_notebook_once")
 			:
-				U"Yes, I allow this script or notebook to perform the action that it requests\n(and ask me again next time)";
+				I18n_translate ("trust.allow_script_or_notebook_once");
 		conststring32 option3 =
 			script ?
-				U"Yes, and I even allow this script to CONTROL MY COMPUTER from now on\n"
-				"(i.e. to perform any action, including saving, deleting, calling system commands, and internetting,\n"
-				"because I fully trust the script authors’ skills and intentions)"
+				I18n_translate ("trust.trust_script_fully")
 			: notebook ?
-				U"Yes, and I even allow this notebook to CONTROL MY COMPUTER from now on\n"
-				"(i.e. to perform any action, including saving, deleting, calling system commands, and internetting,\n"
-				"because I fully trust the notebook authors’ skills and intentions)"
+				I18n_translate ("trust.trust_notebook_fully")
 			:
-				U"Yes, and I even allow this script or notebook to CONTROL MY COMPUTER from now on\n"
-				"(i.e. to perform any action, including saving, deleting, calling system commands, and internetting,\n"
-				"because I fully trust the notebook authors’ skills and intentions)";
+				I18n_translate ("trust.trust_script_or_notebook_fully");
 		integer buttonClicked = GuiTrust_get (nullptr, nullptr,
 			paragraphs [1], paragraphs [2], paragraphs [3], paragraphs [4], paragraphs [5],
 			option1, option2, option3, nullptr, nullptr, interpreter

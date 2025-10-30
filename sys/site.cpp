@@ -19,6 +19,7 @@
 #include "Preferences.h"
 #include <string.h>
 #include "site.h"
+#include "i18n_simple.h"
 
 static PrefsString printCommand;
 
@@ -27,7 +28,7 @@ char32 * Site_getPrintCommand () { return printCommand; }
 void Site_setPrintCommand (conststring32 text) { Pref_copyString (text, printCommand); }
 
 void Site_prefs () {
-	Preferences_addString (U"Site.printCommand", printCommand, U"lp -c %s");
+	Preferences_addString (I18n_translate("preferences.site_print_command"), printCommand, I18n_translate("form.default_print_command"));
 }
 
 /* End of file site.cpp */

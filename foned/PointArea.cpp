@@ -21,6 +21,7 @@
 #include "EditorM.h"
 #include "VoiceAnalysis.h"
 #include "SoundArea.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (PointArea, FunctionArea, 0);
 
@@ -236,42 +237,42 @@ void structPointArea :: v_createMenus () {
 
 	EditorMenu menu = Editor_addMenu (our functionEditor(), U"Pulses", 0);
 
-	FunctionAreaMenu_addCommand (menu, U"- Pulses settings:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Pulses settings...", 0, menu_cb_pulsesSettings, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pulses_settings"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pulses_settings_dialog"), 0, menu_cb_pulsesSettings, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Modify pulses:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Add point at cursor", 'P',
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.modify_pulses"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.add_point_at_cursor"), 'P',
 			MODIFY_DATA__addPointAtCursor, this);
-	FunctionAreaMenu_addCommand (menu, U"Add point at...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.add_point_at"), 0,
 			MODIFY_DATA__addPointAt, this);
-	FunctionAreaMenu_addCommand (menu, U"-- remove point --", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Remove point(s)", GuiMenu_OPTION | 'P',
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.remove_point"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.remove_points"), GuiMenu_OPTION | 'P',
 			MODIFY_DATA__removePoints, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Query selected pulses:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Get jitter (local)", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_selected_pulses"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_jitter_local"), 0,
 			QUERY_DATA_FOR_REAL__getJitter_local, this);
-	FunctionAreaMenu_addCommand (menu, U"Get jitter (local, absolute)", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_jitter_local_absolute"), 0,
 			QUERY_DATA_FOR_REAL__getJitter_local_absolute, this);
-	FunctionAreaMenu_addCommand (menu, U"Get jitter (rap)", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_jitter_rap"), 0,
 			QUERY_DATA_FOR_REAL__getJitter_rap, this);
-	FunctionAreaMenu_addCommand (menu, U"Get jitter (ppq5)", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_jitter_ppq5"), 0,
 			QUERY_DATA_FOR_REAL__getJitter_ppq5, this);
-	FunctionAreaMenu_addCommand (menu, U"Get jitter (ddp)", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_jitter_ddp"), 0,
 			QUERY_DATA_FOR_REAL__getJitter_ddp, this);
 	if (our borrowedSoundArea) {   // BUG: not LongSound
-		FunctionAreaMenu_addCommand (menu, U"- Query selected pulses and sound:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Get shimmer (local)", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_selected_pulses_and_sound"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_shimmer_local"), 0,
 				QUERY_DATA_FOR_REAL__getShimmer_local, this);
-		FunctionAreaMenu_addCommand (menu, U"Get shimmer (local, dB)", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_shimmer_local_dB"), 0,
 				QUERY_DATA_FOR_REAL__getShimmer_local_dB, this);
-		FunctionAreaMenu_addCommand (menu, U"Get shimmer (apq3)", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_shimmer_apq3"), 0,
 				QUERY_DATA_FOR_REAL__getShimmer_apq3, this);
-		FunctionAreaMenu_addCommand (menu, U"Get shimmer (apq5)", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_shimmer_apq5"), 0,
 				QUERY_DATA_FOR_REAL__getShimmer_apq5, this);
-		FunctionAreaMenu_addCommand (menu, U"Get shimmer (apq11)", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_shimmer_apq11"), 0,
 				QUERY_DATA_FOR_REAL__getShimmer_apq11, this);
-		FunctionAreaMenu_addCommand (menu, U"Get shimmer (dda)", 0,
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_shimmer_dda"), 0,
 				QUERY_DATA_FOR_REAL__getShimmer_dda, this);
 	}
 }

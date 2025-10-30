@@ -1,0 +1,74 @@
+@echo off
+chcp 65001 >nul
+title Praat i18n 编译脚本
+
+echo ========================================
+echo    Praat i18n 编译脚本
+echo ========================================
+echo.
+
+echo [1/4] 检查编译环境...
+where mingw32-make >nul 2>&1
+if %errorlevel% neq 0 (
+    echo 错误: 未找到 mingw32-make，请确保 MinGW 已安装并添加到 PATH
+    pause
+    exit /b 1
+)
+echo ✓ MinGW 环境检查通过
+
+echo.
+echo [2/3] 开始编译 Praat...
+echo 使用多线程编译 (4 线程)
+mingw32-make -j4
+
+if %errorlevel% neq 0 (
+    echo.
+    echo ❌ 编译失败！请检查上面的错误信息
+    echo.
+    echo 常见问题解决方案:
+    echo 1. 确保没有 Praat.exe 进程在运行
+    echo 2. 检查源代码是否有语法错误
+    echo 3. 确保所有依赖库都已编译
+    echo.
+    pause
+    exit /b 1
+)
+
+echo.
+echo [3/3] 编译完成！
+echo ✓ Praat.exe 已成功生成
+echo.
+
+echo ========================================
+echo   编译信息
+echo ========================================
+echo 编译时间: %date% %time%
+echo 输出文件: Praat.exe
+echo 文件大小: 
+if exist Praat.exe (
+    for %%A in (Praat.exe) do echo %%~zA 字节
+) else (
+    echo 文件未找到
+)
+echo.
+
+echo 可用的语言包:
+if exist sys\language_packs\*.json (
+    dir /b sys\language_packs\*.json | find /c ".json"
+    echo 个语言包文件
+) else (
+    echo 语言包目录未找到
+)
+
+echo.
+echo ========================================
+echo   测试建议
+echo ========================================
+echo 1. 运行: .\Praat.exe
+echo 2. 检查 i18n 菜单是否显示
+echo 3. 测试语言切换功能
+echo 4. 查看 debug_i18n_simple.txt 调试信息
+echo.
+
+echo 按任意键退出...
+pause >nul

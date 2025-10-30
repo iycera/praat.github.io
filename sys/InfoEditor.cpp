@@ -17,6 +17,7 @@
  */
 
 #include "InfoEditor.h"
+#include "i18n_simple.h"
 
 Thing_implement (InfoEditor, TextEditor, 0);
 
@@ -35,7 +36,7 @@ InfoEditor InfoEditor_getTheReferenceToTheOnlyInstance () {
 	if (! theReferenceToTheOnlyInfoEditor) {
 		autoInfoEditor editor = Thing_new (InfoEditor);
 		TextEditor_init (editor.get(), U"");
-		Thing_setName (editor.get(), U"Praat Info");
+		Thing_setName (editor.get(), I18n_translate ("form.praat_info"));
 		theReferenceToTheOnlyInfoEditor = editor.get();
 		editor.releaseToUser();
 	}

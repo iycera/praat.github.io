@@ -18,6 +18,7 @@
 
 #include "melder.h"
 #include <stdarg.h>
+#include "i18n_simple.h"
 #if defined (UNIX) || defined (macintosh)
 	#include <sys/types.h>
 	#include <sys/stat.h>
@@ -45,6 +46,7 @@
 #include "Strings_.h"
 #include "../kar/UnicodeData.h"
 #include "InfoEditor.h"
+#include "i18n_simple.h"
 extern "C" char *sendpraat (void *display, const char *programName, long timeOut, const char *text);
 
 Thing_implement (Praat_Command, Thing, 0);
@@ -139,9 +141,9 @@ integer praat_idOfSelected (ClassInfo klas, integer inplace) {
 		}
 	}
 	if (inplace)
-		Melder_throw (U"No ", klas ? klas -> className : U"object", U" #", inplace, U" selected.");
+		Melder_throw (I18n_translate ("error.no_object_selected_with_number"), klas ? klas -> className : U"object", U" #", inplace);
 	else
-		Melder_throw (U"No ", klas ? klas -> className : U"object", U" selected.");
+		Melder_throw (I18n_translate ("error.no_object_selected"), klas ? klas -> className : U"object");
 	return 0;
 }
 
@@ -179,9 +181,9 @@ char32 * praat_nameOfSelected (ClassInfo klas, integer inplace) {
 		}
 	}
 	if (inplace)
-		Melder_throw (U"No ", klas ? klas -> className : U"object", U" #", inplace, U" selected.");
+		Melder_throw (I18n_translate ("error.no_object_selected_with_number"), klas ? klas -> className : U"object", U" #", inplace);
 	else
-		Melder_throw (U"No ", klas ? klas -> className : U"object", U" selected.");
+		Melder_throw (I18n_translate ("error.no_object_selected"), klas ? klas -> className : U"object");
 	return nullptr;   // failure, but never reached anyway
 }
 
@@ -190,7 +192,7 @@ integer praat_numberOfSelected (ClassInfo klas) {
 		return theCurrentPraatObjects -> totalSelection;
 	integer readableClassId = klas -> sequentialUniqueIdOfReadableClass;
 	if (readableClassId == 0)
-		Melder_fatal (U"No sequential unique ID for class ", klas -> className, U" (numberOfSelected).");
+		Melder_fatal (I18n_translate ("error.no_sequential_unique_id"), klas -> className, U" (numberOfSelected)");
 	return theCurrentPraatObjects -> numberOfSelected [readableClassId];
 }
 
@@ -203,9 +205,9 @@ void praat_deselect (integer IOBJECT) {
 	Melder_assert (readableClassId != 0);
 	theCurrentPraatObjects -> numberOfSelected [readableClassId] -= 1;
 	if (! theCurrentPraatApplication -> batch && ! Melder_backgrounding) {
-		trace (U"deselecting object ", IOBJECT);
+		trace (I18n_translate ("debug.deselecting_object"), IOBJECT);
 		GuiList_deselectItem (praatList_objects, IOBJECT);
-		trace (U"deselected object ", IOBJECT);
+		trace (I18n_translate ("debug.deselected_object"), IOBJECT);
 	}
 }
 
@@ -224,7 +226,7 @@ void praat_select (integer IOBJECT) {
 	Melder_assert (object);
 	integer readableClassId = object -> classInfo -> sequentialUniqueIdOfReadableClass;
 	if (readableClassId == 0)
-		Melder_fatal (U"No sequential unique ID for class ", object -> classInfo -> className, U" (selectObject).");
+		Melder_fatal (I18n_translate ("error.no_sequential_unique_id"), object -> classInfo -> className, U" (selectObject)");
 	theCurrentPraatObjects -> numberOfSelected [readableClassId] += 1;
 	if (! theCurrentPraatApplication -> batch && ! Melder_backgrounding)
 		GuiList_selectItem (praatList_objects, IOBJECT);
@@ -288,9 +290,9 @@ void praat_write_do (UiForm dia, conststring32 extension) {
 			}
 			MelderString_append (& defaultFileName, U".", extension ? extension : Thing_className (data));
 		} else if (! extension) {
-			MelderString_copy (& defaultFileName, U"praat.Collection");
+			MelderString_copy (& defaultFileName, I18n_translate("file.default_collection"));
 		} else {
-			MelderString_copy (& defaultFileName, U"praat.", extension);
+			MelderString_copy (& defaultFileName, I18n_translate("file.default_prefix"), extension);
 		}
 	}
 	UiOutfile_do (dia, defaultFileName.string);
@@ -368,7 +370,7 @@ static void praat_new_unpackCollection (autoCollection me, const char32* myName)
 
 void praat_newWithFile (autoDaata me, MelderFile file, conststring32 myName) {
 	if (! me)
-		Melder_throw (U"No object was put into the list.");
+		Melder_throw (I18n_translate("error.no_object_put"));
 
 	if (my classInfo == classCollection) {
 		praat_new_unpackCollection (me.static_cast_move <structCollection>(), myName);
@@ -385,7 +387,7 @@ void praat_newWithFile (autoDaata me, MelderFile file, conststring32 myName) {
 		if (p)
 			*p = U'\0';
 	} else {
-		MelderString_copy (& givenName, my name && my name [0] ? my name.get() : U"untitled");
+		MelderString_copy (& givenName, my name && my name [0] ? my name.get() : I18n_translate("file.untitled"));
 	}
 	praat_cleanUpName (givenName.string);
 	MelderString_append (& name, Thing_className (me.get()), U" ", givenName.string);
@@ -522,6 +524,7 @@ static void praat_exit (int exit_code) {
 	trace (U"destroy the picture window");
 	praat_picture_exit ();
 	praat_statistics_exit ();   // record total memory use across sessions
+	I18n_exit ();   // cleanup i18n system
 
 	if (! praatP.ignorePreferenceFiles) {
 		trace (U"stop receiving messages");
@@ -853,13 +856,13 @@ static int publishProc (autoDaata me) {
 		praat_updateSelection ();
 		return 1;
 	} catch (MelderError) {
-		Melder_throw (U"Not published.");
+		Melder_throw (I18n_translate("error.not_published"));
 	}
 }
 
 /***** QUIT *****/
 
-FORM (DO_Quit, U"Confirm Quit", U"Quit") {
+FORM (DO_Quit, I18n_translate("form.confirm_quit"), I18n_translate("menu.quit")) {
 	MUTABLE_COMMENT (label1, U"You have objects in your list!")
 	MUTABLE_COMMENT (label2, U"Do you still want to quit?")
 	OK
@@ -1065,6 +1068,7 @@ static void installPraatShellPreferences () {
 	Melder_textEncoding_prefs ();
 	Printer_prefs ();   // paper size, printer command...
 	structTextEditor :: f_preferences ();   // font size...
+	I18n_preferences ();   // i18n language preferences
 }
 
 extern "C" void praatlib_init () {
@@ -1072,12 +1076,15 @@ extern "C" void praatlib_init () {
 	Melder_init ();
 	Melder_rememberShellDirectory ();
 	installPraatShellPreferences ();   // needed in the library, because this sets the defaults
+	OutputDebugStringA("About to call I18n_init\n");
+	I18n_init ();   // initialize i18n system
+	OutputDebugStringA("I18n_init completed\n");
 	praatP.argc = 0;
 	praatP.argv = nullptr;
 	praatP.argumentNumber = 1;
 	Melder_batch = true;
 	praatP.userWantsToOpen = false;
-	Melder_setAppName (U"Praatlib");
+	Melder_setAppName (I18n_translate("app.name_lib"));
 	theCurrentPraatApplication -> batch = true;
 	Melder_getHomeDir (& homeDir);
 	Thing_recognizeClassesByName (classCollection, classStrings, classManPages, classStringSet, nullptr);
@@ -1094,50 +1101,49 @@ static void injectMessageAndInformationProcs (GuiWindow parent) {
 }
 
 static void printHelp () {
-	MelderInfo_writeLine (U"Usage:");
-	MelderInfo_writeLine (U"   To start up Praat with a new GUI:");
-	MelderInfo_writeLine (U"      praat [OPTION]...");
+	MelderInfo_writeLine (I18n_translate("help.usage"));
+	MelderInfo_writeLine (I18n_translate("help.startup_gui"));
+	MelderInfo_writeLine (I18n_translate("help.startup_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To run a Praat script without a GUI:");
-	MelderInfo_writeLine (U"      praat [--run] [OPTION]... SCRIPT-FILE-NAME [SCRIPT-ARGUMENT]...");
-	MelderInfo_writeLine (U"   The switch --run is superfluous when you use a Console or Terminal");
-	MelderInfo_writeLine (U"   interactively, but necessary if you call Praat programmatically.");
+	MelderInfo_writeLine (I18n_translate("help.run_script"));
+	MelderInfo_writeLine (I18n_translate("help.run_script_command"));
+	MelderInfo_writeLine (I18n_translate("help.run_script_note"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To open one or more files, preferably in an existing GUI instance of Praat:");
-	MelderInfo_writeLine (U"      praat --open [OPTION]... FILE-NAME...");
-	MelderInfo_writeLine (U"   Data files will open in the Objects window, script files in a script window.");
+	MelderInfo_writeLine (I18n_translate("help.open_files"));
+	MelderInfo_writeLine (I18n_translate("help.open_files_command"));
+	MelderInfo_writeLine (I18n_translate("help.open_files_note"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To open one or more files in a new GUI instance of Praat:");
-	MelderInfo_writeLine (U"      praat --new-open [OPTION]... FILE-NAME...");
+	MelderInfo_writeLine (I18n_translate("help.open_files_new"));
+	MelderInfo_writeLine (I18n_translate("help.open_files_new_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To run a Praat script in a preferably existing GUI instance of Praat:");
-	MelderInfo_writeLine (U"      praat --send [OPTION]... SCRIPT-FILE-NAME [SCRIPT-ARGUMENT]...");
+	MelderInfo_writeLine (I18n_translate("help.send_script"));
+	MelderInfo_writeLine (I18n_translate("help.send_script_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To run a Praat script in a new GUI instance of Praat:");
-	MelderInfo_writeLine (U"      praat --new-send [OPTION]... SCRIPT-FILE-NAME [SCRIPT-ARGUMENT]...");
+	MelderInfo_writeLine (I18n_translate("help.send_script_new"));
+	MelderInfo_writeLine (I18n_translate("help.send_script_new_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   As --send, but potentially presenting a form to query for arguments:");
-	MelderInfo_writeLine (U"      praat --send-or-form [OPTION]... SCRIPT-FILE-NAME");
+	MelderInfo_writeLine (I18n_translate("help.send_or_form"));
+	MelderInfo_writeLine (I18n_translate("help.send_or_form_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To start up Praat in an interactive command line session:");
-	MelderInfo_writeLine (U"      praat [OPTION]... -");
+	MelderInfo_writeLine (I18n_translate("help.interactive_session"));
+	MelderInfo_writeLine (I18n_translate("help.interactive_session_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To print the Praat version:");
-	MelderInfo_writeLine (U"      praat --version");
+	MelderInfo_writeLine (I18n_translate("help.print_version"));
+	MelderInfo_writeLine (I18n_translate("help.print_version_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"   To print this list of command line options:");
-	MelderInfo_writeLine (U"      praat --help");
+	MelderInfo_writeLine (I18n_translate("help.print_help"));
+	MelderInfo_writeLine (I18n_translate("help.print_help_command"));
 	MelderInfo_writeLine (U"");
-	MelderInfo_writeLine (U"Options:");
-	MelderInfo_writeLine (U"  --no-pref-files  don't read or write the preferences file and the buttons file");
-	MelderInfo_writeLine (U"  --no-plugins     don't activate the plugins");
-	MelderInfo_writeLine (U"  --pref-dir=DIR   set the preferences folder to DIR");
-	MelderInfo_writeLine (U"  -u, --utf16      use UTF-16LE output encoding, no BOM (the default on Windows)");
-	MelderInfo_writeLine (U"  -8, --utf8       use UTF-8 output encoding (the default on MacOS and Linux)");
-	MelderInfo_writeLine (U"  -a, --ansi       use ISO Latin-1 output encoding (lossy, hence not recommended)");
-	MelderInfo_writeLine (U"                   (on Windows, use -8 or -a when you redirect to a pipe or file)");
-	MelderInfo_writeLine (U"  --trace          switch tracing on at start-up (see Praat > Technical > Debug)");
-	MelderInfo_writeLine (U"  --hide-picture   hide the Picture window at start-up");
+	MelderInfo_writeLine (I18n_translate("help.options"));
+	MelderInfo_writeLine (I18n_translate("help.no_pref_files"));
+	MelderInfo_writeLine (I18n_translate("help.no_plugins"));
+	MelderInfo_writeLine (I18n_translate("help.pref_dir"));
+	MelderInfo_writeLine (I18n_translate("help.utf16"));
+	MelderInfo_writeLine (I18n_translate("help.utf8"));
+	MelderInfo_writeLine (I18n_translate("help.ansi"));
+	MelderInfo_writeLine (I18n_translate("help.encoding_note"));
+	MelderInfo_writeLine (I18n_translate("help.trace"));
+	MelderInfo_writeLine (I18n_translate("help.hide_picture"));
 }
 
 #ifdef _WIN32
@@ -1641,7 +1647,7 @@ static void interpretCommandLineArguments (bool weWereStartedFromTheCommandLine,
 		*/
 		MelderString_copy (& theCurrentPraatApplication -> batchName, Melder_peek8to32 (argv [praatP.argumentNumber ++]));
 		if (praatP.hasCommandLineInput)
-			Melder_throw (U"Cannot have both command line input and a script file.");
+			Melder_throw (I18n_translate("error.command_line_and_script"));
 	} else {
 		MelderString_copy (& theCurrentPraatApplication -> batchName, U"");
 	}
@@ -1828,6 +1834,11 @@ void praat_init (conststring32 title,
 	conststring32 firstPartOfEmailAddress, conststring32 secondPartOfEmailAddress,
 	int argc, char **argv
 ) {
+	// Debug: Add simple debug output
+	FILE* debugFile = fopen("debug_praat_init.txt", "w");
+	fprintf(debugFile, "praat_init: Starting\n");
+	fclose(debugFile);
+	
 	setThePraatLocale ();
 	Melder_init ();
 	const bool weWereStartedFromTheCommandLine = tryToAttachToTheCommandLine ();
@@ -1837,7 +1848,7 @@ void praat_init (conststring32 title,
 		Construct a main-window title like "Praat".
 		Construct an app name like "praat" for file and folder names.
 	*/
-	Melder_setAppName (title && title [0] != U'\0' ? title : U"Praat");
+	Melder_setAppName (title && title [0] != U'\0' ? title : I18n_translate("app.name"));
 	Melder_setAppVersion (versionText, versionNumber);
 	Melder_setAppDate (year, month, day);
 	Melder_setAppContactAddress (firstPartOfEmailAddress, secondPartOfEmailAddress);
@@ -1857,13 +1868,20 @@ void praat_init (conststring32 title,
 	Melder_rememberShellDirectory ();
 
 	installPraatShellPreferences ();
+	
+	// Initialize i18n system
+	I18n_init ();
+	
+	// Debug: Check if I18n_init completed
+	debugFile = fopen("debug_praat_init.txt", "a");
+	fprintf(debugFile, "praat_init: I18n_init completed\n");
+	fclose(debugFile);
 
 	theCurrentPraatApplication -> batch = Melder_batch;
 
 	#if defined (NO_GUI)
 		if (! Melder_batch) {
-			fprintf (Melder_stderr, "A no-GUI edition of Praat cannot be used interactively. "
-					"Supply \"--run\" and a script file name on the command line.\n");
+			fprintf (Melder_stderr, I18n_translate("error.no_gui_interactive"));
 			exit (1);
 		}
 	#endif
@@ -1874,11 +1892,26 @@ void praat_init (conststring32 title,
 	#if defined (macintosh)
 		NSApplication *theApp = [GuiCocoaApplication sharedApplication];   // initialize, so that our bundle identifier exists even if we started from outside Xcode
 	#elif defined (_WIN32)
+		// Debug: Before Windows GUI initialization
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: Before Windows GUI initialization\n");
+		fclose(debugFile);
+		
 		theWinApplicationWindow = GuiWin_initialize1 (Melder_upperCaseAppName());
+		
+		// Debug: After Windows GUI initialization
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: After Windows GUI initialization\n");
+		fclose(debugFile);
 	#endif
 	if (praatP.userWantsExistingInstance)
 		if (tryToSwitchToRunningPraat (praatP.userWantsToOpen, praatP.userWantsToSend, praatP.userWantsToSendOrForm))
 			exit (0);
+
+	// Debug: After existing instance check
+	debugFile = fopen("debug_praat_init.txt", "a");
+	fprintf(debugFile, "praat_init: After existing instance check\n");
+	fclose(debugFile);
 
 	#ifdef UNIX
 		if (! Melder_batch) {
@@ -1910,13 +1943,34 @@ void praat_init (conststring32 title,
 	GuiWindow raam = nullptr;
 	if (! Melder_batch) {
 		trace (U"starting the GUI application");
+		
+		// Debug: Before Machine_initLookAndFeel
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: Before Machine_initLookAndFeel\n");
+		fclose(debugFile);
+		
 		Machine_initLookAndFeel (argc, argv);
+		
+		// Debug: After Machine_initLookAndFeel
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: After Machine_initLookAndFeel\n");
+		fclose(debugFile);
 		#if gtk
 			trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 			g_set_application_name (Melder_peek32to8 (title));
 			trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		#elif motif
+			// Debug: Before GuiWin_initialize2
+			debugFile = fopen("debug_praat_init.txt", "a");
+			fprintf(debugFile, "praat_init: Before GuiWin_initialize2\n");
+			fclose(debugFile);
+			
 			GuiWin_initialize2 (argc, argv);
+			
+			// Debug: After GuiWin_initialize2
+			debugFile = fopen("debug_praat_init.txt", "a");
+			fprintf(debugFile, "praat_init: After GuiWin_initialize2\n");
+			fclose(debugFile);
 		#elif cocoa
 			/*
 				We want to get rid of the Search field in the help menu.
@@ -1936,14 +1990,38 @@ void praat_init (conststring32 title,
 		trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		Gui_getWindowPositioningBounds (& x, & y, nullptr, nullptr);
 		trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
+		
+		// Debug: Before GuiWindow_create
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: Before GuiWindow_create\n");
+		fclose(debugFile);
+		
 		theCurrentPraatApplication -> topShell = raam = GuiWindow_create (x + 10, y, WINDOW_WIDTH, WINDOW_HEIGHT, 450, 250,
 				objectWindowTitle, gui_cb_quit, nullptr, 0);
+		
+		// Debug: After GuiWindow_create
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: After GuiWindow_create\n");
+		fclose(debugFile);
+		
 		trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		#if motif
 			GuiApp_setApplicationShell (theCurrentPraatApplication -> topShell -> d_xmShell);
 		#endif
 		trace (U"before objects window shows locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
+		
+		// Debug: Before GuiThing_show
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: Before GuiThing_show\n");
+		fclose(debugFile);
+		
 		GuiThing_show (raam);
+		
+		// Debug: After GuiThing_show
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: After GuiThing_show\n");
+		fclose(debugFile);
+		
 		trace (U"after objects window shows locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 	}
 	Thing_recognizeClassesByName (classCollection, classStrings, classManPages, classStringSet, nullptr);
@@ -1963,7 +2041,18 @@ void praat_init (conststring32 title,
 		trace (U"creating the menu bar in the Objects window");
 		GuiWindow_addMenuBar (raam);
 		praatP.menuBar = raam;
+		
+		// Debug: Before praat_addMenus
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: Before praat_addMenus\n");
+		fclose(debugFile);
+		
 		praat_addMenus (praatP.menuBar);
+		
+		// Debug: After praat_addMenus
+		debugFile = fopen("debug_praat_init.txt", "a");
+		fprintf(debugFile, "praat_init: After praat_addMenus\n");
+		fclose(debugFile);
 
 		trace (U"creating the object list in the Objects window");
 		GuiLabel_createShown (raam, 3, -250, Machine_getMenuBarBottom () + 5, Machine_getMenuBarBottom () + 5 + Gui_LABEL_HEIGHT, U"Objects:", 0);
@@ -1994,6 +2083,11 @@ void praat_init (conststring32 title,
 	if (! praatP.dontUsePictureWindow)
 		praat_picture_init (! praatP.commandLineOptions.hidePicture);
 	trace (U"after picture window shows: locale is ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
+	
+	// Debug: Check if praat_init completed
+	debugFile = fopen("debug_praat_init.txt", "a");
+	fprintf(debugFile, "praat_init: Completed successfully\n");
+	fclose(debugFile);
 }
 
 static void executeStartUpFile (MelderFolder startUpDirectory, conststring32 fileNameHead, conststring32 fileNameTail) {
@@ -2055,13 +2149,40 @@ static void executeStartUpFile (MelderFolder startUpDirectory, conststring32 fil
 #endif
 
 void praat_run () {
+	// Debug: Add simple debug output
+	FILE* debugFile = fopen("debug_praat_run.txt", "w");
+	fprintf(debugFile, "praat_run: Starting\n");
+	fclose(debugFile);
+	
 	trace (U"adding menus, second round");
+	
+	// Debug: Add debug output before praat_addMenus2
+	debugFile = fopen("debug_praat_run.txt", "a");
+	fprintf(debugFile, "praat_run: Before praat_addMenus2\n");
+	fclose(debugFile);
+	
 	praat_addMenus2 ();
+	
+	// Debug: Add debug output after praat_addMenus2
+	debugFile = fopen("debug_praat_run.txt", "a");
+	fprintf(debugFile, "praat_run: After praat_addMenus2\n");
+	fclose(debugFile);
 	trace (U"locale is ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 
 	trace (U"adding the Quit command");
-	praat_addMenuCommand (U"Objects", U"Praat", U"-- quit --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Praat", U"Quit", nullptr, GuiMenu_UNHIDABLE | 'Q' | GuiMenu_NO_API, DO_Quit);
+	
+	// Debug: Add debug output before Quit command
+	debugFile = fopen("debug_praat_run.txt", "a");
+	fprintf(debugFile, "praat_run: Before Quit command\n");
+	fclose(debugFile);
+	
+	praat_addMenuCommand (U"Objects", U"Praat", I18n_translate("menu.separator_quit"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"Praat", I18n_translate("menu.quit"), nullptr, GuiMenu_UNHIDABLE | 'Q' | GuiMenu_NO_API, DO_Quit);
+
+	// Debug: Add debug output after Quit command
+	debugFile = fopen("debug_praat_run.txt", "a");
+	fprintf(debugFile, "praat_run: After Quit command\n");
+	fclose(debugFile);
 
 	trace (U"read the preferences file, and notify those who want to be notified of this");
 	/* ...namely, those who already have a window (namely, the Picture window),
@@ -2073,6 +2194,7 @@ void praat_run () {
 		if (! praatP.dontUsePictureWindow)
 			praat_picture_prefsChanged ();
 		praat_statistics_prefsChanged ();
+		I18n_preferencesChanged ();   // apply i18n preferences
 	}
 
 	praatP.phase = praat_STARTING_UP;

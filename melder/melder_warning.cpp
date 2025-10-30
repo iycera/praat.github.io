@@ -17,11 +17,12 @@
  */
 
 #include "melder.h"
+#include "../sys/i18n_simple.h"
 
 int MelderWarning::_depth = 0;
 
 void MelderWarning::_defaultProc (conststring32 message) {
-	MelderConsole::write (U"Warning: ", true);
+	MelderConsole::write (I18n_translate("warning.warning"), true);
 	MelderConsole::write (message, true);
 	MelderConsole::write (U"\n", true);
 }

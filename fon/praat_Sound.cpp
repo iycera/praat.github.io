@@ -34,6 +34,7 @@
 #include "SpectrumEditor.h"
 #include "TextGrid_Sound.h"
 #include "mp3.h"
+#include "../sys/i18n_simple.h"
 
 #include "praat_Sound.h"
 
@@ -2249,73 +2250,73 @@ void praat_Sound_init () {
 	Melder_setPlayReverseProc (playReverseProc);
 	Melder_setPublishPlayedProc (publishPlayedProc);
 
-	praat_addMenuCommand (U"Objects", U"New", U"Record mono Sound...", nullptr, GuiMenu_ATTRACTIVE | 'R' | GuiMenu_NO_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.record_mono_sound"), nullptr, GuiMenu_ATTRACTIVE | 'R' | GuiMenu_NO_API,
 			SINGLETON_CREATION_WINDOW__Sound_recordMono);
-	praat_addMenuCommand (U"Objects", U"New", U"Record stereo Sound...", nullptr, GuiMenu_NO_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.record_stereo_sound"), nullptr, GuiMenu_NO_API,
 			SINGLETON_CREATION_WINDOW__Sound_recordStereo);
-	praat_addMenuCommand (U"Objects", U"New", U"Record Sound (fixed time)...", nullptr, GuiMenu_HIDDEN | GuiMenu_FORCE_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.record_sound_fixed_time"), nullptr, GuiMenu_HIDDEN | GuiMenu_FORCE_API,
 			RECORD_ONE__Sound_record_fixedTime);
-	praat_addMenuCommand (U"Objects", U"New", U"Sound", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Sound as pure tone...", nullptr, 1,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.sound"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound_as_pure_tone"), nullptr, 1,
 				CREATE_ONE__Sound_createAsPureTone);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Sound from formula...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound_from_formula"), nullptr, 1,
 				CREATE_ONE__Sound_createFromFormula);
-		praat_addMenuCommand (U"Objects", U"New",   U"Create Sound...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2007,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2007,
 				CREATE_ONE__Sound_create);   // replace with Create Sound from formula: arg1, 1, arg2, arg3, arg4, arg5
-		praat_addMenuCommand (U"Objects", U"New", U"-- create sound advanced --", nullptr, 1, nullptr);
-		praat_addMenuCommand (U"Objects", U"New", U"Create Sound as tone complex... || Create Sound from tone complex...", nullptr, 1,
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.separator_create_sound_advanced"), nullptr, 1, nullptr);
+		praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_sound_as_tone_complex"), nullptr, 1,
 				CREATE_ONE__Sound_createAsToneComplex);   // alternative COMPATIBILITY <= 2013
 
-	praat_addMenuCommand (U"Objects", U"Open", U"-- read sound --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Open", U"Open long sound file...", nullptr, 'L', READ1_LongSound_open);
-	praat_addMenuCommand (U"Objects", U"Open", U"Read separate channels from sound file... || Read two Sounds from stereo file...", nullptr, 0,
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.separator_read_sound"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.open_long_sound_file"), nullptr, 'L', READ1_LongSound_open);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_separate_channels_from_sound_file"), nullptr, 0,
 			READ_MULTIPLE__Sound_readSeparateChannelsFromSoundFile);   // alternative COMPATIBILITY <= 2010
-	praat_addMenuCommand (U"Objects", U"Open", U"Read from special sound file", nullptr, 0, nullptr);
-		praat_addMenuCommand (U"Objects", U"Open", U"Read Sound from raw Alaw file...", nullptr, GuiMenu_DEPTH_1, READ1_Sound_readFromRawAlawFile);
+	praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_from_special_sound_file"), nullptr, 0, nullptr);
+		praat_addMenuCommand (U"Objects", U"Open", I18n_translate("menu.read_sound_from_raw_alaw_file"), nullptr, GuiMenu_DEPTH_1, READ1_Sound_readFromRawAlawFile);
 
 	praat_addMenuCommand (U"Objects", U"Goodies", U"-- sound goodies --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Goodies", U"Stop playing sound", nullptr, GuiMenu_ESCAPE,
+	praat_addMenuCommand (U"Objects", U"Goodies", I18n_translate("menu.stop_playing_sound"), nullptr, GuiMenu_ESCAPE,
 			PLAY__stopPlayingSound);
 	praat_addMenuCommand (U"Objects", U"Settings", U"-- sound settings --", nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"Settings", U"Sound recording settings... || Sound recording preferences...", nullptr, 0,
+	praat_addMenuCommand (U"Objects", U"Settings", I18n_translate("menu.sound_recording_settings"), nullptr, 0,
 			SETTINGS__SoundRecordingSettings);   // alternative GuiMenu_DEPRECATED_2023
-	praat_addMenuCommand (U"Objects", U"Settings", U"Sound playing settings... || Sound playing preferences...", nullptr, 0,
+	praat_addMenuCommand (U"Objects", U"Settings", I18n_translate("menu.sound_playing_settings"), nullptr, 0,
 			SETTINGS__SoundPlayingSettings);   // alternative GuiMenu_DEPRECATED_2023
-	praat_addMenuCommand (U"Objects", U"Settings", U"LongSound settings... || LongSound preferences...", nullptr, 0,
+	praat_addMenuCommand (U"Objects", U"Settings", I18n_translate("menu.longsound_settings"), nullptr, 0,
 			SETTINGS__LongSoundSettings);   // alternative GuiMenu_DEPRECATED_2023
 #ifdef HAVE_PULSEAUDIO
 	praat_addMenuCommand (U"Objects", U"Technical", U"Report sound server properties", U"Report system properties", 0,
 			INFO_NONE__Praat_reportSoundServerProperties);
 #endif
 
-	praat_addAction1 (classLongSound, 0, U"LongSound help", nullptr, 0,
+	praat_addAction1 (classLongSound, 0, I18n_translate("menu.longsound_help"), nullptr, 0,
 			HELP__LongSound_help);
-	praat_addAction1 (classLongSound, 1, U"View || Open", nullptr, GuiMenu_ATTRACTIVE,
+	praat_addAction1 (classLongSound, 1, I18n_translate("menu.view"), nullptr, GuiMenu_ATTRACTIVE,
 			EDITOR_ONE__LongSound_view);   // alternative COMPATIBILITY <= 2011
-	praat_addAction1 (classLongSound, 0, U"Play part...", nullptr, 0, PLAY_LongSound_playPart);
-	praat_addAction1 (classLongSound, 1, U"Query -", nullptr, 0, nullptr);
+	praat_addAction1 (classLongSound, 0, I18n_translate("menu.play_part"), nullptr, 0, PLAY_LongSound_playPart);
+	praat_addAction1 (classLongSound, 1, I18n_translate("menu.query"), nullptr, 0, nullptr);
 		praat_TimeFunction_query_init (classLongSound);
-		praat_addAction1 (classLongSound, 1, U"Sampling", nullptr, 1, nullptr);
-		praat_addAction1 (classLongSound, 1, U"Get number of samples", nullptr, 2, INTEGER_LongSound_getNumberOfSamples);
-		praat_addAction1 (classLongSound, 1, U"Get sampling period || Get sample duration || Get sample period",
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.sampling"), nullptr, 1, nullptr);
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.get_number_of_samples"), nullptr, 2, INTEGER_LongSound_getNumberOfSamples);
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.get_sampling_period"),
 				nullptr, 2, REAL_LongSound_getSamplePeriod);   // alternatives COMPATIBILITY <= 2004
-		praat_addAction1 (classLongSound, 1, U"Get sampling frequency || Get sample rate",
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.get_sampling_frequency"),
 				nullptr, 2, REAL_LongSound_getSampleRate);   // alternative COMPATIBILITY <= 2004
-		praat_addAction1 (classLongSound, 1, U"-- get time discretization --", nullptr, 2, nullptr);
-		praat_addAction1 (classLongSound, 1, U"Get time from sample number... || Get time from index...",
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.separator_time_discretization"), nullptr, 2, nullptr);
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.get_time_from_sample_number"),
 				nullptr, 2, REAL_LongSound_getTimeFromIndex);   // alternative COMPATIBILITY <= 2004
-		praat_addAction1 (classLongSound, 1, U"Get sample number from time... || Get index from time...",
+		praat_addAction1 (classLongSound, 1, I18n_translate("menu.get_sample_number_from_time"),
 				nullptr, 2, REAL_LongSound_getIndexFromTime);   // alternative COMPATIBILITY <= 2004
-	praat_addAction1 (classLongSound, 0, U"Annotate -", nullptr, 0, nullptr);
-		praat_addAction1 (classLongSound, 0, U"Annotation tutorial", nullptr, 1,
+	praat_addAction1 (classLongSound, 0, I18n_translate("menu.annotate"), nullptr, 0, nullptr);
+		praat_addAction1 (classLongSound, 0, I18n_translate("menu.annotation_tutorial"), nullptr, 1,
 				HELP__AnnotationTutorial);
-		praat_addAction1 (classLongSound, 0, U"-- to text grid --", nullptr, 1, nullptr);
-		praat_addAction1 (classLongSound, 0, U"To TextGrid...", nullptr, 1, NEW_LongSound_to_TextGrid);
-	praat_addAction1 (classLongSound, 0, U"Convert to Sound", nullptr, 0, nullptr);
-	praat_addAction1 (classLongSound, 0, U"Extract part...", nullptr, 0, NEW_LongSound_extractPart);
-	praat_addAction1 (classLongSound, 0, U"Concatenate?", nullptr, 0,
+		praat_addAction1 (classLongSound, 0, I18n_translate("menu.separator_to_text_grid"), nullptr, 1, nullptr);
+		praat_addAction1 (classLongSound, 0, I18n_translate("menu.to_textgrid"), nullptr, 1, NEW_LongSound_to_TextGrid);
+	praat_addAction1 (classLongSound, 0, I18n_translate("menu.convert_to_sound"), nullptr, 0, nullptr);
+	praat_addAction1 (classLongSound, 0, I18n_translate("menu.extract_part"), nullptr, 0, NEW_LongSound_extractPart);
+	praat_addAction1 (classLongSound, 0, I18n_translate("menu.concatenate"), nullptr, 0,
 			INFO_NONE__LongSound_concatenate);
-	praat_addAction1 (classLongSound, 0, U"Save as WAV file... || Write to WAV file...",
+	praat_addAction1 (classLongSound, 0, Melder_cat (I18n_translate("menu.save_as_wav_file"), U" || ", I18n_translate("menu.write_to_wav_file")),
 			nullptr, 0, SAVE_ALL__LongSound_saveAsWavFile);   // alternative COMPATIBILITY <= 2011
 	praat_addAction1 (classLongSound, 0, U"Save as AIFF file... || Write to AIFF file...",
 			nullptr, 0, SAVE_ALL__LongSound_saveAsAiffFile);
@@ -2405,249 +2406,249 @@ void praat_Sound_init () {
 			SAVE_ONE__Sound_saveAsRaw32bitBigEndianFile);
 	praat_addAction1 (classSound, 1, U"Save as raw 32-bit little-endian file...", nullptr, 0,
 			SAVE_ONE__Sound_saveAsRaw32bitLittleEndianFile);
-	praat_addAction1 (classSound, 0, U"Sound help", nullptr, 0,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.sound_help"), nullptr, 0,
 			HELP__Sound_help);
-	praat_addAction1 (classSound, 1, U"View & Edit || Edit || Open",
+	praat_addAction1 (classSound, 1, I18n_translate("menu.view_and_edit"),
 			nullptr, GuiMenu_ATTRACTIVE | GuiMenu_NO_API, EDITOR_ONE__Sound_viewAndEdit);
-	praat_addAction1 (classSound, 0, U"Play", nullptr, 0,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.play"), nullptr, 0,
 			PLAY_EACH__Sound_play);
-	praat_addAction1 (classSound, 1, U"Draw -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"Draw...", nullptr, 1,
+	praat_addAction1 (classSound, 1, I18n_translate("menu.draw"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.draw_sound"), nullptr, 1,
 				GRAPHICS_EACH__Sound_draw);
-	praat_addAction1 (classSound, 1, U"Query -", nullptr, 0, nullptr);
+	praat_addAction1 (classSound, 1, I18n_translate("menu.query"), nullptr, 0, nullptr);
 		praat_TimeFunction_query_init (classSound);
-		praat_addAction1 (classSound, 1, U"Get number of channels", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_number_of_channels"), nullptr, 1,
 				QUERY_ONE_FOR_INTEGER__Sound_getNumberOfChannels);
-		praat_addAction1 (classSound, 1, U"Query time sampling", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 1, U"Get number of samples", nullptr, 2,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.query_time_sampling"), nullptr, 1, nullptr);
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_number_of_samples"), nullptr, 2,
 				QUERY_ONE_FOR_INTEGER__Sound_getNumberOfSamples);
-		praat_addAction1 (classSound, 1, U"Get sampling period || Get sample duration || Get sample period",
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_sampling_period"),
 				nullptr, 2, QUERY_ONE_FOR_REAL__Sound_getSamplePeriod);   // alternatives COMPATIBILITY <= 2004
-		praat_addAction1 (classSound, 1, U"Get sampling frequency || Get sample rate",
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_sampling_frequency"),
 				nullptr, 2, QUERY_ONE_FOR_REAL__Sound_getSampleRate);   // alternative COMPATIBILITY <= 2004
 		praat_addAction1 (classSound, 1, U"-- get time discretization --", nullptr, 2, nullptr);
-		praat_addAction1 (classSound, 1, U"Get time from sample number... || Get time from index...",
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_time_from_sample_number"),
 				nullptr, 2, QUERY_ONE_FOR_REAL__Sound_getTimeFromIndex);   // alternative COMPATIBILITY <= 2004
-		praat_addAction1 (classSound, 1, U"List all sample times || Get sample times",
+		praat_addAction1 (classSound, 1, I18n_translate("menu.list_all_sample_times"),
 				nullptr, 2, NUMVEC_Sound_listAllSampleTimes);   // alternative GuiMenu_DEPRECATED_2004
-		praat_addAction1 (classSound, 1, U"Get sample number from time... || Get index from time...",
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_sample_number_from_time"),
 				nullptr, 2, QUERY_ONE_FOR_REAL__Sound_getIndexFromTime);   // alternative COMPATIBILITY <= 2004
 		praat_addAction1 (classSound, 1, U"-- get content --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 1, U"Get value at time...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_value_at_time"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getValueAtTime);
-		praat_addAction1 (classSound, 1, U"Get value at sample number... || Get value at index...",
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_value_at_sample_number"),
 				nullptr, 1, QUERY_ONE_FOR_REAL__Sound_getValueAtIndex);   // alternative COMPATIBILITY <= 2004
 		praat_addAction1 (classSound, 1, U"-- get shape --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 1, U"Get minimum...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_minimum"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getMinimum);
-		praat_addAction1 (classSound, 1, U"Get time of minimum...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_time_of_minimum"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getTimeOfMinimum);
-		praat_addAction1 (classSound, 1, U"Get maximum...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_maximum"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getMaximum);
-		praat_addAction1 (classSound, 1, U"Get time of maximum...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_time_of_maximum"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getTimeOfMaximum);
-		praat_addAction1 (classSound, 1, U"Get absolute extremum...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_absolute_extremum"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getAbsoluteExtremum);
-		praat_addAction1 (classSound, 1, U"Get nearest zero crossing...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_nearest_zero_crossing"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getNearestZeroCrossing);
 		praat_addAction1 (classSound, 1, U"-- get statistics --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 1, U"Get mean...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_mean"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getMean);
-		praat_addAction1 (classSound, 1, U"Get root-mean-square...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_root_mean_square"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getRootMeanSquare);
-		praat_addAction1 (classSound, 1, U"Get standard deviation...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_standard_deviation"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getStandardDeviation);
 		praat_addAction1 (classSound, 1, U"-- get energy --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 1, U"Get energy...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_energy"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getEnergy);
-		praat_addAction1 (classSound, 1, U"Get power...", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_power"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getPower);
 		praat_addAction1 (classSound, 1, U"-- get energy in air --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 1, U"Get energy in air", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_energy_in_air"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getEnergyInAir);
-		praat_addAction1 (classSound, 1, U"Get power in air", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_power_in_air"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getPowerInAir);
-		praat_addAction1 (classSound, 1, U"Get intensity (dB)", nullptr, 1,
+		praat_addAction1 (classSound, 1, I18n_translate("menu.get_intensity_db"), nullptr, 1,
 				QUERY_ONE_FOR_REAL__Sound_getIntensity_dB);
-	praat_addAction1 (classSound, 0, U"Modify -", nullptr, 0, nullptr);
+	praat_addAction1 (classSound, 0, I18n_translate("menu.modify"), nullptr, 0, nullptr);
 		praat_TimeFunction_modify_init (classSound);
 		praat_addAction1 (classSound, 0, U"-- modify generic --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Reverse", nullptr, 1, MODIFY_Sound_reverse);
-		praat_addAction1 (classSound, 0, U"Formula...", nullptr, 1, MODIFY_Sound_formula);
-		praat_addAction1 (classSound, 0, U"Formula (part)...", nullptr, 1, MODIFY_Sound_formula_part);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.reverse"), nullptr, 1, MODIFY_Sound_reverse);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.formula"), nullptr, 1, MODIFY_Sound_formula);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.formula_part"), nullptr, 1, MODIFY_Sound_formula_part);
 		praat_addAction1 (classSound, 0, U"-- add & mul --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Add...", nullptr, 1, MODIFY_Sound_add);
-		praat_addAction1 (classSound, 0, U"Shift times to between zero and physical duration", U"Shift times to...", 3, MODIFY_Sound_shiftTimesToBetweenZeroAndPhysicalDuration);
-		praat_addAction1 (classSound, 0, U"Subtract mean", nullptr, 1, MODIFY_Sound_subtractMean);
-		praat_addAction1 (classSound, 0, U"Multiply...", nullptr, 1, MODIFY_Sound_multiply);
-		praat_addAction1 (classSound, 0, U"Multiply by window...", nullptr, 1, MODIFY_Sound_multiplyByWindow);
-		praat_addAction1 (classSound, 0, U"Scale peak... || Scale...",
+		praat_addAction1 (classSound, 0, I18n_translate("menu.add"), nullptr, 1, MODIFY_Sound_add);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.shift_times_to_between_zero_and_physical_duration"), nullptr, 3, MODIFY_Sound_shiftTimesToBetweenZeroAndPhysicalDuration);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.subtract_mean"), nullptr, 1, MODIFY_Sound_subtractMean);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.multiply"), nullptr, 1, MODIFY_Sound_multiply);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.multiply_by_window"), nullptr, 1, MODIFY_Sound_multiplyByWindow);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.scale_peak"),
 				nullptr, 1, MODIFY_Sound_scalePeak);   // alternative COMPATIBILITY <= 2004
-		praat_addAction1 (classSound, 0, U"Scale intensity...", nullptr, 1, MODIFY_Sound_scaleIntensity);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.scale_intensity"), nullptr, 1, MODIFY_Sound_scaleIntensity);
 		praat_addAction1 (classSound, 0, U"-- set --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Set value at sample number... || Set value at index...",
+		praat_addAction1 (classSound, 0, I18n_translate("menu.set_value_at_sample_number"),
 				nullptr, 1, MODIFY_Sound_setValueAtIndex);   // alternative COMPATIBILITY <= 2004
-		praat_addAction1 (classSound, 0, U"Set part to zero...", nullptr, 1, MODIFY_Sound_setPartToZero);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.set_part_to_zero"), nullptr, 1, MODIFY_Sound_setPartToZero);
 		praat_addAction1 (classSound, 0, U"-- modify hack --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Override sampling frequency... || Override sample rate...",
+		praat_addAction1 (classSound, 0, I18n_translate("menu.override_sampling_frequency"),
 				nullptr, 1, MODIFY_Sound_overrideSamplingFrequency);   // alternative COMPATIBILITY <= 2004
 		praat_addAction1 (classSound, 0, U"-- in-place filters --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"In-place filters", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Filter with one formant (in-place)... || Filter with one formant (in-line)...",
+		praat_addAction1 (classSound, 0, I18n_translate("menu.in_place_filters"), nullptr, 1, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_with_one_formant_in_place"),
 				nullptr, 2, MODIFY_Sound_filterWithOneFormantInplace);   // alternative COMPATIBILITY <= 2017
-		praat_addAction1 (classSound, 0, U"Pre-emphasize (in-place)... || Pre-emphasize (in-line)...",
+		praat_addAction1 (classSound, 0, I18n_translate("menu.pre_emphasize_in_place"),
 				nullptr, 2, MODIFY_Sound_preemphasizeInplace);
-		praat_addAction1 (classSound, 0, U"De-emphasize (in-place)... || De-emphasize (in-line)...",
+		praat_addAction1 (classSound, 0, I18n_translate("menu.de_emphasize_in_place"),
 				nullptr, 2, MODIFY_Sound_deemphasizeInplace);
-	praat_addAction1 (classSound, 0, U"Annotate -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"Annotation tutorial", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.annotate"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.annotation_tutorial"), nullptr, 1,
 				HELP__AnnotationTutorial);
 		praat_addAction1 (classSound, 0, U"-- to text grid --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To TextGrid...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_textgrid"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_TextGrid);
-		praat_addAction1 (classSound, 0, U"To TextTier", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_texttier"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 				CONVERT_EACH_TO_ONE__Sound_to_TextTier);
-		praat_addAction1 (classSound, 0, U"To IntervalTier", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_intervaltier"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 				CONVERT_EACH_TO_ONE__Sound_to_IntervalTier);
-	praat_addAction1 (classSound, 0, U"Analyse periodicity -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"How to choose a pitch analysis method", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.analyse_periodicity"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.how_to_choose_pitch_analysis_method"), nullptr, 1,
 				HELP__How_to_choose_a_pitch_analysis_method);
 		praat_addAction1 (classSound, 0, U"-- pitch --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To Pitch...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch);
-		praat_addAction1 (classSound, 0, U"To Pitch (filtered autocorrelation)... || To Pitch (filtered ac)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_filtered_autocorrelation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch_filteredAutocorrelation);
-		praat_addAction1 (classSound, 0, U"To Pitch (raw cross-correlation)... || To Pitch (raw cc)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_raw_cross_correlation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch_rawCrossCorrelation);
-		praat_addAction1 (classSound, 0, U"To Pitch (raw autocorrelation)... || To Pitch (raw ac)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_raw_autocorrelation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch_rawAutocorrelation);
-		praat_addAction1 (classSound, 0, U"To Pitch (filtered cross-correlation)... || To Pitch (filtered cc)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_filtered_cross_correlation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch_filteredCrossCorrelation);
-		praat_addAction1 (classSound, 0, U"To Pitch (ac)...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_ac"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch_ac);
-		praat_addAction1 (classSound, 0, U"To Pitch (cc)...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pitch_cc"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 				CONVERT_EACH_TO_ONE__Sound_to_Pitch_cc);
 
-		praat_addAction1 (classSound, 0, U"To PointProcess (periodic, cc)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pointprocess_periodic_cc"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_PointProcess_periodic_cc);
-		praat_addAction1 (classSound, 0, U"To PointProcess (periodic, peaks)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pointprocess_periodic_peaks"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_PointProcess_periodic_peaks);
 		praat_addAction1 (classSound, 0, U"-- points --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To PointProcess (extrema)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pointprocess_extrema"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_PointProcess_extrema);
-		praat_addAction1 (classSound, 0, U"To PointProcess (zeroes)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_pointprocess_zeroes"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_PointProcess_zeroes);
 		praat_addAction1 (classSound, 0, U"-- hnr --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To Harmonicity (cc)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_harmonicity_cc"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Harmonicity_cc);
-		praat_addAction1 (classSound, 0, U"To Harmonicity (ac)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_harmonicity_ac"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Harmonicity_ac);
-		praat_addAction1 (classSound, 0, U"To Harmonicity (gne)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_harmonicity_gne"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Harmonicity_gne);
 		praat_addAction1 (classSound, 0, U"-- autocorrelation --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Autocorrelate...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.autocorrelate"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_autoCorrelate);
-	praat_addAction1 (classSound, 0, U"Analyse spectrum -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"To Spectrum...", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.analyse_spectrum"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrum"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Spectrum);
-		praat_addAction1 (classSound, 0,   U"To Spectrum (fft)", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2004,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrum_fft"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2004,
 				CONVERT_EACH_TO_ONE__Sound_to_Spectrum_fft);   // replace with To Spectrum: 1
-		praat_addAction1 (classSound, 0,   U"To Spectrum", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2004,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrum_deprecated"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2004,
 				CONVERT_EACH_TO_ONE__Sound_to_Spectrum_fft);   // replace with To Spectrum: 1
-		praat_addAction1 (classSound, 0,   U"To Spectrum (dft)", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2004,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrum_dft"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2004,
 				CONVERT_EACH_TO_ONE__Sound_to_Spectrum_dft);   // replace with To Spectrum: 0
-		praat_addAction1 (classSound, 0, U"To Ltas...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_ltas"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Ltas);
-		praat_addAction1 (classSound, 0, U"To Ltas (pitch-corrected)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_ltas_pitch_corrected"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Ltas_pitchCorrected);
 		praat_addAction1 (classSound, 0, U"-- spectrotemporal --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To Spectrogram...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_spectrogram"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Spectrogram);
-		praat_addAction1 (classSound, 0, U"To Cochleagram...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_cochleagram"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Cochleagram);
-		praat_addAction1 (classSound, 0, U"To Cochleagram (edb)...", nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_cochleagram_edb"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 				CONVERT_EACH_TO_ONE__Sound_to_Cochleagram_edb);
 		praat_addAction1 (classSound, 0, U"-- formants --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To Formant (burg)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_formant_burg"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Formant_burg);
-		praat_addAction1 (classSound, 0, U"To Formant (hack)", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"To Formant (keep all)...", nullptr, 2,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_formant_hack"), nullptr, 1, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_formant_keep_all"), nullptr, 2,
 				CONVERT_EACH_TO_ONE__Sound_to_Formant_keepAll);
-		praat_addAction1 (classSound, 0, U"To Formant (sl)...", nullptr, 2,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_formant_sl"), nullptr, 2,
 				CONVERT_EACH_TO_ONE__Sound_to_Formant_willems);
-	praat_addAction1 (classSound, 0, U"To Intensity...", nullptr, 0,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_intensity"), nullptr, 0,
 			CONVERT_EACH_TO_ONE__Sound_to_Intensity);
-	praat_addAction1 (classSound, 0, U"To IntensityTier...", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_intensitytier"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_IntensityTier);
-	praat_addAction1 (classSound, 0, U"Manipulate -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"To Manipulation...", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.manipulate"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.to_manipulation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Manipulation);
-	praat_addAction1 (classSound, 0, U"Convert -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"Convert to mono", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.convert"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.convert_to_mono"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_convertToMono);
-		praat_addAction1 (classSound, 0, U"Convert to stereo", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.convert_to_stereo"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_convertToStereo);
-		praat_addAction1 (classSound, 0, U"Extract all channels", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.extract_all_channels"), nullptr, 1,
 				CONVERT_ONE_TO_MULTIPLE__Sound_extractAllChannels);
-		praat_addAction1 (classSound, 0, U"Extract one channel...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.extract_one_channel"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_extractChannel);
 		praat_addAction1 (classSound, 0,   U"Extract left channel", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2010,
 				CONVERT_EACH_TO_ONE__Sound_extractLeftChannel);   // replace with Extract one channel: 1
 		praat_addAction1 (classSound, 0,   U"Extract right channel", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2010,
 				CONVERT_EACH_TO_ONE__Sound_extractRightChannel);   // replace with Extract one channel: 2
-		praat_addAction1 (classSound, 0, U"Extract channels...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.extract_channels"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_extractChannels);
-		praat_addAction1 (classSound, 0, U"Extract part...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.extract_part"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_extractPart);
-		praat_addAction1 (classSound, 0, U"Extract part for overlap...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.extract_part_for_overlap"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_extractPartForOverlap);
-		praat_addAction1 (classSound, 0, U"Resample...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.resample"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_resample);
 		praat_addAction1 (classSound, 0, U"-- enhance --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Lengthen (overlap-add)... || Lengthen (PSOLA)...", nullptr, 1,
-				CONVERT_EACH_TO_ONE__Sound_lengthen_overlapAdd);   // alternative COMPATIBILITY <= 2007
-		praat_addAction1 (classSound, 0, U"Deepen band modulation...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.lengthen_overlap_add"),
+				nullptr, 1, CONVERT_EACH_TO_ONE__Sound_lengthen_overlapAdd);   // alternative COMPATIBILITY <= 2007
+		praat_addAction1 (classSound, 0, I18n_translate("menu.deepen_band_modulation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_deepenBandModulation);
 		praat_addAction1 (classSound, 0, U"-- cast --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Down to Matrix", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.down_to_matrix"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_downto_Matrix);
-	praat_addAction1 (classSound, 0, U"Filter -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"Filtering tutorial", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.filter"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filtering_tutorial"), nullptr, 1,
 				HELP__FilteringTutorial);
 		praat_addAction1 (classSound, 0, U"-- frequency-domain filter --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Filter (pass Hann band)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_pass_hann_band"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_filter_passHannBand);
-		praat_addAction1 (classSound, 0, U"Filter (stop Hann band)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_stop_hann_band"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_filter_stopHannBand);
-		praat_addAction1 (classSound, 0, U"Filter (formula)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_formula"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_filter_formula);
 		praat_addAction1 (classSound, 0, U"-- time-domain filter --", nullptr, 1, nullptr);
-		praat_addAction1 (classSound, 0, U"Filter (one formant)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_one_formant"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_filter_oneFormant);
-		praat_addAction1 (classSound, 0, U"Filter (pre-emphasis)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_pre_emphasis"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_filter_preemphasis);
-		praat_addAction1 (classSound, 0, U"Filter (de-emphasis)...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.filter_de_emphasis"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_filter_deemphasis);
-	praat_addAction1 (classSound, 0, U"Combine -", nullptr, 0, nullptr);
-		praat_addAction1 (classSound, 0, U"Combine to stereo", nullptr, 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.combine"), nullptr, 0, nullptr);
+		praat_addAction1 (classSound, 0, I18n_translate("menu.combine_to_stereo"), nullptr, 1,
 				COMBINE_ALL_TO_ONE__Sounds_combineToStereo);
-		praat_addAction1 (classSound, 0, U"Combine into SoundList", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.combine_into_soundlist"), nullptr, 1,
 				COMBINE_ALL_TO_ONE__Sounds_combineIntoSoundList);
-		praat_addAction1 (classSound, 0, U"Combine into SoundSet", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.combine_into_soundset"), nullptr, 1,
 				COMBINE_ALL_TO_ONE__Sounds_combineIntoSoundSet);
-		praat_addAction1 (classSound, 0, U"Concatenate", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.concatenate"), nullptr, 1,
 				COMBINE_ALL_TO_ONE__Sounds_concatenate);
-		praat_addAction1 (classSound, 0, U"Concatenate recoverably", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.concatenate_recoverably"), nullptr, 1,
 				CONVERT_ALL_TO_MULTIPLE__Sounds_concatenateRecoverably);
-		praat_addAction1 (classSound, 0, U"Concatenate with overlap...", nullptr, 1,
+		praat_addAction1 (classSound, 0, I18n_translate("menu.concatenate_with_overlap"), nullptr, 1,
 				COMBINE_ALL_TO_ONE__Sounds_concatenateWithOverlap);
-		praat_addAction1 (classSound, 2, U"Convolve...", nullptr, 1,
+		praat_addAction1 (classSound, 2, I18n_translate("menu.convolve"), nullptr, 1,
 				CONVERT_TWO_TO_ONE__Sounds_convolve);
 		praat_addAction1 (classSound, 2,   U"Convolve", nullptr, GuiMenu_DEPTH_1 | GuiMenu_DEPRECATED_2010,
 				CONVERT_TWO_TO_ONE__Sounds_convolve_old);   // replace with Convolve: "sum", "zero"
-		praat_addAction1 (classSound, 2, U"Cross-correlate...", nullptr, 1,
+		praat_addAction1 (classSound, 2, I18n_translate("menu.cross_correlate"), nullptr, 1,
 				CONVERT_TWO_TO_ONE__Sounds_crossCorrelate);
-		praat_addAction1 (classSound, 2, U"To ParamCurve", nullptr, 1,
+		praat_addAction1 (classSound, 2, I18n_translate("menu.to_paramcurve"), nullptr, 1,
 				CONVERT_TWO_TO_ONE__Sounds_to_ParamCurve);
 
 	praat_addAction2 (classLongSound, 0, classSound, 0, U"Save as WAV file... || Write to WAV file...",

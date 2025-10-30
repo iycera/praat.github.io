@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiForm, GuiControl, 0);
 
@@ -24,7 +25,7 @@ Thing_implement (GuiForm, GuiControl, 0);
 	static void _guiGtkForm_destroyCallback (GuiObject widget, gpointer void_me) {
 		(void) widget;
 		iam (GuiForm);
-		trace (U"destroying GuiForm ", Melder_pointer (me));
+		trace (I18n_translate("debug.destroying_guiform"), U" ", Melder_pointer (me));
 		forget (me);
 	}
 #elif motif

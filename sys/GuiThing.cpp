@@ -18,6 +18,7 @@
 
 #include "GuiP.h"
 #include "machine.h"
+#include "i18n_simple.h"
 
 void structGuiThing :: v_hide () {
 	#if gtk
@@ -25,7 +26,7 @@ void structGuiThing :: v_hide () {
 		if (parent && GTK_IS_DIALOG (parent)) {   // I am the top GtkFixed of a dialog
 			gtk_widget_hide (GTK_WIDGET (parent));
 		} else if (parent && GTK_IS_DIALOG (gtk_widget_get_parent (GTK_WIDGET (parent)))) {
-			trace (U"hiding a dialog indirectly");
+			trace (I18n_translate (U"debug.hiding_a_dialog_indirectly"));
 			gtk_widget_hide (GTK_WIDGET (gtk_widget_get_parent (GTK_WIDGET (parent))));
 		} else {
 			gtk_widget_hide (GTK_WIDGET (d_widget));
@@ -64,24 +65,24 @@ void structGuiThing :: v_setSensitive (bool sensitive) {
 
 void structGuiThing :: v_show () {
 	#if gtk
-		trace (U"showing widget ", Melder_pointer (d_widget));
+		trace (I18n_translate (U"debug.showing_widget"), Melder_pointer (d_widget));
 		GuiObject parent = gtk_widget_get_parent (GTK_WIDGET (d_widget));
-		trace (U"the parent widget is ", Melder_pointer (parent));
+		trace (I18n_translate (U"debug.the_parent_widget_is"), Melder_pointer (parent));
 		if (GTK_IS_WINDOW (parent)) {
 			// I am a window's GtkFixed
-			trace (U"showing a window");
+			trace (I18n_translate (U"debug.showing_a_window"));
 			gtk_widget_show (GTK_WIDGET (d_widget));
 			gtk_window_present (GTK_WINDOW (parent));
 		} else if (GTK_IS_DIALOG (parent)) {
 			// I am a dialog's GtkFixed, and therefore automatically shown
-			trace (U"showing a dialog");
+			trace (I18n_translate (U"debug.showing_a_dialog"));
 			gtk_window_present (GTK_WINDOW (parent));
 		} else if (GTK_IS_DIALOG (gtk_widget_get_parent (GTK_WIDGET (parent)))) {
 			// I am a dialog's GtkFixed, and therefore automatically shown
-			trace (U"showing a dialog (indirectly)");
+			trace (I18n_translate (U"debug.showing_a_dialog_indirectly"));
 			gtk_window_present (GTK_WINDOW (gtk_widget_get_parent (GTK_WIDGET (parent))));
 		} else {
-			trace (U"showing a widget that is not a window or dialog");
+			trace (I18n_translate (U"debug.showing_a_widget_that_is_not_a_window_or_dialog"));
 			gtk_widget_show (GTK_WIDGET (d_widget));
 		}
 	#elif motif
@@ -92,12 +93,12 @@ void structGuiThing :: v_show () {
 		}
 	#elif cocoa
 		if ([(NSObject *) d_widget isKindOfClass: [NSWindow class]]) {
-			trace (U"trying to show a window");
+			trace (I18n_translate (U"debug.trying_to_show_a_window"));
 			[(NSWindow *) d_widget makeKeyAndOrderFront: nil];
 			[(NSWindow *) d_widget layoutIfNeeded];
 		} else if ([(NSObject *) d_widget isKindOfClass: [NSView class]]) {
 			if ((NSView *) d_widget == [[(NSView *) d_widget window] contentView]) {
-				trace (U"trying to show a window through its content view");
+				trace (I18n_translate (U"debug.trying_to_show_a_window_through_its_content_view"));
 				[[(NSView *) d_widget window] makeKeyAndOrderFront: nil];
 				[[(NSView *) d_widget window] layoutIfNeeded];
 			} else {
@@ -107,7 +108,7 @@ void structGuiThing :: v_show () {
 			[(NSMenuItem *) d_widget setHidden: NO];
 		}
 	#endif
-	trace (U"end");
+	trace (I18n_translate ("debug.end"));
 }
 
 void GuiThing_hide (GuiThing me) {

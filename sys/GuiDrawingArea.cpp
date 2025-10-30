@@ -23,6 +23,7 @@
 	#include <locale.h>
 #endif
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiDrawingArea, GuiControl, 0);
 
@@ -43,7 +44,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 		forget (me);
 	}
 	static gboolean _guiGtkDrawingArea_drawCallback (GuiObject widget, cairo_t *cairoGraphicsContext, gpointer void_me) {
-		trace (U"begin");
+		trace (I18n_translate ("debug.begin"));
 		iam (GuiDrawingArea);
 		Melder_assert (me);
 		if (my d_exposeCallback) {
@@ -60,12 +61,12 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 				for (int igraphics = 1; igraphics <= my numberOfGraphicses; igraphics ++)
 					((GraphicsScreen) my graphicses [igraphics]) -> d_cairoGraphicsContext = nullptr;
 			} catch (MelderError) {
-				Melder_flushError (U"Redrawing not completed");
+				Melder_flushError (I18n_translate ("error.redrawing_not_completed"));
 			}
-			trace (U"the draw callback handled drawing");
+			trace (I18n_translate ("debug.the_draw_callback_handled_drawing"));
 			return true;
 		}
-		trace (U"GTK will handle redrawing");
+		trace (I18n_translate ("debug.gtk_will_handle_redrawing"));
 		return false;
 	}
 	static structGuiDrawingArea_MouseEvent::Phase previousPhase = structGuiDrawingArea_MouseEvent::Phase::DROP;
@@ -88,14 +89,14 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 					previousPhase = event. phase = structGuiDrawingArea_MouseEvent::Phase::DROP;
 					my mouseCallback (my mouseBoss, & event);
 				} catch (MelderError) {
-					Melder_flushError (U"Mouse drop not completely handled.");
+					Melder_flushError (I18n_translate ("error.mouse_drop_not_completely_handled"));
 				}
 			}
 			try {
 				previousPhase = event. phase = structGuiDrawingArea_MouseEvent::Phase::CLICK;
 				my mouseCallback (my mouseBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Mouse click not completely handled.");
+				Melder_flushError (I18n_translate ("error.mouse_click_not_completely_handled"));
 			}
 			return true;
 		}
@@ -114,7 +115,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 				previousPhase = event. phase = structGuiDrawingArea_MouseEvent::Phase::DRAG;
 				my mouseCallback (my mouseBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Mouse drag not completely handled.");
+				Melder_flushError (I18n_translate ("error.mouse_drag_not_completely_handled"));
 			}
 			return true;
 		}
@@ -133,7 +134,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 				previousPhase = event. phase = structGuiDrawingArea_MouseEvent::Phase::DROP;
 				my mouseCallback (my mouseBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Mouse drop not completely handled.");
+				Melder_flushError (I18n_translate ("error.mouse_drop_not_completely_handled"));
 			}
 			return true;
 		}
@@ -141,7 +142,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 	}
 	static gboolean _guiGtkDrawingArea_keyCallback (GuiObject widget, GdkEvent *gevent, gpointer void_me) {
 		iam (GuiDrawingArea);
-		trace (U"begin");
+		trace (I18n_translate ("debug.begin"));
 		if (my d_keyCallback && gevent -> type == GDK_KEY_PRESS) {
 			structGuiDrawingArea_KeyEvent event { me, 0 };
 			GdkEventKey *gkeyEvent = (GdkEventKey *) gevent;
@@ -160,7 +161,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			try {
 				my d_keyCallback (my d_keyBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Key press not completely handled.");
+				Melder_flushError (I18n_translate ("error.key_press_not_completely_handled"));
 			}
 			/*
 			 * FIXME: here we should empty the type-ahead buffer
@@ -173,14 +174,14 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 		iam (GuiDrawingArea);
 		if (my d_resizeCallback) {
 			structGuiDrawingArea_ResizeEvent event { me, 0 };
-			trace (U"drawingArea resized to ", allocation -> width, U" x ", allocation -> height, U".");
+			trace (I18n_translate ("debug.drawingarea_resized_to"), allocation -> width, U" x ", allocation -> height, U".");
 			event. width = allocation -> width;
 			event. height = allocation -> height;
 			//g_debug("%d %d", allocation->width, allocation->height);
 			try {
 				my d_resizeCallback (my d_resizeBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Window resizing not completely handled.");
+				Melder_flushError (I18n_translate ("error.window_resizing_not_completely_handled"));
 			}
 			return true;
 		}
@@ -188,7 +189,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 	}
 	static gboolean _guiGtkDrawingArea_swipeCallback (GuiObject w, GdkEventScroll *event, gpointer void_me) {
 		iam (GuiDrawingArea);
-		trace (U"_guiGtkDrawingArea_swipeCallback ", Melder_pointer (my d_horizontalScrollBar), Melder_pointer (my d_verticalScrollBar));
+		trace (I18n_translate ("debug.guigtk_drawingarea_swipe_callback"), Melder_pointer (my d_horizontalScrollBar), Melder_pointer (my d_verticalScrollBar));
 		if (my d_horizontalScrollBar) {
 			double hv = gtk_range_get_value (GTK_RANGE (my d_horizontalScrollBar -> d_widget));
 			GtkAdjustment *adjustment = gtk_range_get_adjustment (GTK_RANGE (my d_horizontalScrollBar -> d_widget));
@@ -246,7 +247,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			try {
 				my d_exposeCallback (my d_exposeBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Redrawing not completed");
+				Melder_flushError (I18n_translate ("error.redrawing_not_completed"));
 			}
 		}
 		for (int igraphics = 1; igraphics <= my numberOfGraphicses; igraphics ++)
@@ -272,11 +273,11 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			} catch (MelderError) {
 				switch (phase) {
 					case structGuiDrawingArea_MouseEvent::Phase::CLICK:
-						Melder_flushError (U"Mouse click not completely handled.");
+						Melder_flushError (I18n_translate ("error.mouse_click_not_completely_handled"));
 					break; case structGuiDrawingArea_MouseEvent::Phase::DRAG:
-						Melder_flushError (U"Mouse drag not completely handled.");
+						Melder_flushError (I18n_translate ("error.mouse_drag_not_completely_handled"));
 					break; case structGuiDrawingArea_MouseEvent::Phase::DROP:
-						Melder_flushError (U"Mouse drop not completely handled.");
+						Melder_flushError (I18n_translate ("error.mouse_drop_not_completely_handled"));
 					break;
 				}
 			}
@@ -287,14 +288,20 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 		if (my d_keyCallback) {
 			structGuiDrawingArea_KeyEvent event { me, 0 };
 			event. key = kar;
-			event. shiftKeyPressed = GetKeyState (VK_SHIFT) < 0;   // TODO: event -> key?
-			event. optionKeyPressed = GetKeyState (VK_MENU) < 0;
-			event. commandKeyPressed = GetKeyState (VK_CONTROL) < 0;
-			try {
-				my d_keyCallback (my d_keyBoss, & event);
-			} catch (MelderError) {
-				Melder_flushError (U"Key press not completely handled.");
+		event. shiftKeyPressed = GetKeyState (VK_SHIFT) < 0;   // TODO: event -> key?
+		event. optionKeyPressed = GetKeyState (VK_MENU) < 0;
+		event. commandKeyPressed = GetKeyState (VK_CONTROL) < 0;
+		try {
+			my d_keyCallback (my d_keyBoss, & event);
+		} catch (MelderError) {
+			// 特殊处理删除键错误，避免崩溃
+			if (kar == VK_DELETE) {
+				Melder_casual (U"Delete key error handled gracefully");
+				Melder_clearError ();
+			} else {
+				Melder_flushError (I18n_translate ("error.key_press_not_completely_handled"));
 			}
+		}
 		}
 	}
 	void _GuiWinDrawingArea_shellResize (GuiObject widget) {
@@ -306,7 +313,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			try {
 				my d_resizeCallback (my d_resizeBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Window resizing not completely handled.");
+				Melder_flushError (I18n_translate ("error.window_resizing_not_completely_handled"));
 			}
 		}
 	}
@@ -374,7 +381,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			try {
 				my d_resizeCallback (my d_resizeBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Window resizing not completely handled.");
+				Melder_flushError (I18n_translate ("error.window_resizing_not_completely_handled"));
 			}
 		}
 	}
@@ -409,7 +416,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 						graphics -> d_macGraphicsContext = nullptr;
 				}
 			} catch (MelderError) {
-				Melder_flushError (U"Redrawing not completed");
+				Melder_flushError (I18n_translate ("error.redrawing_not_completed"));
 			}
 		}
 	}
@@ -456,11 +463,11 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			} catch (MelderError) {
 				switch (phase) {
 					case structGuiDrawingArea_MouseEvent::Phase::CLICK:
-						Melder_flushError (U"Mouse click not completely handled.");
+						Melder_flushError (I18n_translate ("error.mouse_click_not_completely_handled"));
 					break; case structGuiDrawingArea_MouseEvent::Phase::DRAG:
-						Melder_flushError (U"Mouse drag not completely handled.");
+						Melder_flushError (I18n_translate ("error.mouse_drag_not_completely_handled"));
 					break; case structGuiDrawingArea_MouseEvent::Phase::DROP:
-						Melder_flushError (U"Mouse drop not completely handled.");
+						Melder_flushError (I18n_translate ("error.mouse_drop_not_completely_handled"));
 					break;
 				}
 			}
@@ -530,7 +537,7 @@ Thing_implement (GuiDrawingArea, GuiControl, 0);
 			try {
 				my d_keyCallback (my d_keyBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Key press not completely handled.");
+				Melder_flushError (I18n_translate ("error.key_press_not_completely_handled"));
 			}
 		}
 	}

@@ -29,6 +29,7 @@
 #include "Ui.h"
 #include "site.h"
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 
 #if cocoa
 	#include "Picture.h"
@@ -49,10 +50,10 @@ Printer thePrinter = {
 };
 
 void Printer_prefs () {
-	Preferences_addEnum (U"Printer.spots", & thePrinter. spots, kGraphicsPostscript_spots, kGraphicsPostscript_spots::DEFAULT);
-	Preferences_addEnum (U"Printer.paperSize", & thePrinter. paperSize, kGraphicsPostscript_paperSize, kGraphicsPostscript_paperSize::DEFAULT);
-	Preferences_addBool (U"Printer.allowDirectPostScript", & thePrinter. allowDirectPostScript, true);
-	Preferences_addEnum (U"Printer.fontChoiceStrategy", & thePrinter. fontChoiceStrategy, kGraphicsPostscript_fontChoiceStrategy, kGraphicsPostscript_fontChoiceStrategy::DEFAULT);
+	Preferences_addEnum (I18n_translate("preferences.printer_spots"), & thePrinter. spots, kGraphicsPostscript_spots, kGraphicsPostscript_spots::DEFAULT);
+	Preferences_addEnum (I18n_translate("preferences.printer_paper_size"), & thePrinter. paperSize, kGraphicsPostscript_paperSize, kGraphicsPostscript_paperSize::DEFAULT);
+	Preferences_addBool (I18n_translate("preferences.printer_allow_direct_postscript"), & thePrinter. allowDirectPostScript, true);
+	Preferences_addEnum (I18n_translate("preferences.printer_font_choice_strategy"), & thePrinter. fontChoiceStrategy, kGraphicsPostscript_fontChoiceStrategy, kGraphicsPostscript_fontChoiceStrategy::DEFAULT);
 }
 
 #if cocoa
@@ -277,7 +278,7 @@ int Printer_print (void (*draw) (void *boss, Graphics g), void *boss) {
 				theWinPrint. lStructSize = sizeof (PRINTDLG);
 				theWinPrint. Flags = PD_RETURNDEFAULT;
 				if (! PrintDlg (& theWinPrint))
-					Melder_throw (U"Cannot initialize printer.");
+					Melder_throw (I18n_translate("error.cannot_initialize_printer"));
 			}
 			#endif
 			#if 0
@@ -319,7 +320,7 @@ int Printer_print (void (*draw) (void *boss, Graphics g), void *boss) {
 			if (Melder_backgrounding) {
 				theWinPrint. Flags = PD_RETURNDEFAULT | PD_RETURNDC;
 				if (! PrintDlg (& theWinPrint) || ! theWinPrint. hDC)
-					Melder_throw (U"Cannot print from a script on this computer.");
+					Melder_throw (I18n_translate("error.cannot_print_from_script"));
 			} else {
 				theWinPrint. Flags &= ~ PD_RETURNDEFAULT;
 				theWinPrint. Flags |= PD_RETURNDC;
@@ -390,7 +391,7 @@ int Printer_print (void (*draw) (void *boss, Graphics g), void *boss) {
 					draw (boss, graphics.get());
 				}
 				if (EndPage (theWinDC) < 0) {
-					Melder_throw (U"Cannot print page.");
+					Melder_throw (I18n_translate("error.cannot_print_page"));
 				} else {
 					EndDoc (theWinDC);
 				}
@@ -400,7 +401,7 @@ int Printer_print (void (*draw) (void *boss, Graphics g), void *boss) {
 		#endif
 		return 1;
 	} catch (MelderError) {
-		Melder_throw (U"Not printed.");
+		Melder_throw (I18n_translate("error.not_printed"));
 	}
 }
 

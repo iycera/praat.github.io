@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiDialog, GuiShell, 0);
 
@@ -203,9 +204,9 @@ integer GuiDialog_run (GuiDialog me) {
 				}
 
 				if (IsDialogMessage (my d_xmShell -> window, & event)) {   // not my d_widget -> window, because that would prevent closing
-					trace (U"dialog message ", event. message);
+					trace (I18n_translate("debug.dialog_message"), U" ", event. message);
 				} else if (event. message == WM_PAINT) {
-					trace (U"paint ", event. message);
+					trace (I18n_translate("debug.paint"), U" ", event. message);
 					//TranslateMessage (& event);
 					//DispatchMessage (& event);
 				}

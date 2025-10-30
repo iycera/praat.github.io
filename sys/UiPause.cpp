@@ -18,6 +18,7 @@
 
 #include "UiPause.h"
 #include "praatP.h"
+#include "i18n_simple.h"
 
 static autoUiForm thePauseForm;
 static int thePauseForm_clicked = 0;
@@ -44,8 +45,8 @@ static void thePauseFormCancelCallback (UiForm /* dia */, void * /* closure */) 
 }
 void UiPause_begin (GuiWindow topShell, Editor optionalPauseWindowOwningEditor, conststring32 title, Interpreter interpreter) {
 	if (theEventLoopDepth > 0)
-		Melder_throw (Melder_upperCaseAppName(), U" cannot have more than one pause form at a time.");
-	thePauseForm = UiForm_create (topShell, optionalPauseWindowOwningEditor, Melder_cat (U"Pause: ", title),
+		Melder_throw (Melder_upperCaseAppName(), I18n_translate("error.cannot_have_more_than_one_pause_form_at_a_time"));
+	thePauseForm = UiForm_create (topShell, optionalPauseWindowOwningEditor, Melder_cat (I18n_translate("form.pause"), U": ", title),
 		thePauseFormOkCallback, interpreter,   // pass interpreter as closure!
 		nullptr, nullptr);
 }

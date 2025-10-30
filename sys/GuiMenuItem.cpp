@@ -20,6 +20,7 @@
 #if gtk
 	#include <gdk/gdkkeysyms.h>
 #endif
+#include "i18n_simple.h"
 
 #define _motif_SHIFT_MASK  1
 #define _motif_COMMAND_MASK  2
@@ -80,7 +81,7 @@ Thing_implement (GuiMenuItem, GuiThing, 0);
 	static void _guiGtkMenuItem_destroyCallback (GuiObject widget, gpointer void_me) {
 		(void) widget;
 		iam (GuiMenuItem);
-		trace (U"destroying GuiMenuItem ", Melder_pointer (me));
+		trace (I18n_translate ("debug.destroying_guimenuitem"), Melder_pointer (me));
 		forget (me);
 	}
 	static void _guiGtkMenuItem_activateCallback (GuiObject widget, gpointer void_me) {
@@ -94,7 +95,7 @@ Thing_implement (GuiMenuItem, GuiThing, 0);
 			try {
 				my d_callback (my d_boss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your choice of menu item \"", Melder_peek8to32 (gtk_widget_get_name (GTK_WIDGET (widget))), U"\" was not completely handled.");
+				Melder_flushError (I18n_translate ("error.menu_item_choice_not_completely_handled"), Melder_peek8to32 (gtk_widget_get_name (GTK_WIDGET (widget))));
 			}
 		}
 	}
@@ -111,7 +112,7 @@ Thing_implement (GuiMenuItem, GuiThing, 0);
 			try {
 				my d_callback (my d_boss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your choice of menu item \"", widget -> name.get(), U"\" was not completely handled.");
+				Melder_flushError (I18n_translate ("error.menu_item_choice_not_completely_handled"), widget -> name.get());
 			}
 		}
 	}
@@ -122,7 +123,7 @@ Thing_implement (GuiMenuItem, GuiThing, 0);
 	- (void) dealloc {   // override
 		GuiMenuItem me = d_userData;
 		forget (me);
-		trace (U"deleting a menu item");
+		trace (I18n_translate ("debug.deleting_a_menu_item"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -140,7 +141,7 @@ Thing_implement (GuiMenuItem, GuiThing, 0);
 			try {
 				my d_callback (my d_boss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your choice of menu item \"", U"xx", U"\" was not completely handled.");
+				Melder_flushError (I18n_translate ("error.menu_item_choice_not_completely_handled"), U"xx");
 			}
 		}
 	}
@@ -155,7 +156,7 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 	my d_parent = menu;
 	my d_menu = menu;
 
-	trace (U"creating item \"", title, U"\" in menu ", Melder_pointer (menu));
+	trace (I18n_translate ("debug.creating_item_in_menu"), title, U"\" in menu ", Melder_pointer (menu));
 	bool toggle = flags & (GuiMenu_CHECKBUTTON | GuiMenu_RADIO_FIRST | GuiMenu_RADIO_NEXT | GuiMenu_TOGGLE_ON) ? true : false;
 	uint32 accelerator = flags & 127;
 	Melder_assert (title);
@@ -185,7 +186,7 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 			if (flags & (GuiMenu_RADIO_FIRST | GuiMenu_RADIO_NEXT)) {
 				my d_widget = gtk_radio_menu_item_new_with_label (group, Melder_peek32to8 (title));
 				group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (my d_widget));
-				trace (U"created a radio menu item with title \"", title, U"\", group ", Melder_pointer (group));
+				trace (I18n_translate ("debug.created_a_radio_menu_item"), title, U"\", group ", Melder_pointer (group));
 			} else {
 				my d_widget = gtk_check_menu_item_new_with_label (Melder_peek32to8 (title));
 			}
@@ -224,7 +225,7 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 			[underlinedString release];
 		}*/
 		//Melder_assert ([string retainCount] == 2 || [string retainCount] == -1);   // the menu item retains the string (assertion can fail on 10.6)
-		trace (U"string retain count = ", [string retainCount]);
+		trace (I18n_translate ("debug.string_retain_count"), [string retainCount]);
 		my d_widget = menuItem;
 		trace (
 			U"installing item in GuiMenu ", Melder_pointer (menu),
@@ -237,18 +238,18 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 			U" (NSMenu ", Melder_pointer (menu -> d_cocoaMenu),
 			U"); retain count = ", [menuItem retainCount]
 		);
-		trace (U"release the item");
+		trace (I18n_translate ("debug.release_the_item"));
 		[menuItem release];   // ... so we can release the item already
-		trace (U"set user data");
+		trace (I18n_translate ("debug.set_user_data"));
 		[menuItem setUserData: me.get()];
 	#endif
 	Melder_assert (my d_widget);
 
-	trace (U"set sensitivity");
+	trace (I18n_translate ("debug.set_sensitivity"));
 	if (flags & GuiMenu_INSENSITIVE)
 		GuiThing_setSensitive (me.get(), false);
 
-	trace (U"understand toggle menu items");
+	trace (I18n_translate ("debug.understand_toggle_menu_items"));
 	if (flags & GuiMenu_TOGGLE_ON)
 		#if gtk
 			gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (my d_widget), true);
@@ -259,7 +260,7 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 		#endif
 
 	if (accelerator) {
-		trace (U"adding accelerator ", accelerator);
+		trace (I18n_translate ("debug.adding_accelerator"), accelerator);
 		/*
 		 * For printable characters, the Command key is assumed.
 		 */
@@ -342,12 +343,12 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 				} else if (accelerator == GuiMenu_ESCAPE) {
 					GuiWindow window = (GuiWindow) my d_shell;
 					if (window) {
-						trace (U"setting the escape callback in a window");
+						trace (I18n_translate ("debug.setting_the_escape_callback_in_a_window"));
 						Melder_assert (window -> classInfo == classGuiWindow);   // fairly safe, because dialogs have no menus
 						window -> d_escapeCallback = commandCallback;
 						window -> d_escapeBoss = boss;
 					} else {
-						trace (U"setting the global escape callback");
+						trace (I18n_translate ("debug.setting_the_global_escape_callback"));
 						theGuiEscapeMenuItemCallback = commandCallback;
 						theGuiEscapeMenuItemBoss = boss;
 					}
@@ -356,22 +357,22 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 				[menuItem setKeyEquivalent: [NSString stringWithFormat: @"%c", accelerator]];
 			}
 		#endif
-		trace (U"added accelerator ", accelerator);
+		trace (I18n_translate ("debug.added_accelerator"), accelerator);
 	}
 
-	trace (U"install the command callback");
+	trace (I18n_translate ("debug.install_the_command_callback"));
 	my d_callback = commandCallback;
 	my d_boss = boss;
 	#if gtk
 		if (commandCallback) {
 			if (accelerator == GuiMenu_TAB && ! (flags & GuiMenu_SHIFT)) {
 				GtkWidget *shell = gtk_widget_get_toplevel (gtk_menu_get_attach_widget (GTK_MENU (menu -> d_widget)));
-				trace (U"tab set in GTK window ", Melder_pointer (shell));
+				trace (I18n_translate ("debug.tab_set_in_gtk_window"), Melder_pointer (shell));
 				g_object_set_data (G_OBJECT (shell), "tabCallback", (gpointer) _guiGtkMenuItem_activateCallback);
 				g_object_set_data (G_OBJECT (shell), "tabClosure", (gpointer) me.get());
 			} else if (accelerator == GuiMenu_TAB && (flags & GuiMenu_SHIFT)) {
 				GtkWidget *shell = gtk_widget_get_toplevel (gtk_menu_get_attach_widget (GTK_MENU (menu -> d_widget)));
-				trace (U"shift-tab set in GTK window ", Melder_pointer (shell));
+				trace (I18n_translate ("debug.shift_tab_set_in_gtk_window"), Melder_pointer (shell));
 				g_object_set_data (G_OBJECT (shell), "shiftTabCallback", (gpointer) _guiGtkMenuItem_activateCallback);
 				g_object_set_data (G_OBJECT (shell), "shiftTabClosure", (gpointer) me.get());
 			} else {
@@ -392,7 +393,7 @@ GuiMenuItem GuiMenu_addItem (GuiMenu menu, conststring32 title, uint32 flags,
 		[(NSMenuItem *) my d_widget setAction: @selector (_guiCocoaMenuItem_activateCallback:)];
 	#endif
 
-	trace (U"make sure that I will be destroyed when my widget is destroyed");
+	trace (I18n_translate ("debug.make_sure_destroyed_when_widget_destroyed"));
 	#if gtk
 		g_signal_connect (G_OBJECT (my d_widget), "destroy", G_CALLBACK (_guiGtkMenuItem_destroyCallback), me.get());
 	#elif motif
@@ -416,25 +417,25 @@ GuiMenuItem GuiMenu_addSeparator (GuiMenu menu) {
 		my d_widget = XtVaCreateManagedWidget ("menuSeparator", xmSeparatorGadgetClass, menu -> d_widget, nullptr);
 	#elif cocoa
 		my d_widget = (GuiObject) [GuiCocoaMenuItem separatorItem];
-		trace (U"install separator in menu ", Melder_pointer (menu));
+		trace (I18n_translate ("debug.install_separator_in_menu"), Melder_pointer (menu));
 		trace (
-			U"installing separator in GuiMenu ", Melder_pointer (menu),
+			I18n_translate ("debug.install_separator_in_menu"), Melder_pointer (menu),
 			U" (NSMenu ", Melder_pointer (menu -> d_cocoaMenu),
 			U"); retain count = ", [((NSMenuItem *) my d_widget) retainCount]
 		);
 		[menu -> d_cocoaMenu  addItem: (NSMenuItem *) my d_widget];   // the menu will retain the item...
 		trace (
-			U"installed separator in GuiMenu ", Melder_pointer (menu),
+			I18n_translate ("debug.install_separator_in_menu"), Melder_pointer (menu),
 			U" (NSMenu ", Melder_pointer (menu -> d_cocoaMenu),
 			U"); retain count = ", [((NSMenuItem *) my d_widget) retainCount]
 		);
-		trace (U"release the item");
+		trace (I18n_translate ("debug.release_the_item"));
 		//[(NSMenuItem *) my d_widget release];   // ... so we can release the item already
-		trace (U"set user data");
+		trace (I18n_translate ("debug.set_user_data"));
 		[(GuiCocoaMenuItem *) my d_widget   setUserData: me.get()];
 	#endif
 
-	trace (U"make sure that I will be destroyed when my widget is destroyed");
+	trace (I18n_translate ("debug.make_sure_destroyed_when_widget_destroyed"));
 	#if gtk
 		g_signal_connect (G_OBJECT (my d_widget), "destroy", G_CALLBACK (_guiGtkMenuItem_destroyCallback), me.get());
 	#elif cocoa

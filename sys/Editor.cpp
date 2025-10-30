@@ -21,6 +21,7 @@
 #include "machine.h"
 #include "EditorM.h"
 #include "praat_script.h"
+#include "i18n_simple.h"
 
 Thing_implement (Editor, DataGui, 0);
 
@@ -49,8 +50,10 @@ static void commonCallback (EditorCommand me, GuiMenuItemEvent /* event */) {
 	try {
 		my commandCallback (my sender, me, nullptr, 0, nullptr, nullptr, nullptr);
 	} catch (MelderError) {
-		if (! Melder_hasError (U"Script exited."))
-			Melder_appendError (U"Menu command “", my itemTitle.get(), U"” not completed.");
+		if (! Melder_hasError (I18n_translate ("error.script_exited"))) {
+			autostring8 itemTitle8 = Melder_32to8(my itemTitle.get());
+			Melder_appendError (I18n_translateWithPlaceholders ("error.menu_command_not_completed", "item_title", itemTitle8.get()));
+		}
 		Melder_flushError ();
 	}
 }
@@ -503,9 +506,9 @@ static void menu_cb_openScript (Editor me, EDITOR_ARGS) {
 
 void structEditor :: v_createMenuItems_edit (EditorMenu menu) {
 	if (our data()) {
-		our undoButton = EditorMenu_addCommand (menu, U"Can't undo", GuiMenu_INSENSITIVE + 'Z', menu_cb_undo);
-		our redoButton = EditorMenu_addCommand (menu, U"Can't redo", GuiMenu_INSENSITIVE + 'Y', menu_cb_redo);
-		our clearUndoHistoryButton = EditorMenu_addCommand (menu, U"Clear undo history", GuiMenu_INSENSITIVE, menu_cb_clearUndoHistory);
+		our undoButton = EditorMenu_addCommand (menu, I18n_translate("menu.cant_undo"), GuiMenu_INSENSITIVE + 'Z', menu_cb_undo);
+		our redoButton = EditorMenu_addCommand (menu, I18n_translate("menu.cant_redo"), GuiMenu_INSENSITIVE + 'Y', menu_cb_redo);
+		our clearUndoHistoryButton = EditorMenu_addCommand (menu, I18n_translate("menu.clear_undo_history"), GuiMenu_INSENSITIVE, menu_cb_clearUndoHistory);
 	}
 }
 
@@ -526,7 +529,7 @@ void structEditor :: v_createMenus () {
 	v_createMenuItems_prefs (our fileMenu);
 	v_createMenuItems_save (our fileMenu);
 	if (our v_hasEditMenu ()) {
-		our editMenu = Editor_addMenu (this, U"Edit", 0);
+		our editMenu = Editor_addMenu (this, I18n_translate("menu.edit"), 0);
 		v_createMenuItems_edit (our editMenu);
 	}
 }
@@ -630,30 +633,30 @@ void Editor_init (Editor me, int x, int y, int width, int height, conststring32 
 	my v_createChildren ();
 
 	if (my v_hasMenuBar ()) {
-		my fileMenu = Editor_addMenu (me, U"File", 0);
+		my fileMenu = Editor_addMenu (me, I18n_translate("menu.file"), 0);
 		if (my v_canReportSettings ()) {
-			EditorMenu_addCommand (my fileMenu, U"Editor info || Settings report", 0, INFO_EDITOR__settingsReport);
+			EditorMenu_addCommand (my fileMenu, I18n_translate("menu.editor_info"), 0, INFO_EDITOR__settingsReport);
 			if (my data())
-				EditorMenu_addCommand (my fileMenu, Melder_cat (Thing_className (my data()), U" info"), 0, INFO_DATA__info);
+				EditorMenu_addCommand (my fileMenu, Melder_cat (Thing_className (my data()), I18n_translate("menu.data_info")), 0, INFO_DATA__info);
 		}
 		my v_createMenus ();
 		EditorMenu helpMenu = Editor_addMenu (me, U"Help", 0);
 		my v_createMenuItems_help (helpMenu);
-		EditorMenu_addCommand (helpMenu, U"-- search --", 0, nullptr);
-		my searchButton = EditorMenu_addCommand (helpMenu, U"Search manual...", 'M', menu_cb_searchManual);
+		EditorMenu_addCommand (helpMenu, I18n_translate("menu.search"), 0, nullptr);
+		my searchButton = EditorMenu_addCommand (helpMenu, I18n_translate("menu.search_manual"), 'M', menu_cb_searchManual);
 		if (my v_scriptable ()) {
-			EditorMenu_addCommand (my fileMenu, U"-- scripting --", 0, 0);
-			EditorMenu_addCommand (my fileMenu, U"New editor script", 0, menu_cb_newScript);
-			EditorMenu_addCommand (my fileMenu, U"Open editor script...", 0, menu_cb_openScript);
+			EditorMenu_addCommand (my fileMenu, I18n_translate("menu.scripting"), 0, 0);
+			EditorMenu_addCommand (my fileMenu, I18n_translate("menu.new_editor_script"), 0, menu_cb_newScript);
+			EditorMenu_addCommand (my fileMenu, I18n_translate("menu.open_editor_script"), 0, menu_cb_openScript);
 		}
 		/*
 			Add the scripted commands.
 		*/
 		praat_addCommandsToEditor (me);
-		EditorMenu_addCommand (my fileMenu, U"-- closing --", 0, 0);
+		EditorMenu_addCommand (my fileMenu, I18n_translate("menu.closing"), 0, 0);
 		if (my callbackSocket)
-			EditorMenu_addCommand (my fileMenu, U"Send back to calling program", 0, menu_cb_sendBackToCallingProgram);
-		EditorMenu_addCommand (my fileMenu, U"Close", 'W', menu_cb_close);
+			EditorMenu_addCommand (my fileMenu, I18n_translate("menu.send_back_to_calling_program"), 0, menu_cb_sendBackToCallingProgram);
+		EditorMenu_addCommand (my fileMenu, I18n_translate("menu.close"), 'W', menu_cb_close);
 	}
 	GuiThing_show (my windowForm);
 }

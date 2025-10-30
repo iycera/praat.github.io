@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiScrolledWindow, GuiControl, 0);
 
@@ -48,7 +49,7 @@ Thing_implement (GuiScrolledWindow, GuiControl, 0);
 	- (void) dealloc {   // override
 		GuiScrolledWindow me = d_userData;
 		forget (me);
-		trace (U"deleting a scrolled window");
+		trace (I18n_translate("debug.deleting_a_scrolled_window"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -82,7 +83,7 @@ GuiScrolledWindow GuiScrolledWindow_create (GuiForm parent, int left, int right,
 		_GuiObject_setUserData (my d_widget, me.get());
 		my v_positionInForm (my d_widget, left, right, top, bottom, parent);
 		Melder_assert (my classInfo == classGuiScrolledWindow);
-		trace (U"me = ", Melder_pointer (me.get()), U", user data = ", Melder_pointer (my d_widget -> userData));
+		trace (I18n_translate("debug.me_equals"), U" ", Melder_pointer (me.get()), I18n_translate("debug.user_data_equals"), U" ", Melder_pointer (my d_widget -> userData));
 	#elif cocoa
 		(void) horizontalScrollbarPersistence;
 		(void) verticalScrollbarPersistence;

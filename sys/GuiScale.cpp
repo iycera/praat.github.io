@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiScale, GuiControl, 0);
 
@@ -39,7 +40,7 @@ Thing_implement (GuiScale, GuiControl, 0);
 	void _GuiWinScale_destroy (GuiObject widget) {
 		iam_scale;
 		DestroyWindow (widget -> window);
-		trace (U"forgetting a scale or a progress bar");
+		trace (I18n_translate("debug.forgetting_a_scale_or_progress_bar"));
 		forget (me);   // NOTE: my widget is not destroyed here
 	}
 #elif cocoa
@@ -49,7 +50,7 @@ Thing_implement (GuiScale, GuiControl, 0);
 	- (void) dealloc {   // override
 		GuiScale me = d_userData;
 		forget (me);
-		trace (U"deleting a progress bar");
+		trace (I18n_translate("debug.deleting_a_progress_bar"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {

@@ -17,6 +17,7 @@
  */
 
 #include "DemoEditor.h"
+#include "i18n_simple.h"
 #include "machine.h"
 #include "praatP.h"
 #include "../kar/UnicodeData.h"
@@ -39,9 +40,9 @@ void structDemoEditor :: v9_destroy () noexcept {
 
 void structDemoEditor :: v1_info () {
 	DemoEditor_Parent :: v1_info ();
-	MelderInfo_writeLine (U"Colour: ", MelderColour_name (((PraatPicture) praatPicture) -> colour));
-	MelderInfo_writeLine (U"Font: ", kGraphics_font_getText (((PraatPicture) praatPicture) -> font));
-	MelderInfo_writeLine (U"Font size: ", ((PraatPicture) praatPicture) -> fontSize);
+	MelderInfo_writeLine (I18n_translate ("form.colour"), MelderColour_name (((PraatPicture) praatPicture) -> colour));
+	MelderInfo_writeLine (I18n_translate ("form.font"), kGraphics_font_getText (((PraatPicture) praatPicture) -> font));
+	MelderInfo_writeLine (I18n_translate ("form.font_size"), ((PraatPicture) praatPicture) -> fontSize);
 }
 
 void structDemoEditor :: v_goAway () {
@@ -59,7 +60,7 @@ static void gui_drawingarea_cb_expose (DemoEditor me, GuiDrawingArea_ExposeEvent
 	if (! my graphics)
 		return;   // could be the case in the very beginning
 static integer count=0;
-//Melder_casual(U"gui_drawingarea_cb_expose ", ++count);
+//Melder_casual(I18n_translate ("debug.gui_drawingarea_cb_expose"), ++count);
 	//Graphics_clearWs (my foregroundGraphics.get());
 	Graphics_play (my graphics.get(), my graphics.get());
 }
@@ -87,7 +88,7 @@ static void gui_drawingarea_cb_key (DemoEditor me, GuiDrawingArea_KeyEvent event
 	my x = 0;
 	my y = 0;
 	my key = event -> key;
-	trace (U"\"", my key, U"\"");
+	trace (I18n_translate ("debug.key"), my key);
 	my shiftKeyPressed = event -> shiftKeyPressed;
 	my commandKeyPressed = event -> commandKeyPressed;
 	my optionKeyPressed = event -> optionKeyPressed;
@@ -134,7 +135,7 @@ autoDemoEditor DemoEditor_create () {
 		DemoEditor_init (me.get());
 		return me;
 	} catch (MelderError) {
-		Melder_throw (U"Demo window not created.");
+		Melder_throw (I18n_translate ("error.demo_window_not_created"));
 	}
 }
 

@@ -21,6 +21,7 @@
 #include "../kar/UnicodeData.h"
 #include "Sound_and_MixingMatrix.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (SoundArea, FunctionArea, 0);
 Thing_implement (LongSoundArea, FunctionArea, 0);
@@ -667,16 +668,16 @@ void structSoundArea :: v_createMenuItems_edit (EditorMenu menu) {
 	FunctionAreaMenu_addCommand (menu, U"-- cut copy paste --", 0, nullptr, this);
 	const bool weMayUseShortcuts = ! our functionEditor() -> textArea;
 	if (our editable())
-		our cutButton = FunctionAreaMenu_addCommand (menu, U"Cut", 'X' * weMayUseShortcuts,
+		our cutButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.cut"), 'X' * weMayUseShortcuts,
 				menu_cb_Cut, this);
-	our copyButton = FunctionAreaMenu_addCommand (menu, U"Copy selection to Sound clipboard", 'C' * weMayUseShortcuts,
+	our copyButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.copy_selection_to_sound_clipboard"), 'C' * weMayUseShortcuts,
 			menu_cb_Copy, this);
 	if (our editable()) {
-		our pasteBeforeButton = FunctionAreaMenu_addCommand (menu, U"Paste before selection", (GuiMenu_SHIFT | 'V') * weMayUseShortcuts,
+		our pasteBeforeButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.paste_before_selection"), (GuiMenu_SHIFT | 'V') * weMayUseShortcuts,
 				menu_cb_PasteBefore, this);
-		our pasteOverButton = FunctionAreaMenu_addCommand (menu, U"Paste over selection", (GuiMenu_OPTION | 'V') * weMayUseShortcuts,
+		our pasteOverButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.paste_over_selection"), (GuiMenu_OPTION | 'V') * weMayUseShortcuts,
 				menu_cb_PasteOver, this);
-		our pasteAfterButton = FunctionAreaMenu_addCommand (menu, U"Paste after selection", 'V' * weMayUseShortcuts,
+		our pasteAfterButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.paste_after_selection"), 'V' * weMayUseShortcuts,
 				menu_cb_PasteAfter, this);
 	}
 }
@@ -975,72 +976,65 @@ static void CONVERT_DATA_TO_ONE__ExtractSelectedSoundForOverlap (SoundArea me, E
 #pragma mark - SoundArea menus
 
 void structSoundArea :: v_createMenus () {
-	EditorMenu menu = Editor_addMenu (our functionEditor(), U"Sound", 0);
+	EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.sound"), 0);
 
-	FunctionAreaMenu_addCommand (menu, U"Sound scaling...",
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.sound_scaling"),
 			0, menu_cb_soundScaling, this);
-	FunctionAreaMenu_addCommand (menu, U"Mute channels...",
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.mute_channels"),
 			0, menu_cb_soundMuteChannels, this);
 
 	if (our editable()) {
-		FunctionAreaMenu_addCommand (menu, U"- Modify sound:", 0, nullptr, this);
-		our zeroButton = FunctionAreaMenu_addCommand (menu, U"Set selection to zero",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.modify_sound"), 0, nullptr, this);
+		our zeroButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.set_selection_to_zero"),
 				1, menu_cb_SetSelectionToZero, this);
-		our reverseButton = FunctionAreaMenu_addCommand (menu, U"Reverse selection",
+		our reverseButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.reverse_selection"),
 				'R' + GuiMenu_DEPTH_1, menu_cb_ReverseSelection, this);
 	}
 
-	FunctionAreaMenu_addCommand (menu, U"- Query sound:", 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.query_sound"), 0, nullptr, this);
 	if (Thing_isa (this, classLongSoundArea))
-		FunctionAreaMenu_addCommand (menu, U"Info on whole LongSound || LongSound info",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.info_on_whole_longsound"),
 				1, INFO_DATA__LongSoundInfo, this);
 	else
-		FunctionAreaMenu_addCommand (menu, U"Info on whole Sound || Sound info",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.info_on_whole_sound"),
 				1, INFO_DATA__SoundInfo, this);
 	if (! Thing_isa (this, classLongSoundArea)) {
-		FunctionAreaMenu_addCommand (menu, U"Get amplitude(s)",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.get_amplitudes"),
 				1, INFO_DATA__getAmplitudes, this);
 	}
 
 	if (! Thing_isa (this, classLongSoundArea)) {
-		FunctionAreaMenu_addCommand (menu, U"- Select by sound:", 0, nullptr, this);
-		FunctionAreaMenu_addCommand (menu, U"Move start of selection to nearest zero crossing || Move begin of selection to nearest zero crossing",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_by_sound"), 0, nullptr, this);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_start_to_zero_crossing"),
 				',' + GuiMenu_DEPTH_1, menu_cb_MoveStartOfSelectionToNearestZeroCrossing, this);
-		FunctionAreaMenu_addCommand (menu, U"Move cursor to nearest zero crossing",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_cursor_to_zero_crossing"),
 				'0' + GuiMenu_DEPTH_1, menu_cb_MoveCursorToNearestZeroCrossing, this);
-		FunctionAreaMenu_addCommand (menu, U"Move end of selection to nearest zero crossing",
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.move_end_to_zero_crossing"),
 				'.' + GuiMenu_DEPTH_1, menu_cb_MoveEndOfSelectionToNearestZeroCrossing, this);
 	}
 
-	FunctionAreaMenu_addCommand (menu, U"- Draw sound to picture window:", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Draw visible sound...",
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_sound_to_picture"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_visible_sound"),
 			1, menu_cb_DrawVisibleSound, this);
-	our drawButton = FunctionAreaMenu_addCommand (menu, U"Draw selected sound...",
+	our drawButton = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.draw_selected_sound"),
 			1, menu_cb_DrawSelectedSound, this);
 
-	FunctionAreaMenu_addCommand (menu, U"- Extract sound to objects window:", 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.extract_sound_to_objects"), 0, nullptr, this);
 	our publishPreserveButton = FunctionAreaMenu_addCommand (menu,
-		U"Extract selected sound (preserve times) ||"
-		" Extract sound selection (preserve times) ||"
-		" Extract selection (preserve times)",
+		I18n_translate("menu.extract_selected_sound_preserve_times"),
 		1, CONVERT_DATA_TO_ONE__ExtractSelectedSound_preserveTimes, this
 	);
 	our publishButton = FunctionAreaMenu_addCommand (menu,
-		U"Extract selected sound (time from 0) ||"
-		" Extract sound selection (time from 0) ||"
-		" Extract selection (time from 0) ||"
-		" Extract selection",
+		I18n_translate("menu.extract_selected_sound_time_from_zero"),
 		1, CONVERT_DATA_TO_ONE__ExtractSelectedSound_timeFromZero, this
 	);
 	if (! Thing_isa (this, classLongSoundArea)) {
 		our publishWindowButton = FunctionAreaMenu_addCommand (menu,
-			U"Extract selected sound (windowed)... ||"
-			" Extract windowed sound selection... ||"
-			" Extract windowed selection...",
+			I18n_translate("menu.extract_selected_sound_windowed"),
 			1, CONVERT_DATA_TO_ONE__ExtractSelectedSound_windowed, this
 		);
 		our publishOverlapButton = FunctionAreaMenu_addCommand (menu,
-			U"Extract selected sound for overlap...",
+			I18n_translate("menu.extract_selected_sound_for_overlap"),
 			1, CONVERT_DATA_TO_ONE__ExtractSelectedSoundForOverlap, this
 		);
 	}

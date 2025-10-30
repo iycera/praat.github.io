@@ -17,6 +17,7 @@
  */
 
 #include "Interpreter.h"
+#include "i18n_simple.h"
 #include "praatP.h"
 #include "praat_script.h"
 #include "Formula.h"
@@ -62,34 +63,34 @@ Thing_implement (InterpreterVariable, SimpleString, 0);
 static autoInterpreterVariable InterpreterVariable_create (conststring32 key) {
 	try {
 		if (key [0] == U'e' && key [1] == U'\0')
-			Melder_throw (U"You cannot use “e” as the name of a variable (e is the constant 2.71...).");
+			Melder_throw (I18n_translate ("error.cannot_use_e_as_variable"));
 		if (key [0] == U'p' && key [1] == U'i' && key [2] == U'\0')
-			Melder_throw (U"You cannot use “pi” as the name of a variable (pi is the constant 3.14...).");
+			Melder_throw (I18n_translate ("error.cannot_use_pi_as_variable"));
 		if (key [0] == U'u' && key [1] == U'n' && key [2] == U'd' && key [3] == U'e' && key [4] == U'f' && key [5] == U'i' &&
 			key [6] == U'n' && key [7] == U'e' && key [8] == U'd' && key [9] == U'\0')
-			Melder_throw (U"You cannot use “undefined” as the name of a variable.");
+			Melder_throw (I18n_translate ("error.cannot_use_undefined_as_variable"));
 		if (key [0] == U's' && key [1] == U't' && key [2] == U'o' && key [3] == U'p' && key [4] == U'w' && key [5] == U'a' &&
 			key [6] == U't' && key [7] == U'c' && key [8] == U'h' && key [9] == U'\0')
-			Melder_throw (U"You cannot use “stopwatch” as the name of a variable.");
+			Melder_throw (I18n_translate ("error.cannot_use_stopwatch_as_variable"));
 		autoInterpreterVariable me = Thing_new (InterpreterVariable);
 		my string = Melder_dup (key);
 		return me;
 	} catch (MelderError) {
-		Melder_throw (U"Interpreter variable not created.");
+		Melder_throw (I18n_translate ("error.interpreter_variable_not_created"));
 	}
 }
 
 conststring32 kInterpreter_ReturnType_errorMessage (kInterpreter_ReturnType returnType, conststring32 command) {
 	switch (returnType) {
 		case kInterpreter_ReturnType::VOID_:
-			return Melder_cat (U"The command \"", command, U"\" does not return anything");
+			return Melder_cat (I18n_translate ("error.command_does_not_return_anything"), command);
 		case kInterpreter_ReturnType::OBJECT_:
-			return Melder_cat (U"The command \"", command, U"\" returns an object");
+			return Melder_cat (I18n_translate ("error.command_returns_object"), command);
 		case kInterpreter_ReturnType::REAL_:
 		case kInterpreter_ReturnType::INTEGER_:
-			return Melder_cat (U"The command \"", command, U"\" returns a number or a string");
+			return Melder_cat (I18n_translate ("error.command_returns_number_or_string"), command);
 		case kInterpreter_ReturnType::STRING_:
-			return Melder_cat (U"The command \"", command, U"\" returns a string");
+			return Melder_cat (I18n_translate ("error.command_returns_string"), command);
 		case kInterpreter_ReturnType::REALVECTOR_:
 		case kInterpreter_ReturnType::INTEGERVECTOR_:
 			return Melder_cat (U"The command \"", command, U"\" returns a vector");

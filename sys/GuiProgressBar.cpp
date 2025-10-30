@@ -17,6 +17,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiProgressBar, GuiControl, 0);
 
@@ -29,10 +30,10 @@ Thing_implement (GuiProgressBar, GuiControl, 0);
 #elif motif
 	static void _guiMotifProgressBar_destroyCallback (GuiObject widget, XtPointer void_me, XtPointer call) {
 		(void) widget; (void) call;
-		trace (U"destroying a progress bar");
+		trace (I18n_translate("debug.destroying_a_progress_bar"));
 		iam (GuiProgressBar);
 		//forget (me);   // because I am already forgotten in the scale::destroy callback
-		trace (U"destroyed a progress bar");
+		trace (I18n_translate("debug.destroyed_a_progress_bar"));
 	}
 #elif cocoa
 	@implementation GuiCocoaProgressBar {
@@ -41,7 +42,7 @@ Thing_implement (GuiProgressBar, GuiControl, 0);
 	- (void) dealloc {   // override
 		GuiProgressBar me = d_userData;
 		forget (me);
-		trace (U"deleting a progress bar");
+		trace (I18n_translate("debug.deleting_a_progress_bar"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {

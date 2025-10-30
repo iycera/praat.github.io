@@ -18,6 +18,7 @@
 
 #include "../kar/UnicodeData.h"
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 #include "../kar/longchar.h"
 #include "Printer.h"
 
@@ -109,11 +110,7 @@ extern const char * ipaSerifRegularPS [];
 			ipaInited = true;
 			if (! hasCharis && ! hasDoulos) {
 				/* BUG: The next warning may cause reentry of drawing (on window exposure) and lead to crash. Some code must be non-reentrant !! */
-				Melder_warning (U"The phonetic font is not available.\n"
-					"Several characters may not look correct.\n"
-					"You can download phonetics fonts via praat.org "
-					"(go to the download page for Windows)."
-				);
+				Melder_warning (I18n_translate("warning.phonetic_font_not_available"), U"\n", I18n_translate("warning.several_characters_may_not_look_correct"), U"\n", I18n_translate("warning.download_phonetics_fonts"));
 			}
 		}
 		wcscpy (spec. lfFaceName,
@@ -140,13 +137,13 @@ extern const char * ipaSerifRegularPS [];
 		Melder_assert (font >= 0 && font <= kGraphics_font_DINGBATS);
 		if (! fontDescriptions [font]) {
 			const char *fontFace =
-				font == (int) kGraphics_font::HELVETICA ? "Helvetica" :
-				font == (int) kGraphics_font::TIMES ? "Times" :
-				font == (int) kGraphics_font::COURIER ? "Courier New" :
-				font == (int) kGraphics_font::PALATINO ? "Palatino" :
-				font == kGraphics_font_IPATIMES ? "Doulos SIL" :
-				font == kGraphics_font_IPAPALATINO ? "Charis SIL" :
-				font == kGraphics_font_DINGBATS ? "Dingbats" : "Serif";
+				font == (int) kGraphics_font::HELVETICA ? I18n_translate("font.helvetica") :
+				font == (int) kGraphics_font::TIMES ? I18n_translate("font.times") :
+				font == (int) kGraphics_font::COURIER ? I18n_translate("font.courier") :
+				font == (int) kGraphics_font::PALATINO ? I18n_translate("font.palatino") :
+				font == kGraphics_font_IPATIMES ? I18n_translate("font.doulos_sil") :
+				font == kGraphics_font_IPAPALATINO ? I18n_translate("font.charis_sil") :
+				font == kGraphics_font_DINGBATS ? I18n_translate("font.dingbats") : I18n_translate("font.serif");
 			fontDescriptions [font] = pango_font_description_from_string (fontFace);
 		}
 
@@ -579,52 +576,52 @@ static conststring32 quartz_getFontName (int font, int style) {
 	switch (font) {
 		case (int) kGraphics_font::TIMES:
 			return
-				style == 0 ? U"Times New Roman"
-				: style == Graphics_BOLD ? U"Times New Roman Bold"
-				: style == Graphics_ITALIC ? U"Times New Roman Italic"
-				: U"Times New Roman Bold Italic";
+				style == 0 ? I18n_translate("font.times_new_roman")
+				: style == Graphics_BOLD ? I18n_translate("font.times_new_roman_bold")
+				: style == Graphics_ITALIC ? I18n_translate("font.times_new_roman_italic")
+				: I18n_translate("font.times_new_roman_bold_italic");
 		case (int) kGraphics_font::HELVETICA:
 			return
-				style == 0 ? U"Arial"
-				: style == Graphics_BOLD ? U"Arial Bold"
-				: style == Graphics_ITALIC ? U"Arial Italic"
-				: U"Arial Bold Italic";
+				style == 0 ? I18n_translate("font.arial")
+				: style == Graphics_BOLD ? I18n_translate("font.arial_bold")
+				: style == Graphics_ITALIC ? I18n_translate("font.arial_italic")
+				: I18n_translate("font.arial_bold_italic");
 		case (int) kGraphics_font::COURIER:
 			return
-				style == 0 ? U"Courier New"
-				: style == Graphics_BOLD ? U"Courier New Bold"
-				: style == Graphics_ITALIC ? U"Courier New Italic"
-				: U"Courier New Bold Italic";
+				style == 0 ? I18n_translate("font.courier_new")
+				: style == Graphics_BOLD ? I18n_translate("font.courier_new_bold")
+				: style == Graphics_ITALIC ? I18n_translate("font.courier_new_italic")
+				: I18n_translate("font.courier_new_bold_italic");
 		case (int) kGraphics_font::PALATINO:
 			if (Melder_debug == 900)
-				return U"DG Meta Serif Science";
+				return I18n_translate("font.dg_meta_serif_science");
 			else
 				return
-					style == 0 ? U"Palatino"
-					: style == Graphics_BOLD ? U"Palatino Bold"
-					: style == Graphics_ITALIC ? U"Palatino Italic"
-					: U"Palatino Bold Italic";
+					style == 0 ? I18n_translate("font.palatino")
+					: style == Graphics_BOLD ? I18n_translate("font.palatino_bold")
+					: style == Graphics_ITALIC ? I18n_translate("font.palatino_italic")
+					: I18n_translate("font.palatino_bold_italic");
 		case kGraphics_font_SYMBOL:
-			return U"Symbol";
+			return I18n_translate("font.symbol");
 		case kGraphics_font_IPATIMES:
-			return U"Doulos SIL";
+			return I18n_translate("font.doulos_sil");
 		case kGraphics_font_IPAPALATINO:
 			if (hasCharis7)
 				return
-					style == 0 ? U"Charis"
-					: style == Graphics_BOLD ? U"Charis Bold"
-					: style == Graphics_ITALIC ? U"Charis Italic"
-					: U"Charis Bold Italic";
+					style == 0 ? I18n_translate("font.charis")
+					: style == Graphics_BOLD ? I18n_translate("font.charis_bold")
+					: style == Graphics_ITALIC ? I18n_translate("font.charis_italic")
+					: I18n_translate("font.charis_bold_italic");
 			else
 				return
-					style == 0 ? U"Charis SIL"
-					: style == Graphics_BOLD ? U"Charis SIL Bold"
-					: style == Graphics_ITALIC ? U"Charis SIL Italic"
-					: U"Charis SIL Bold Italic";
+					style == 0 ? I18n_translate("font.charis_sil")
+					: style == Graphics_BOLD ? I18n_translate("font.charis_sil_bold")
+					: style == Graphics_ITALIC ? I18n_translate("font.charis_sil_italic")
+					: I18n_translate("font.charis_sil_bold_italic");
 		case kGraphics_font_CHEROKEE:
-			return U"Plantagenet Cherokee";
+			return I18n_translate("font.plantagenet_cherokee");
 		case kGraphics_font_DINGBATS:
-			return U"Zapf Dingbats";
+			return I18n_translate("font.zapf_dingbats");
 		default:
 			return nullptr;
 	}

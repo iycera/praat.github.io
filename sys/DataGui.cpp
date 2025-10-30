@@ -17,6 +17,7 @@
  */
 
 #include "DataGui.h"
+#include "i18n_simple.h"
 #include "ScriptEditor.h"
 #include "EditorM.h"
 
@@ -36,8 +37,8 @@ Thing_implement_pureVirtual (DataGui, Thing, 0);
 
 BOOLEAN_VARIABLE (v_form_pictureWindow__eraseFirst)
 void structDataGui :: v_form_pictureWindow (EditorCommand cmd) {
-	COMMENT (U"Picture window:")
-	BOOLEAN_FIELD (v_form_pictureWindow__eraseFirst, U"Erase first", true)
+	COMMENT (I18n_translate ("comment.picture_window"))
+	BOOLEAN_FIELD (v_form_pictureWindow__eraseFirst, I18n_translate ("form.erase_first"), true)
 }
 void structDataGui :: v_ok_pictureWindow (EditorCommand cmd) {
 	SET_BOOLEAN (v_form_pictureWindow__eraseFirst, our instancePref_picture_eraseFirst())
@@ -48,9 +49,9 @@ void structDataGui :: v_do_pictureWindow (EditorCommand /* cmd */) {
 
 OPTIONMENU_ENUM_VARIABLE (kDataGui_writeNameAtTop, v_form_pictureMargins__writeNameAtTop)
 void structDataGui :: v_form_pictureMargins (EditorCommand cmd) {
-	COMMENT (U"Margins:")
+	COMMENT (I18n_translate ("comment.margins"))
 	OPTIONMENU_ENUM_FIELD (kDataGui_writeNameAtTop, v_form_pictureMargins__writeNameAtTop,
-			U"Write name at top", kDataGui_writeNameAtTop::DEFAULT)
+			I18n_translate ("form.write_name_at_top"), kDataGui_writeNameAtTop::DEFAULT)
 }
 void structDataGui :: v_ok_pictureMargins (EditorCommand cmd) {
 	SET_ENUM (v_form_pictureMargins__writeNameAtTop, kDataGui_writeNameAtTop, our classPref_picture_writeNameAtTop())

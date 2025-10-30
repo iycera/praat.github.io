@@ -17,6 +17,7 @@
  */
 
 #include "praatP.h"
+#include "i18n_simple.h"
 #include "Picture.h"
 
 static void logo_defaultDraw (Graphics g) {
@@ -33,7 +34,7 @@ static void logo_defaultDraw (Graphics g) {
 	Graphics_text (g, 0.5, 0.6, Melder_upperCaseAppName());
 	Graphics_setFontStyle (g, 0);
 	Graphics_setFontSize (g, 12);
-	Graphics_text (g, 0.5, 0.25, U"\\s{Built on the} %%Praat shell%\\s{,© Paul Boersma, 1992-2024");
+	Graphics_text (g, 0.5, 0.25, I18n_translate ("form.built_on_praat_shell"));
 }
 
 static struct {
@@ -70,7 +71,7 @@ void praat_showLogo () {
 		int width  = theLogo.width_mm  / 25.4 * Gui_getResolution (nullptr);
 		int height = theLogo.height_mm / 25.4 * Gui_getResolution (nullptr);
 		theLogo.dia = GuiDialog_create (theCurrentPraatApplication -> topShell, 100, 100, width, height,
-				U"About", gui_cb_goAway, nullptr, GuiDialog_Modality::MODELESS);
+				I18n_translate ("form.about"), gui_cb_goAway, nullptr, GuiDialog_Modality::MODELESS);
 		theLogo.form = theLogo.dia;
 		theLogo.drawingArea = GuiDrawingArea_createShown (theLogo.form, 0, width, 0, height,
 				gui_drawingarea_cb_expose, gui_drawingarea_cb_mouse, nullptr, nullptr, nullptr, nullptr, 0);

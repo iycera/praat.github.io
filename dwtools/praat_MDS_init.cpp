@@ -41,6 +41,7 @@
 #include "Proximity_and_Distance.h"
 #include "Confusion.h"
 #include "Formula.h"
+#include "../sys/i18n_simple.h"
 
 #include "praatM.h"
 
@@ -1395,19 +1396,19 @@ void praat_MDS_new_init () {
 		classSimilarity, classConfiguration, classDistance, classSalience, classScalarProduct, classWeight, nullptr);
 	Thing_recognizeClassByOtherName (classProcrustes, U"Procrustus");
 
-	praat_addMenuCommand (U"Objects", U"New", U"Multidimensional scaling", nullptr, 1, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Multidimensional scaling tutorial", nullptr, GuiMenu_DEPTH_2 | GuiMenu_NO_API,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.multidimensional_scaling"), nullptr, 1, nullptr);
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.multidimensional_scaling_tutorial"), nullptr, GuiMenu_DEPTH_2 | GuiMenu_NO_API,
 			HELP__MDS_help);
 	praat_addMenuCommand (U"Objects", U"New", U"-- MDS --", nullptr, 2, nullptr);
-	praat_addMenuCommand (U"Objects", U"New", U"Create letter R example...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_letter_r_example"), nullptr, 2,
 			CREATE_ONE__Dissimilarity_createLetterRExample);
-	praat_addMenuCommand (U"Objects", U"New", U"Create INDSCAL Carroll Wish example...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_indscal_carroll_wish_example"), nullptr, 2,
 			CREATE_MULTIPLE_INDSCAL_createCarrollWishExample);
-	praat_addMenuCommand (U"Objects", U"New", U"Create Configuration...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_configuration"), nullptr, 2,
 			CREATE_ONE__Configuration_create);
-	praat_addMenuCommand (U"Objects", U"New", U"Draw splines...", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.draw_splines"), nullptr, 2,
 			GRAPHICS_NONE__drawSplines);
-	praat_addMenuCommand (U"Objects", U"New", U"Draw MDS class relations", nullptr, 2,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.draw_mds_class_relations"), nullptr, 2,
 			GRAPHICS_NONE__drawMDSClassRelations);
 
 	INCLUDE_MANPAGES (manual_MDS_init)
@@ -1456,25 +1457,25 @@ void praat_MDS_actions_init () {
 	praat_addAction1 (classConfiguration, 0, U"Invert dimension...", U"Rotate (pc)", 1, 
 			MODIFY_Configuration_invertDimension);
 	praat_addAction1 (classConfiguration, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classConfiguration, 0, U"To Distance", nullptr, 0, 
+	praat_addAction1 (classConfiguration, 0, I18n_translate("menu.to_distance_configuration"), U"Analyse", 0, 
 			CONVERT_EACH_TO_ONE__Configuration_to_Distance);
-	praat_addAction1 (classConfiguration, 0, U"To Configuration (varimax)...", nullptr, 0,
+	praat_addAction1 (classConfiguration, 0, I18n_translate("menu.to_configuration_varimax"), I18n_translate("menu.to_distance_configuration"), 0,
 			CONVERT_EACH_TO_ONE__Configuration_varimax);
-	praat_addAction1 (classConfiguration, 0, U"To Similarity (cc)", nullptr, 0, 
+	praat_addAction1 (classConfiguration, 0, I18n_translate("menu.to_similarity_configuration"), I18n_translate("menu.to_configuration_varimax"), 0, 
 			COMBINE_ALL_LISTED_TO_ONE__Configurations_to_Similarity_cc);
 
 	praat_addAction1 (classConfiguration, 0, U"Match configurations -", nullptr, 0, nullptr);
-	praat_addAction1 (classConfiguration, 2, U"To Procrustes...", nullptr, 1, 
+	praat_addAction1 (classConfiguration, 2, I18n_translate("menu.to_procrustes_configuration"), nullptr, 1, 
 			CONVERT_TWO_TO_ONE__Configurations_to_Procrustes);
-	praat_addAction1 (classConfiguration, 2, U"To AffineTransform (congruence)...", nullptr, 1,
+	praat_addAction1 (classConfiguration, 2, I18n_translate("menu.to_affinetransform_configuration"), I18n_translate("menu.to_procrustes_configuration"), 1,
 			CONVERT_TWO_TO_ONE__Configurations_to_AffineTransform_congruence);
 
-	praat_addAction1 (classConfusion, 0, U"To ContingencyTable", U"To Matrix", 1, 
+	praat_addAction1 (classConfusion, 0, I18n_translate("menu.to_contingencytable_confusion"), nullptr, 1, 
 			CONVERT_EACH_TO_ONE__Confusion_to_ContingencyTable);
-	praat_addAction1 (classConfusion, 0, U"To Proximity -", U"Analyse", 0, nullptr);
-	praat_addAction1 (classConfusion, 0, U"To Dissimilarity (pdf)...", U"To Proximity -", 1, 
+	praat_addAction1 (classConfusion, 0, I18n_translate("menu.to_proximity_confusion"), U"Analyse", 0, nullptr);
+	praat_addAction1 (classConfusion, 0, I18n_translate("menu.to_dissimilarity_confusion"), I18n_translate("menu.to_proximity_confusion"), 1, 
 			CONVERT_EACH_TO_ONE__Confusion_to_Dissimilarity_pdf);
-	praat_addAction1 (classConfusion, 0, U"To Similarity...", U"To Proximity -", 1, 
+	praat_addAction1 (classConfusion, 0, U"To Similarity...", I18n_translate("menu.to_proximity_confusion"), 1, 
 			CONVERT_EACH_TO_ONE__Confusion_to_Similarity);
 	praat_addAction1 (classConfusion, 0, U"Sum", U"Synthesize -", 1, 
 			COMBINE_ALL_LISTED_TO_ONE__Confusions_sum);

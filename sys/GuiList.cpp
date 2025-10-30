@@ -86,7 +86,7 @@ Thing_implement (GuiList, GuiControl, 0);
 			tableColumn. width = frameRect. size. width;
 			[tableColumn setEditable: NO];
 			[self -> tableView   addTableColumn: tableColumn];
-			trace (U"Retain count of table view after adding one column: ", [self -> tableView   retainCount]);   // probably 1
+			trace (I18n_translate("debug.retain_count_after_adding_column"), U" ", [self -> tableView   retainCount]);   // probably 1
 
 			self -> tableView. delegate = self;
 			self -> tableView. dataSource = self;
@@ -98,19 +98,19 @@ Thing_implement (GuiList, GuiControl, 0);
 			NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame: frameRect];
 			[scrollView setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
 			[scrollView setBorderType: NSBezelBorder];
-			trace (U"Retain count of table view before setting as document view: ", [self -> tableView   retainCount]);   // probably 1
+			trace (I18n_translate("debug.retain_count_before_setting_document"), U" ", [self -> tableView   retainCount]);   // probably 1
 			[scrollView setDocumentView: self -> tableView];   // this retains the table view
-			trace (U"Retain count of table view after setting as document view: ", [self -> tableView   retainCount]);   // probably 3
+			trace (I18n_translate("debug.retain_count_after_setting_document"), U" ", [self -> tableView   retainCount]);   // probably 3
 			[scrollView setHasVerticalScroller: YES];
 			//[scrollView setHasHorizontalScroller: YES];
 
-			trace (U"Retain count of scroll view before adding as subview: ", [scrollView retainCount]);   // probably 1
+			trace (I18n_translate("debug.retain_count_scroll_before_adding"), U" ", [scrollView retainCount]);   // probably 1
 			[self addSubview: scrollView];   // this retains the scroll view
-			trace (U"Retain count of scroll view after adding as subview: ", [scrollView retainCount]);   // probably 3
+			trace (I18n_translate("debug.retain_count_scroll_after_adding"), U" ", [scrollView retainCount]);   // probably 3
 
-			trace (U"Retain count of scroll view before release: ", [scrollView retainCount]);   // probably 3
+			trace (I18n_translate("debug.retain_count_scroll_before_release"), U" ", [scrollView retainCount]);   // probably 3
 			[scrollView release];   // compensates for alloc
-			trace (U"Retain count of table view before release: ", [self -> tableView   retainCount]);   // probably 3
+			trace (I18n_translate("debug.retain_count_table_before_release"), U" ", [self -> tableView   retainCount]);   // probably 3
 			[self -> tableView   release];   // compensates for alloc
 
 			self -> contents = [[NSMutableArray alloc] init];
@@ -138,7 +138,7 @@ Thing_implement (GuiList, GuiControl, 0);
 			because tableViewSelectionDidChange will already have been called at this point.
 		*/
 		(void) sender;
-		trace (U"enter");
+		trace (I18n_translate("debug.enter"));
 		GuiList me = self -> userData;
 		if (me && my d_selectionChangedCallback) {
 			//struct structGuiList_SelectionChangedEvent event { me };
@@ -167,7 +167,7 @@ Thing_implement (GuiList, GuiControl, 0);
 		 * This is invoked when the user clicks in the table or uses the arrow keys.
 		 */
 		(void) notification;
-		trace (U"enter");
+		trace (I18n_translate("debug.enter"));
 		GuiList me = self -> userData;
 		if (me && my d_selectionChangedCallback && ! my d_blockValueChangedCallbacks) {
 			struct structGuiList_SelectionChangedEvent event { me };

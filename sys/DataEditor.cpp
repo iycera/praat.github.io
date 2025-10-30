@@ -27,6 +27,7 @@
 #define SCROLL_BAR_WIDTH  Machine_getScrollBarWidth ()
 
 #include "DataEditor.h"
+#include "i18n_simple.h"
 #include "EditorM.h"
 #include "Collection.h"
 #include "machine.h"
@@ -124,8 +125,7 @@ static void gui_button_cb_change (DataSubEditor me, GuiButtonEvent /* event */) 
 					if (newValue != oldValue) {
 						Data_Description numberUse = DataSubEditor_findNumberUse (me, my d_fieldData [irow]. description -> name);
 						if (numberUse)
-							Melder_flushError (U"Changing field \"", strip_d (my d_fieldData [irow]. description -> name),
-								U"\" would damage the array \"", strip_d (numberUse -> name), U"\".");
+					Melder_flushError (I18n_translate ("error.changing_field_would_damage_array"), strip_d (my d_fieldData [irow]. description -> name), U"\" would damage the array \"", strip_d (numberUse -> name));
 						else
 							* (signed char *) my d_fieldData [irow]. address = newValue;
 					}
@@ -136,11 +136,9 @@ static void gui_button_cb_change (DataSubEditor me, GuiButtonEvent /* event */) 
 					if (newValue != oldValue) {
 						Data_Description numberUse = DataSubEditor_findNumberUse (me, my d_fieldData [irow]. description -> name);
 						if (numberUse)
-							Melder_flushError (U"Changing field \"", strip_d (my d_fieldData [irow]. description -> name),
-								U"\" would damage the array \"", strip_d (numberUse -> name), U"\".");
+					Melder_flushError (I18n_translate ("error.changing_field_would_damage_array"), strip_d (my d_fieldData [irow]. description -> name), U"\" would damage the array \"", strip_d (numberUse -> name));
 						else if (newValue < INT16_MIN || newValue > INT16_MAX)
-							Melder_flushError (U"Field \"", strip_d (my d_fieldData [irow]. description -> name),
-								U"\" can have no values less than ", INT16_MIN, U" or greater than ", INT16_MAX, U".");
+					Melder_flushError (I18n_translate ("error.field_can_have_no_values_less_than"), strip_d (my d_fieldData [irow]. description -> name), U"\" can have no values less than ", INT16_MIN, U" or greater than ", INT16_MAX, U".");
 						else
 							* (int16 *) my d_fieldData [irow]. address = (int16) newValue;   // guarded conversion
 					}
@@ -150,8 +148,7 @@ static void gui_button_cb_change (DataSubEditor me, GuiButtonEvent /* event */) 
 					if (newValue != oldValue) {
 						Data_Description numberUse = DataSubEditor_findNumberUse (me, my d_fieldData [irow]. description -> name);
 						if (numberUse)
-							Melder_flushError (U"Changing field \"", strip_d (my d_fieldData [irow]. description -> name),
-								U"\" would damage the array \"", strip_d (numberUse -> name), U"\".");
+					Melder_flushError (I18n_translate ("error.changing_field_would_damage_array"), strip_d (my d_fieldData [irow]. description -> name), U"\" would damage the array \"", strip_d (numberUse -> name));
 						else
 							* (int *) my d_fieldData [irow]. address = newValue;
 					}
@@ -161,8 +158,7 @@ static void gui_button_cb_change (DataSubEditor me, GuiButtonEvent /* event */) 
 					if (newValue != oldValue) {
 						Data_Description numberUse = DataSubEditor_findNumberUse (me, my d_fieldData [irow]. description -> name);
 						if (numberUse)
-							Melder_flushError (U"Changing field \"", strip_d (my d_fieldData [irow]. description -> name),
-								U"\" would damage the array \"", strip_d (numberUse -> name), U"\".");
+					Melder_flushError (I18n_translate ("error.changing_field_would_damage_array"), strip_d (my d_fieldData [irow]. description -> name), U"\" would damage the array \"", strip_d (numberUse -> name));
 						else
 							* (integer *) my d_fieldData [irow]. address = newValue;
 					}

@@ -17,6 +17,7 @@
  */
 
 #include "praatM.h"
+#include "i18n_simple.h"
 #include "DataModeler.h"
 #include "Formant_extensions.h"
 #include "FormantModeler.h"
@@ -1138,7 +1139,7 @@ void praat_DataModeler_init () {
 
 	structOptimalCeilingTierArea :: f_preferences ();
 
-	praat_addMenuCommand (U"Objects", U"New", U"Create simple DataModeler...", U"Create ISpline...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addMenuCommand (U"Objects", U"New", I18n_translate("menu.create_simple_datamodeler"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CREATE_ONE__DataModeler_createSimple);
 
 	praat_addAction1 (classDataModeler, 0, U"Speckle...", 0, 0, 
@@ -1229,7 +1230,7 @@ void praat_DataModeler_init () {
 	praat_addAction1 (classDataModeler, 0, U"To Table (z-scores)", 0, 0, 
 			CONVERT_EACH_TO_ONE__DataModeler_to_Table_zscores);
 
-	praat_addAction1 (classFormant, 0, U"To FormantModeler...", U"To LPC...", GuiMenu_HIDDEN,
+	praat_addAction1 (classFormant, 0, U"To FormantModeler...", U"Convert", GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Formant_to_FormantModeler);
 	praat_addAction1 (classFormant, 0, U"Extract smoothest part...", 0, GuiMenu_HIDDEN,
 			COMBINE_ALL_TO_ONE__Formants_extractSmoothestPart);
@@ -1342,9 +1343,9 @@ void praat_DataModeler_init () {
 
 	//praat_addAction1 (classPitchModeler, 0, U"Draw...", 0, 0, GRAPHICS_EACH__PitchModeler_draw);
 
-	praat_addAction1 (classSound, 0, U"Get optimal formant ceiling...", U"Get intensity (dB)", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"Get optimal formant ceiling...", I18n_translate("menu.get_intensity_db"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			QUERY_ONE_FOR_REAL__Sound_getOptimalFormantCeiling);
-	praat_addAction1 (classSound, 0, U"To Formant (interval)...", U"To Formant (robust)...", GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"To Formant (interval)...", I18n_translate("menu.to_formant_robust"), GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_Formant_interval);
 	praat_addAction1 (classSound, 0, U"To Formant (interval, constrained)...", U"To Formant (interval)...", GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_Formant_interval_constrained);
@@ -1354,7 +1355,7 @@ void praat_DataModeler_init () {
 	
 	praat_addAction1 (classSound, 0, U"To Formant (interval, constrained, robust)...", U"To Formant (interval, constrained)...", GuiMenu_DEPTH_2 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_Formant_interval_constrained_robust);
-	praat_addAction1 (classTable, 0, U"To DataModeler...", U"To logistic regression...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classTable, 0, U"To DataModeler...", U"Convert -", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Table_to_DataModeler);
 }
 

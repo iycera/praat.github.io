@@ -18,6 +18,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiCheckButton, GuiControl, 0);
 
@@ -63,7 +64,7 @@ Thing_implement (GuiCheckButton, GuiControl, 0);
 	- (void) dealloc {   // override
 		GuiCheckButton me = d_userData;
 		forget (me);
-		trace (U"deleting a check button");
+		trace (I18n_translate("debug.deleting_a_check_button"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {

@@ -17,6 +17,7 @@
  */
 
 #include "NotebookEditor.h"
+#include "i18n_simple.h"
 #include "../kar/longchar.h"
 #include "praatP.h"
 #include "EditorM.h"
@@ -53,18 +54,17 @@ void structNotebookEditor :: v_nameChanged () {
 	*/
 	const bool dirtinessAlreadyShown = GuiWindow_setDirty (our windowForm, our dirty);   // (3) on the Mac (last checked 2023-03-25)
 	static MelderString buffer;
-	MelderString_copy (& buffer, MelderFile_isNull (& our file) ? U"untitled notebook" : U"Notebook");   // (1)
+	MelderString_copy (& buffer, MelderFile_isNull (& our file) ? I18n_translate ("form.untitled_notebook") : I18n_translate ("form.notebook"));   // (1)
 	if (! MelderFile_isNull (& our file))
 		MelderString_append (& buffer, U" ", MelderFile_messageName (& our file));   // (2)
 	if (our dirty && ! dirtinessAlreadyShown)
-		MelderString_append (& buffer, U" (modified)");   // (3) on Windows and Linux (last checked 2023-02-25)
+		MelderString_append (& buffer, U" ", I18n_translate ("form.modified"));   // (3) on Windows and Linux (last checked 2023-02-25)
 	GuiShell_setTitle (windowForm, buffer.string);
 }
 
 void structNotebookEditor :: v_goAway () {
 	if (our interpreter -> running)
-		Melder_flushError (U"Cannot close the NotebookEditor while the notebook is running or paused.\n"
-				"Please close or continue the pause, trust or demo window.");
+		Melder_flushError (I18n_translate ("error.cannot_close_notebook_editor_while_running"));
 	else
 		NotebookEditor_Parent :: v_goAway ();
 }
@@ -93,7 +93,7 @@ static void args_ok (UiForm sendingForm, integer /* narg */, Stackel /* args */,
 
 static void menu_cb_run (NotebookEditor me, EDITOR_ARGS) {
 	if (my interpreter -> running)
-		Melder_throw (U"The notebook is already running (paused). Please close or continue the pause, trust or demo window.");
+		Melder_throw (I18n_translate ("error.notebook_already_running"));
 	integer startOfSelection, endOfSelection;
 	autostring32 text = GuiText_getStringAndSelectionPosition (my textWidget, & startOfSelection, & endOfSelection);
 	if (Melder_startsWith (text.get(), U"\"")) {
@@ -128,13 +128,12 @@ static void menu_cb_run (NotebookEditor me, EDITOR_ARGS) {
 		autoManual manual = Manual_create (firstPage -> title.get(), my interpreter.get(), you.releaseToAmbiguousOwner(), true, true);
 		manual.releaseToUser ();
 	} else
-		Melder_throw (U"A Praat notebook should either start with a title between straight double quotes (\"\"), "
-			"or contain multiple such pieces separated by \"####################\" (or longer) lines on all sides.");
+		Melder_throw (I18n_translate ("error.praat_notebook_should_start_with_title"), U"or contain a separator line with 20 or more hash symbols (#).");
 }
 
 static void menu_cb_runChunk (NotebookEditor me, EDITOR_ARGS) {
 	if (my interpreter -> running)
-		Melder_throw (U"The notebook is already running (paused). Please close or continue the pause, trust or demo window.");
+		Melder_throw (I18n_translate ("error.notebook_already_running"));
 	autostring32 text = GuiText_getSelection (my textWidget);   // TODO: replace with chunk
 	if (! text)
 		Melder_throw (U"No text selected.");
@@ -164,20 +163,20 @@ static void menu_cb_Functions (NotebookEditor, EDITOR_ARGS) { Melder_help (U"Fun
 
 void structNotebookEditor :: v_createMenus () {
 	NotebookEditor_Parent :: v_createMenus ();
-	Editor_addCommand (this, U"File", U"-- close --", 0, nullptr);
-	Editor_addCommand (this, U"Convert", U"-- expand --", 0, nullptr);
-	Editor_addCommand (this, U"Convert", U"Expand include files", 0, menu_cb_expandIncludeFiles);
-	Editor_addMenu (this, U"Run", 0);
-	Editor_addCommand (this, U"Run", U"Run", 'R', menu_cb_run);
-	Editor_addCommand (this, U"Run", U"Run chunk", 'T', menu_cb_runChunk);
+	//Editor_addCommand (this, I18n_translate("menu.file"), U"-- close --", 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.convert"), I18n_translate("menu.separator_expand"), 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.convert"), I18n_translate("menu.expand_include_files"), 0, menu_cb_expandIncludeFiles);
+	Editor_addMenu (this, I18n_translate("menu.run"), 0);
+	Editor_addCommand (this, I18n_translate("menu.run"), I18n_translate("menu.run"), 'R', menu_cb_run);
+	Editor_addCommand (this, I18n_translate("menu.run"), I18n_translate("menu.run_chunk"), 'T', menu_cb_runChunk);
 }
 
 void structNotebookEditor :: v_createMenuItems_help (EditorMenu menu) {
 	NotebookEditor_Parent :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"About NotebookEditor", '?', menu_cb_AboutNotebookEditor);
-	EditorMenu_addCommand (menu, U"Scripting tutorial", 0, menu_cb_ScriptingTutorial);
-	EditorMenu_addCommand (menu, U"Scripting examples", 0, menu_cb_ScriptingExamples);
-	EditorMenu_addCommand (menu, U"Praat script", 0, menu_cb_PraatScript);
+	EditorMenu_addCommand (menu, I18n_translate("menu.about_notebook_editor"), '?', menu_cb_AboutNotebookEditor);
+	EditorMenu_addCommand (menu, I18n_translate("menu.scripting_tutorial"), 0, menu_cb_ScriptingTutorial);
+	EditorMenu_addCommand (menu, I18n_translate("menu.scripting_examples"), 0, menu_cb_ScriptingExamples);
+	EditorMenu_addCommand (menu, I18n_translate("menu.praat_script"), 0, menu_cb_PraatScript);
 	EditorMenu_addCommand (menu, U"Formulas tutorial", 0, menu_cb_FormulasTutorial);
 	EditorMenu_addCommand (menu, U"Functions", 0, menu_cb_Functions);
 }

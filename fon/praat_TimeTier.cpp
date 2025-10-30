@@ -17,6 +17,7 @@
  */
 
 #include "praat_TimeTier.h"
+#include "../sys/i18n_simple.h"
 
 // MARK: TIMETIER
 
@@ -28,8 +29,8 @@ DIRECT (INTEGER_TimeTier_getNumberOfPoints) {
 	QUERY_ONE_FOR_REAL_END (U" points")
 }
 
-FORM (INTEGER_TimeTier_getLowIndexFromTime, U"Get low index", U"AnyTier: Get low index from time...") {
-	REAL (time, U"Time (s)", U"0.5")
+FORM (INTEGER_TimeTier_getLowIndexFromTime, I18n_translate("form.get_low_index"), I18n_translate("form.anytier_get_low_index_from_time_dialog")) {
+	REAL (time, I18n_translate("form.time_s"), U"0.5")
 	OK
 DO
 	QUERY_ONE_FOR_REAL (AnyTier)
@@ -38,8 +39,8 @@ DO
 	QUERY_ONE_FOR_REAL_END (U"")
 }
 
-FORM (INTEGER_TimeTier_getHighIndexFromTime, U"Get high index", U"AnyTier: Get high index from time...") {
-	REAL (time, U"Time (s)", U"0.5")
+FORM (INTEGER_TimeTier_getHighIndexFromTime, I18n_translate("form.get_high_index"), I18n_translate("form.anytier_get_high_index_from_time_dialog")) {
+	REAL (time, I18n_translate("form.time_s"), U"0.5")
 	OK
 DO
 	QUERY_ONE_FOR_REAL (AnyTier)
@@ -48,8 +49,8 @@ DO
 	QUERY_ONE_FOR_REAL_END (U"")
 }
 
-FORM (INTEGER_TimeTier_getNearestIndexFromTime, U"Get nearest index", U"AnyTier: Get nearest index from time...") {
-	REAL (time, U"Time (s)", U"0.5")
+FORM (INTEGER_TimeTier_getNearestIndexFromTime, I18n_translate("form.get_nearest_index"), I18n_translate("form.anytier_get_nearest_index_from_time_dialog")) {
+	REAL (time, I18n_translate("form.time_s"), U"0.5")
 	OK
 DO
 	QUERY_ONE_FOR_REAL (AnyTier)   // TODO: make it more general that we don't return an integer, because we should be able to return undefined, as here

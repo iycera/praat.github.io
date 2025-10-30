@@ -17,18 +17,19 @@
  */
 
 #include "StringsEditor.h"
+#include "i18n_simple.h"
 #include "EditorM.h"
 #include "machine.h"
 
 Thing_implement (StringsEditor, Editor, 0);
 
 static void menu_cb_help (StringsEditor /* me */, EDITOR_ARGS) {
-	HELP (U"StringsEditor")
+	HELP (I18n_translate ("form.strings_editor_help"))
 }
 
 void structStringsEditor :: v_createMenuItems_help (EditorMenu menu) {
 	StringsEditor_Parent :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"StringsEditor help", U'?', menu_cb_help);
+	EditorMenu_addCommand (menu, I18n_translate ("form.strings_editor_help_menu"), U'?', menu_cb_help);
 }
 
 static void updateList (StringsEditor me) {
@@ -107,10 +108,10 @@ void structStringsEditor :: v_createChildren () {
 	GuiThing_show (list);
 
 	text = GuiText_createShown (our windowForm, 0, 0, -40 - Gui_TEXTFIELD_HEIGHT, -40, 0);
-	GuiButton_createShown (our windowForm, 10, 100, -10 - Gui_PUSHBUTTON_HEIGHT, -10, U"Insert", gui_button_cb_insert, this, GuiButton_DEFAULT);
-	GuiButton_createShown (our windowForm, 110, 200, -10 - Gui_PUSHBUTTON_HEIGHT, -10, U"Append", gui_button_cb_append, this, 0);
-	GuiButton_createShown (our windowForm, 210, 300, -10 - Gui_PUSHBUTTON_HEIGHT, -10, U"Replace", gui_button_cb_replace, this, 0);
-	GuiButton_createShown (our windowForm, 310, 400, -10 - Gui_PUSHBUTTON_HEIGHT, -10, U"Remove", gui_button_cb_remove, this, 0);
+	GuiButton_createShown (our windowForm, 10, 100, -10 - Gui_PUSHBUTTON_HEIGHT, -10, I18n_translate ("button.insert"), gui_button_cb_insert, this, GuiButton_DEFAULT);
+	GuiButton_createShown (our windowForm, 110, 200, -10 - Gui_PUSHBUTTON_HEIGHT, -10, I18n_translate ("button.append"), gui_button_cb_append, this, 0);
+	GuiButton_createShown (our windowForm, 210, 300, -10 - Gui_PUSHBUTTON_HEIGHT, -10, I18n_translate ("button.replace"), gui_button_cb_replace, this, 0);
+	GuiButton_createShown (our windowForm, 310, 400, -10 - Gui_PUSHBUTTON_HEIGHT, -10, I18n_translate ("button.remove"), gui_button_cb_remove, this, 0);
 }
 
 void structStringsEditor :: v1_dataChanged (Editor /* sender */) {
@@ -124,7 +125,7 @@ autoStringsEditor StringsEditor_create (conststring32 title, Strings strings) {
 		updateList (me.get());
 		return me;
 	} catch (MelderError) {
-		Melder_throw (U"Strings window not created.");
+		Melder_throw (I18n_translate ("error.strings_window_not_created"));
 	}
 }
 

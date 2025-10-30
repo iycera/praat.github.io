@@ -17,6 +17,7 @@
  */
 
 #include "HyperPage.h"
+#include "i18n_simple.h"
 #include "Printer.h"
 #include "machine.h"
 #include "GuiP.h"
@@ -638,7 +639,7 @@ void structHyperPage :: v9_destroy () noexcept {
 }
 
 static void gui_drawingarea_cb_expose (HyperPage me, GuiDrawingArea_ExposeEvent /* event */) {
-	trace (U"HyperPage: gui_drawingarea_cb_expose");
+		trace (I18n_translate ("debug.hyperpage_gui_drawingarea_cb_expose"));
 	if (! my graphics)
 		return;   // could be the case in the very beginning
 	if (my entryHint && my entryPosition != 0.0) {
@@ -650,7 +651,7 @@ static void gui_drawingarea_cb_expose (HyperPage me, GuiDrawingArea_ExposeEvent 
 	my d_x = 0.0;
 	my previousBottomSpacing = 0.0;
 	my links. removeAllItems ();
-	trace (U"going to draw");
+		trace (I18n_translate ("debug.going_to_draw"));
 	Graphics_clearWs (my graphics.get());
 	my v_draw ();
 }
@@ -663,7 +664,7 @@ static void gui_drawingarea_cb_mouse (HyperPage me, GuiDrawingArea_MouseEvent ev
 	for (integer ilink = 1; ilink <= my links.size; ilink ++) {
 		HyperLink link = my links.at [ilink];
 		if (! link)
-			Melder_fatal (U"gui_drawingarea_cb_click: empty link ", ilink, U"/", my links.size, U".");
+			Melder_fatal (I18n_translate ("error.hyperpage_empty_link"), ilink, U"/", my links.size);
 		if (event -> y > link -> y2DC && event -> y < link -> y1DC && event -> x > link -> x1DC && event -> x < link -> x2DC) {
 			saveHistory (me, my optionalCurrentPageTitle.get());
 			try {
@@ -692,7 +693,7 @@ static void menu_cb_pageSetup (HyperPage me, EDITOR_ARGS) {
 #endif
 
 static void menu_cb_print (HyperPage me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Print", nullptr)
+	EDITOR_FORM (I18n_translate ("form.print"), nullptr)
 		SENTENCE_FIELD (my insideHeader, U"Left or inside header", U"")
 		SENTENCE_FIELD (my middleHeader, U"Middle header", U"")
 		TEXTFIELD_FIELD (my outsideHeader, U"Right or outside header", U"", 2)
@@ -711,7 +712,7 @@ static void menu_cb_print (HyperPage me, EDITOR_ARGS) {
 }
 
 static void menu_cb_font (HyperPage me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Font", nullptr)
+	EDITOR_FORM (I18n_translate("form.font"), nullptr)
 		CHOICE (font, U"Font", 1)
 			OPTION (U"Times")
 			OPTION (U"Helvetica")
@@ -748,7 +749,7 @@ static void menu_cb_18 (HyperPage me, EDITOR_ARGS) { setFontSize (me, 18.0); }
 static void menu_cb_24 (HyperPage me, EDITOR_ARGS) { setFontSize (me, 24.0); }
 
 static void menu_cb_fontSize (HyperPage me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Font size", nullptr)
+	EDITOR_FORM (I18n_translate("form.font_size"), nullptr)
 		POSITIVE (fontSize, U"Font size (points)", my default_fontSize ())
 	EDITOR_OK
 		SET_REAL (fontSize, my instancePref_fontSize())
@@ -758,7 +759,7 @@ static void menu_cb_fontSize (HyperPage me, EDITOR_ARGS) {
 }
 
 static void menu_cb_searchForPage (HyperPage me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Search for page", nullptr)
+	EDITOR_FORM (I18n_translate("form.search_for_page"), nullptr)
 		TEXTFIELD (page, U"Page", U"a", 2)
 	EDITOR_OK
 	EDITOR_DO
@@ -880,12 +881,12 @@ static void gui_button_cb_forth (HyperPage me, GuiButtonEvent /* event */) {
 void structHyperPage :: v_createMenus () {
 	HyperPage_Parent :: v_createMenus ();
 
-	Editor_addCommand (this, U"File", U"PostScript settings...", GuiMenu_HIDDEN, menu_cb_postScriptSettings);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"PostScript settings...", GuiMenu_HIDDEN, menu_cb_postScriptSettings);
 	#ifdef macintosh
-		Editor_addCommand (this, U"File", U"Page setup...", GuiMenu_HIDDEN, menu_cb_pageSetup);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Page setup...", GuiMenu_HIDDEN, menu_cb_pageSetup);
 	#endif
-	Editor_addCommand (this, U"File", U"Print page...", GuiMenu_HIDDEN, menu_cb_print);
-	Editor_addCommand (this, U"File", U"-- close --", GuiMenu_HIDDEN, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"Print page...", GuiMenu_HIDDEN, menu_cb_print);
+	Editor_addCommand (this, I18n_translate("menu.file"), U"-- close --", GuiMenu_HIDDEN, nullptr);
 
 	if (our v_hasHistory ()) {
 		Editor_addMenu (this, U"Go to", 0);
@@ -898,15 +899,15 @@ void structHyperPage :: v_createMenus () {
 		Editor_addCommand (this, U"Go to", U"Search for page...", 0, menu_cb_searchForPage);
 	}
 
-	Editor_addMenu (this, U"Font", 0);
-	Editor_addCommand (this, U"Font", U"Font size...", 0, menu_cb_fontSize);
-	fontSizeButton_10 = Editor_addCommand (this, U"Font", U"10", GuiMenu_CHECKBUTTON, menu_cb_10);
-	fontSizeButton_12 = Editor_addCommand (this, U"Font", U"12", GuiMenu_CHECKBUTTON, menu_cb_12);
-	fontSizeButton_14 = Editor_addCommand (this, U"Font", U"14", GuiMenu_CHECKBUTTON, menu_cb_14);
-	fontSizeButton_18 = Editor_addCommand (this, U"Font", U"18", GuiMenu_CHECKBUTTON, menu_cb_18);
-	fontSizeButton_24 = Editor_addCommand (this, U"Font", U"24", GuiMenu_CHECKBUTTON, menu_cb_24);
-	Editor_addCommand (this, U"Font", U"-- font --", 0, nullptr);
-	Editor_addCommand (this, U"Font", U"Font...", 0, menu_cb_font);
+	Editor_addMenu (this, I18n_translate("menu.font"), 0);
+	Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_size"), 0, menu_cb_fontSize);
+	fontSizeButton_10 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_10"), GuiMenu_CHECKBUTTON, menu_cb_10);
+	fontSizeButton_12 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_12"), GuiMenu_CHECKBUTTON, menu_cb_12);
+	fontSizeButton_14 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_14"), GuiMenu_CHECKBUTTON, menu_cb_14);
+	fontSizeButton_18 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_18"), GuiMenu_CHECKBUTTON, menu_cb_18);
+	fontSizeButton_24 = Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font_24"), GuiMenu_CHECKBUTTON, menu_cb_24);
+	Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.separator_font"), 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.font"), I18n_translate("menu.font"), 0, menu_cb_font);
 }
 
 /********** **********/

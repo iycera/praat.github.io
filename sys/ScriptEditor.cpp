@@ -17,6 +17,7 @@
  */
 
 #include "ScriptEditor.h"
+#include "i18n_simple.h"
 #include "../kar/longchar.h"
 #include "praatP.h"
 #include "EditorM.h"
@@ -55,17 +56,17 @@ void structScriptEditor :: v_nameChanged () {
 	*/
 	const bool dirtinessAlreadyShown = GuiWindow_setDirty (our windowForm, our dirty);   // (3) on the Mac (last checked 2023-02-25)
 	static MelderString buffer;
-	MelderString_copy (& buffer, MelderFile_isNull (& our file) ? U"untitled script" : U"Script");   // (1)
+	MelderString_copy (& buffer, MelderFile_isNull (& our file) ? I18n_translate ("form.untitled_script") : I18n_translate ("form.script"));   // (1)
 	if (our wasCreatedInAnEditor()) {
 		if (our optionalReferenceToOwningEditor)
 			MelderString_append (& buffer, U" [editor “", Thing_getName (our optionalReferenceToOwningEditor), U"”]");   // (4), (5)
 		else
-			MelderString_append (& buffer, U" [closed ", our optionalOwningEditorClassName.get(), U"]");   // (4)
+			MelderString_append (& buffer, I18n_translate ("form.editor_closed"), our optionalOwningEditorClassName.get());   // (4)
 	}
 	if (! MelderFile_isNull (& our file))
 		MelderString_append (& buffer, U" ", MelderFile_messageName (& our file));   // (2)
 	if (our dirty && ! dirtinessAlreadyShown)
-		MelderString_append (& buffer, U" (modified)");   // (3) on Windows and Linux (last checked 2023-02-25)
+		MelderString_append (& buffer, U" ", I18n_translate ("form.modified"));   // (3) on Windows and Linux (last checked 2023-02-25)
 	GuiShell_setTitle (windowForm, buffer.string);
 	/*
 		Finally, remember the name of this script.
@@ -78,8 +79,7 @@ void structScriptEditor :: v_nameChanged () {
 
 void structScriptEditor :: v_goAway () {
 	if (our interpreter -> running)
-		Melder_flushError (U"Cannot close the script window while the script is running or paused.\n"
-				"Please close or continue the pause, trust or demo window.");
+		Melder_flushError (I18n_translate ("error.cannot_close_script_window_while_running"));
 	else
 		ScriptEditor_Parent :: v_goAway ();
 }
@@ -111,7 +111,7 @@ static void args_ok_selectionOnly (UiForm sendingForm, integer /* narg */, Stack
 	iam (ScriptEditor);
 	autostring32 text = GuiText_getSelection (my textWidget);
 	if (! text)
-		Melder_throw (U"No text is selected any longer.\nPlease reselect or click Cancel.");
+		Melder_throw (I18n_translate ("error.no_text_selected_any_longer"));
 	if (! MelderFile_isNull (& my file))
 		MelderFile_setDefaultDir (& my file);
 	Melder_includeIncludeFiles (& text);
@@ -132,7 +132,7 @@ static void menu_cb_run_async (ScriptEditor me) {
 	try {
 		bool isObscured = false;
 		autostring32 text = GuiText_getString (my textWidget);
-		trace (U"Running the following script (1):\n", text.get());
+		trace (I18n_translate ("debug.running_the_following_script"), text.get());
 		if (! MelderFile_isNull (& my file))
 			MelderFile_setDefaultDir (& my file);
 		const conststring32 obscuredLabel = U"#!praatObscured";
@@ -148,12 +148,12 @@ static void menu_cb_run_async (ScriptEditor me) {
 				restOfText ++;
 				char32 *endOfFirstLine = str32chr (restOfText, U'\n');
 				if (! endOfFirstLine)
-					Melder_throw (U"Incomplete script.");
+					Melder_throw (I18n_translate("error.incomplete_script"));
 				*endOfFirstLine = U'\0';
 				passwordHash = NUMhashString (restOfText);
 				restOfText = endOfFirstLine + 1;
 			} else {
-				Melder_throw (U"Unexpected nonspace after #!praatObscured.");
+				Melder_throw (I18n_translate("error.unexpected_nonspace_after_praatobscured"));
 			}
 			static uint64 nonsecret = UINT64_C (529857089);
 			text = unhex_STR (restOfText, fileKey + nonsecret + passwordHash);
@@ -179,13 +179,13 @@ static void menu_cb_run_async (ScriptEditor me) {
 			Interpreter_run (my interpreter.get(), text.get(), false);
 		}
 	} catch (MelderError) {
-		Melder_flushError (U"The script didn’t run to its completion.");
+		Melder_flushError (I18n_translate("error.script_did_not_run_to_completion"));
 	}
 }
 
 static void menu_cb_run (ScriptEditor me, EDITOR_ARGS) {
 	if (my interpreter -> running)
-		Melder_throw (U"The script is already running (paused). Please close or continue the pause, trust or demo window.");
+		Melder_throw (I18n_translate("error.script_already_running"));
 	#ifdef macintosh
 		dispatch_async (dispatch_get_main_queue (), ^{ menu_cb_run_async (me); });
 	#else
@@ -197,7 +197,7 @@ static void menu_cb_runSelection_async (ScriptEditor me) {
 	try {
 		autostring32 selectedText = GuiText_getSelection (my textWidget);
 		if (! selectedText)
-			Melder_throw (U"No text selected.");
+			Melder_throw (I18n_translate("error.no_text_selected"));
 		if (! MelderFile_isNull (& my file))
 			MelderFile_setDefaultDir (& my file);
 		Melder_includeIncludeFiles (& selectedText);
@@ -257,7 +257,7 @@ static void menu_cb_runSelection_async (ScriptEditor me) {
 
 static void menu_cb_runSelection (ScriptEditor me, EDITOR_ARGS) {
 	if (my interpreter -> running)
-		Melder_throw (U"The script is already running (paused). Please close or continue the pause, trust or demo window.");
+		Melder_throw (I18n_translate("error.script_already_running"));
 	#ifdef macintosh
 		dispatch_async (dispatch_get_main_queue (), ^{ menu_cb_runSelection_async (me); });
 	#else
@@ -266,7 +266,7 @@ static void menu_cb_runSelection (ScriptEditor me, EDITOR_ARGS) {
 }
 
 static void menu_cb_addToMenu (ScriptEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Add to menu", U"Add to fixed menu...")
+	EDITOR_FORM (I18n_translate("form.add_to_menu"), I18n_translate("form.add_to_fixed_menu_dialog"))
 		WORD (window, U"Window", U"?")
 		SENTENCE (menu, U"Menu", U"File")
 		SENTENCE (command, U"Command", U"Do it...")
@@ -287,7 +287,7 @@ static void menu_cb_addToMenu (ScriptEditor me, EDITOR_ARGS) {
 }
 
 static void menu_cb_addToFixedMenu (ScriptEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Add to fixed menu", U"Add to fixed menu...");
+	EDITOR_FORM (I18n_translate("form.add_to_fixed_menu"), I18n_translate("form.add_to_fixed_menu_dialog"));
 		CHOICESTR (window, U"Window", 1)
 			OPTION (U"Objects")
 			OPTION (U"Picture")
@@ -308,7 +308,7 @@ static void menu_cb_addToFixedMenu (ScriptEditor me, EDITOR_ARGS) {
 }
 
 static void menu_cb_addToDynamicMenu (ScriptEditor me, EDITOR_ARGS) {
-	EDITOR_FORM (U"Add to dynamic menu", U"Add to dynamic menu...")
+	EDITOR_FORM (I18n_translate("form.add_to_dynamic_menu"), I18n_translate("form.add_to_dynamic_menu_dialog"))
 		WORD (class1, U"Class 1", U"Sound")
 		INTEGER (number1, U"Number 1", U"0")
 		WORD (class2, U"Class 2", U"")
@@ -378,37 +378,37 @@ static void menu_cb_AddingToADynamicMenu (ScriptEditor, EDITOR_ARGS) { Melder_he
 void structScriptEditor :: v_createMenus () {
 	ScriptEditor_Parent :: v_createMenus ();
 	if (our wasCreatedInAnEditor()) {
-		Editor_addCommand (this, U"File", U"Add to menu...", 0, menu_cb_addToMenu);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Add to menu...", 0, menu_cb_addToMenu);
 	} else {
-		Editor_addCommand (this, U"File", U"Add to fixed menu...", 0, menu_cb_addToFixedMenu);
-		Editor_addCommand (this, U"File", U"Add to dynamic menu...", 0, menu_cb_addToDynamicMenu);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Add to fixed menu...", 0, menu_cb_addToFixedMenu);
+		Editor_addCommand (this, I18n_translate("menu.file"), U"Add to dynamic menu...", 0, menu_cb_addToDynamicMenu);
 	}
-	Editor_addCommand (this, U"File", U"-- close --", 0, nullptr);
-	Editor_addCommand (this, U"Edit", U"-- history --", 0, nullptr);
-	Editor_addCommand (this, U"Edit", U"Clear history", 0, menu_cb_clearHistory);
-	Editor_addCommand (this, U"Edit", U"Paste history", 'H', menu_cb_pasteHistory);
-	Editor_addCommand (this, U"Convert", U"-- expand --", 0, nullptr);
-	Editor_addCommand (this, U"Convert", U"Expand include files", 0, menu_cb_expandIncludeFiles);
-	Editor_addMenu (this, U"Run", 0);
-	Editor_addCommand (this, U"Run", U"Run", 'R', menu_cb_run);
-	Editor_addCommand (this, U"Run", U"Run selection", 'T', menu_cb_runSelection);
+	//Editor_addCommand (this, I18n_translate("menu.file"), U"-- close --", 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.edit"), U"-- history --", 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.edit"), U"Clear history", 0, menu_cb_clearHistory);
+	Editor_addCommand (this, I18n_translate("menu.edit"), U"Paste history", 'H', menu_cb_pasteHistory);
+	Editor_addCommand (this, I18n_translate("menu.convert"), I18n_translate("menu.separator_expand"), 0, nullptr);
+	Editor_addCommand (this, I18n_translate("menu.convert"), I18n_translate("menu.expand_include_files"), 0, menu_cb_expandIncludeFiles);
+	Editor_addMenu (this, I18n_translate("menu.run"), 0);
+	Editor_addCommand (this, I18n_translate("menu.run"), I18n_translate("menu.run"), 'R', menu_cb_run);
+	Editor_addCommand (this, I18n_translate("menu.run"), I18n_translate("menu.run_selection"), 'T', menu_cb_runSelection);
 }
 
 void structScriptEditor :: v_createMenuItems_help (EditorMenu menu) {
 	ScriptEditor_Parent :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"About ScriptEditor", '?', menu_cb_AboutScriptEditor);
-	EditorMenu_addCommand (menu, U"Scripting tutorial", 0, menu_cb_ScriptingTutorial);
-	EditorMenu_addCommand (menu, U"Scripting examples", 0, menu_cb_ScriptingExamples);
-	EditorMenu_addCommand (menu, U"Praat script", 0, menu_cb_PraatScript);
-	EditorMenu_addCommand (menu, U"Formulas tutorial", 0, menu_cb_FormulasTutorial);
-	EditorMenu_addCommand (menu, U"Functions", 0, menu_cb_Functions);
-	EditorMenu_addCommand (menu, U"Demo window", 0, menu_cb_DemoWindow);
-	EditorMenu_addCommand (menu, U"-- help history --", 0, nullptr);
-	EditorMenu_addCommand (menu, U"The History mechanism", 0, menu_cb_TheHistoryMechanism);
-	EditorMenu_addCommand (menu, U"Initialization scripts", 0, menu_cb_InitializationScripts);
-	EditorMenu_addCommand (menu, U"-- help add --", 0, nullptr);
-	EditorMenu_addCommand (menu, U"Adding to a fixed menu", 0, menu_cb_AddingToAFixedMenu);
-	EditorMenu_addCommand (menu, U"Adding to a dynamic menu", 0, menu_cb_AddingToADynamicMenu);
+	EditorMenu_addCommand (menu, I18n_translate("menu.about_script_editor"), '?', menu_cb_AboutScriptEditor);
+	EditorMenu_addCommand (menu, I18n_translate("menu.scripting_tutorial"), 0, menu_cb_ScriptingTutorial);
+	EditorMenu_addCommand (menu, I18n_translate("menu.scripting_examples"), 0, menu_cb_ScriptingExamples);
+	EditorMenu_addCommand (menu, I18n_translate("menu.praat_script"), 0, menu_cb_PraatScript);
+	EditorMenu_addCommand (menu, I18n_translate("menu.formulas_tutorial"), 0, menu_cb_FormulasTutorial);
+	EditorMenu_addCommand (menu, I18n_translate("menu.functions"), 0, menu_cb_Functions);
+	EditorMenu_addCommand (menu, I18n_translate("menu.demo_window"), 0, menu_cb_DemoWindow);
+	EditorMenu_addCommand (menu, I18n_translate("menu.help_history"), 0, nullptr);
+	EditorMenu_addCommand (menu, I18n_translate("menu.history_mechanism"), 0, menu_cb_TheHistoryMechanism);
+	EditorMenu_addCommand (menu, I18n_translate("menu.initialization_scripts"), 0, menu_cb_InitializationScripts);
+	EditorMenu_addCommand (menu, I18n_translate("menu.help_add"), 0, nullptr);
+	EditorMenu_addCommand (menu, I18n_translate("menu.adding_to_fixed_menu"), 0, menu_cb_AddingToAFixedMenu);
+	EditorMenu_addCommand (menu, I18n_translate("menu.adding_to_dynamic_menu"), 0, menu_cb_AddingToADynamicMenu);
 }
 
 void ScriptEditor_init (ScriptEditor me, Editor optionalOwningEditor, conststring32 initialText) {

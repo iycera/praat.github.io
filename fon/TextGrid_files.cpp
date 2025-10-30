@@ -17,11 +17,12 @@
  */
 
 #include "TextGrid.h"
+#include "../sys/i18n_simple.h"
 
 static int64 Melder_readInteger (const char32 **p) {
 	char32 kar = * (*p) ++;
 	Melder_require (kar != U'\0',
-		U"Looking for an integer, but found the end of the text.");
+		I18n_translate("error.looking_for_integer_but_found_end_of_text"));
 	Melder_require (! Melder_isVerticalSpace (kar),
 		U"Looking for an integer, but found the end of the line.");
 	const bool hasSign = ( kar == U'-' || kar == U'+' );

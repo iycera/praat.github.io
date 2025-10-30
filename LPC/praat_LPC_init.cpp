@@ -28,6 +28,7 @@
 #include "MFCC.h"
 #include "LFCC.h"
 #include "LPC_and_Cepstrumc.h"
+#include "i18n_simple.h"
 #include "LPC_and_Formant.h"
 #include "LPC_and_LFCC.h"
 #include "LPC_and_LineSpectralFrequencies.h"
@@ -44,6 +45,7 @@
 #include "Sound_and_Cepstrum.h"
 #include "Sound_to_MFCC.h"
 #include "VocalTractTier.h"
+#include "../sys/i18n_simple.h"
 
 #include "praat_TimeFrameSampled.h"
 #include "praat_TimeTier.h"
@@ -53,15 +55,15 @@
 	REAL (fromQuefrency, U"left Quefrency range (s)", U"0.0") \
 	REAL (toQuefrency, U"right Quefrency range (s)", U"0.0 (= all)")
 
-static const conststring32 DRAW_BUTTON    = U"Draw -";
-static const conststring32 QUERY_BUTTON   = U"Query -";
-static const conststring32 MODIFY_BUTTON   = U"Modify -";
+static const conststring32 DRAW_BUTTON    = I18n_translate("menu.draw");
+static const conststring32 QUERY_BUTTON   = I18n_translate("menu.query");
+static const conststring32 MODIFY_BUTTON   = I18n_translate("menu.modify");
 
 void praat_CC_init (ClassInfo klas);
 void praat_TimeFrameSampled_query_init (ClassInfo klas);
 
 DIRECT (HELP__FormantPath_help) {
-	HELP (U"FormantPath")
+	HELP (I18n_translate("help.formantpath"))
 }
 
 static void cb_FormantPathEditor_publication (Editor /* editor */, autoDaata publication) {
@@ -90,7 +92,7 @@ DIRECT (HINT__FormantPath_Sound_viewAndEdit) {
 	INFO_NONE_END
 }
 
-FORM (GRAPHICS_EACH__FormantPath_drawAsGrid, U"FormantPath: Draw as grid", nullptr) {
+FORM (GRAPHICS_EACH__FormantPath_drawAsGrid, I18n_translate("form.formantpath_draw_as_grid"), nullptr) {
 	REAL (tmin, U"left Time range (s)", U"0.0")
 	REAL (tmax, U"right Time range (s)", U"0.1")
 	POSITIVE (fmax, U"Maximum frequency", U"6200.0")
@@ -239,7 +241,7 @@ DO
 	MODIFY_EACH_END
 }
 
-FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_stress, U"FormantPath: To Matrix (stress)", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_stress, I18n_translate("form.formantpath_to_matrix_stress"), nullptr) {
 	POSITIVE (windowLength, U"Window length", U"0.025")
 	NATURALVECTOR (parameters, U"Coefficients by track", WHITESPACE_SEPARATED_, U"3 3 3 3")
 	POSITIVE (powerf, U"Power", U"1.25")
@@ -250,7 +252,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_qsums, U"FormantPath: To Matrix (qsums)", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_qsums, I18n_translate("form.formantpath_to_matrix_qsums"), nullptr) {
 	INTEGER (numberOfTracks, U"Number of tracks", U"4")
 	OK
 DO
@@ -259,7 +261,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_transition,  U"FormantPath: To Matrix (transition)", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_transition, I18n_translate("form.formantpath_to_matrix_transition"), nullptr) {
 	INTEGER (numberOfTracks, U"Number of tracks", U"4")
 	BOOLEAN (maximumCosts, U"Maximum costs", false)
 	OK
@@ -269,7 +271,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_deltas,  U"FormantPath: To Matrix (deltas)", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_deltas, I18n_translate("form.formantpath_to_matrix_deltas"), nullptr) {
 	COMMENT (U"Within frame:")
 	REAL (qWeight, U"F/B weight (0-1)", U"1.0")
 	COMMENT (U"Between frames:")
@@ -295,7 +297,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (MODIFY_EACH__FormantPath_pathFinder,  U"FormantPath: Path finder", nullptr) {
+FORM (MODIFY_EACH__FormantPath_pathFinder, I18n_translate("form.formantpath_path_finder"), nullptr) {
 	COMMENT (U"Within frame:")
 	REAL (qWeight, U"F/B weight (0-1)", U"1.0")
 	COMMENT (U"Between frames:")
@@ -424,7 +426,7 @@ DO
 	QUERY_ONE_FOR_REAL_END (U" dB")
 }
 
-FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getPeakInQuefrencyInterval, U"PowerCepstrum: Get peak in quefrency interval", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getPeakInQuefrencyInterval, I18n_translate("form.powercepstrum_get_peak_in_quefrency_interval"), nullptr) {
 	REAL (fromQuefrency, U"left Quefrency interval (s)", U"0.0033 (= 300 Hz)")
 	REAL (toQuefrency, U"right Quefrency interval (s)", U"0.01667 (= 60 Hz)")
 	CHOICE_ENUM (kCepstrum_peakInterpolation, peakInterpolationType,
@@ -451,7 +453,7 @@ DO
 	QUERY_ONE_FOR_REAL_END (U" seconds (f = ", f, U" Hz)")
 }
 
-FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getRNR, U"PowerCepstrum: Get rhamonics to noise ration", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getRNR, I18n_translate("form.powercepstrum_get_rnr"), nullptr) {
 	REAL (fromPitch, U"left Pitch range (Hz)", U"60.0")
 	REAL (toPitch, U"right Pitch range (Hz)", U"333.3")
 	POSITIVE (fractionalWidth, U"Fractional width (0-1)", U"0.025")
@@ -486,7 +488,7 @@ DIRECT (QUERY_ONE_FOR_REAL__PowerCepstrum_getQuefrencyStep) {
 	QUERY_ONE_FOR_REAL_END (U" seconds")
 }
 
-FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getQuefrencyFromIndex, U"PowerCepstrum: Get quefrency from index", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getQuefrencyFromIndex, I18n_translate("form.powercepstrum_get_quefrency_from_index"), nullptr) {
 	NATURAL (index, U"Quefrency index", U"1")
 	OK
 DO
@@ -495,7 +497,7 @@ DO
 	QUERY_ONE_FOR_REAL_END (U" seconds")
 }
 
-FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getIndexFromQuefrency, U"PowerCepstrum: Get index from quefrency", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getIndexFromQuefrency, I18n_translate("form.powercepstrum_get_index_from_quefrency"), nullptr) {
 	REAL (quefrency, U"Quefrency (s)", U"0.01")
 	OK
 DO
@@ -555,7 +557,7 @@ DO
 	QUERY_ONE_FOR_REAL_END (U" dB (quefrency = ", quefrency, U" s)")
 }
 
-FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getValueInBin, U"PowerCepstrum: Get value in bin", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PowerCepstrum_getValueInBin, I18n_translate("form.powercepstrum_get_value_in_bin"), nullptr) {
 	NATURAL (binNumber, U"Bin number", U"100")
 	OK
 DO
@@ -633,7 +635,7 @@ DIRECT (CONVERT_EACH_TO_ONE__Cepstrum_to_Spectrum) {
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (CONVERT_EACH_TO_ONE__PowerCepstrum_to_Spectrum, U"PowerCepstrum: To Spectrum", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__PowerCepstrum_to_Spectrum, I18n_translate("form.powercepstrum_to_spectrum"), nullptr) {
 	BOOLEAN (randomPhases, U"Random phases", true)
 	OK
 DO
@@ -654,7 +656,7 @@ DIRECT (HELP__PowerCepstrogram_help) {
 	HELP (U"PowerCepstrogram")
 }
 
-FORM (GRAPHICS_EACH__old_PowerCepstrogram_paint, U"PowerCepstrogram: Paint", nullptr) {
+FORM (GRAPHICS_EACH__old_PowerCepstrogram_paint, I18n_translate("form.powercepstrogram_paint"), nullptr) {
 	praat_TimeFunction_RANGE (fromTime, toTime)
 	praat_Quefrency_RANGE (fromQuefrency, toQuefrency)
 	REAL (minimum_dB, U"Minimum (dB)", U"0.0")
@@ -716,7 +718,7 @@ DIRECT (QUERY_ONE_FOR_REAL__PowerCepstrogram_getQuefrencyStep) {
 	QUERY_ONE_FOR_REAL_END (U" seconds (quefrency step)")
 }
 
-FORM (CONVERT_EACH_TO_ONE__PowerCepstrogram_subtractTrend, U"PowerCepstrogram: Subtract trend", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__PowerCepstrogram_subtractTrend, I18n_translate("form.powercepstrogram_subtract_trend"), nullptr) {
 	REAL (fromQuefrency_trendLine, U"left Trend line quefrency range (s)", U"0.001")
 	REAL (toQuefrency_trendLine, U"right Trend line quefrency range (s)", U"0.05")
 	OPTIONMENU_ENUM (kCepstrum_trendType, lineType, U"Trend type", kCepstrum_trendType::DEFAULT)
@@ -728,7 +730,7 @@ DO
 	CONVERT_EACH_TO_ONE_END (my name.get(), U"_minusTrend")
 }
 
-FORM (MODIFY_EACH__PowerCepstrogram_subtractTrend_inplace, U"PowerCepstrogram: Subtract trend (in-place)", nullptr) {
+FORM (MODIFY_EACH__PowerCepstrogram_subtractTrend_inplace, I18n_translate("form.powercepstrogram_subtract_trend_inplace"), nullptr) {
 	REAL (fromQuefrency_trendLine, U"left Trend line quefrency range (s)", U"0.001")
 	REAL (toQuefrency_trendLine, U"right Trend line quefrency range (s)", U"0.05")
 	OPTIONMENU_ENUM (kCepstrum_trendType, lineType, U"Trend type", kCepstrum_trendType::DEFAULT)
@@ -740,7 +742,7 @@ DO
 	MODIFY_EACH_END
 }
 
-FORM (QUERY_ONE_FOR_REAL__PowerCepstrogram_getCPPS_hillenbrand, U"PowerCepstrogram: Get CPPS", nullptr) {
+FORM (QUERY_ONE_FOR_REAL__PowerCepstrogram_getCPPS_hillenbrand, I18n_translate("form.powercepstrogram_get_cpps"), nullptr) {
 	COMMENT (U"Smoothing:")
 	BOOLEAN (subtractTrendBeforeSmoothing, U"Subtract trend before smoothing", true)
 	REAL (smoothingWindowDuration, U"Time averaging window (s)", U"0.001")
@@ -782,7 +784,7 @@ DO
 	QUERY_ONE_FOR_REAL_END (U" dB");
 }
 
-FORM (MODIFY__EACH_WEAK__PowerCepstrogram_formula, U"PowerCepstrogram: Formula", nullptr) {
+FORM (MODIFY__EACH_WEAK__PowerCepstrogram_formula, I18n_translate("form.powercepstrogram_formula"), nullptr) {
 	COMMENT (U"Do for all times and quefrencies:")
 	COMMENT (U"   `x` is the time in seconds")
 	COMMENT (U"   `y` is the quefrency in seconds")
@@ -795,7 +797,7 @@ DO
 	MODIFY_EACH_WEAK_END
 }
 
-FORM (CONVERT_EACH_TO_ONE__PowerCepstrogram_to_PowerCepstrum_slice, U"PowerCepstrogram: To PowerCepstrum (slice)", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__PowerCepstrogram_to_PowerCepstrum_slice, I18n_translate("form.powercepstrogram_to_powercepstrum_slice"), nullptr) {
 	REAL (time, U"Time (s)", U"0.1")
 	OK
 DO
@@ -941,7 +943,7 @@ DO
 	QUERY_ONE_FOR_REAL_VECTOR_END
 }
 
-FORM (CONVERT_EACH_TO_ONE__Formant_to_LPC, U"Formant: To LPC", nullptr) {
+FORM (CONVERT_EACH_TO_ONE__Formant_to_LPC, I18n_translate("form.formant_to_lpc"), nullptr) {
 	POSITIVE (samplingFrequency, U"Sampling frequency (Hz)", U"16000.0")
 	OK
 DO
@@ -1611,22 +1613,22 @@ void praat_uvafon_LPC_init () {
 
 
 	praat_addAction1 (classCepstrumc, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classCepstrumc, 0, U"To LPC", nullptr, 0,
+	praat_addAction1 (classCepstrumc, 0, I18n_translate("menu.to_lpc_cepstrumc"), U"Analyse", 0,
 			CONVERT_EACH_TO_ONE__Cepstrumc_to_LPC);
-	praat_addAction1 (classCepstrumc, 2, U"To DTW...", nullptr, 0,
+	praat_addAction1 (classCepstrumc, 2, I18n_translate("menu.to_dtw_cepstrumc"), I18n_translate("menu.to_lpc_cepstrumc"), 0,
 			CONVERT_TWO_TO_ONE__Cepstrumc_to_DTW);
-	praat_addAction1 (classCepstrumc, 0, U"Hack", nullptr, 0, nullptr);
-	praat_addAction1 (classCepstrumc, 0, U"To Matrix", nullptr, 0,
+	praat_addAction1 (classCepstrumc, 0, U"Hack", I18n_translate("menu.to_dtw_cepstrumc"), 0, nullptr);
+	praat_addAction1 (classCepstrumc, 0, I18n_translate("menu.to_matrix_cepstrumc"), U"Hack", 0,
 			CONVERT_EACH_TO_ONE__Cepstrumc_to_Matrix);
 
 	praat_addAction1 (classFormant, 0, U"List formant slope...", U"Get standard deviation...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			QUERY_ONE_FOR_REAL_VECTOR__Formant_listFormantSlope);
 	praat_addAction1 (classFormant, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classFormant, 0, U"To LPC...", nullptr, 0,
+	praat_addAction1 (classFormant, 0, I18n_translate("menu.to_lpc_formant"), U"Analyse", 0,
 			CONVERT_EACH_TO_ONE__Formant_to_LPC);
 	praat_addAction1 (classFormant, 0, U"Formula...", U"Formula (bandwidths)...", 1,
 			MODIFY_EACH_WEAK__Formant_formula);
-	praat_addAction2 (classFormant, 1, classSpectrogram, 1, U"To IntensityTier...", nullptr, 0,
+	praat_addAction2 (classFormant, 1, classSpectrogram, 1, I18n_translate("menu.to_intensitytier_formant_spectrogram"), nullptr, 0,
 			CONVERT_ONE_AND_ONE_TO_ONE__Formant_Spectrogram_to_IntensityTier);
 	
 	praat_addAction1 (classFormantPath, 0, U"FormantPath help", nullptr, 0,
@@ -1661,13 +1663,13 @@ void praat_uvafon_LPC_init () {
 			MODIFY_EACH__FormantPath_setOptimalPath);
 	praat_addAction1 (classFormantPath, 0, U"Extract Formant", nullptr, 0,
 			CONVERT_EACH_TO_ONE__FormantPath_extractFormant);
-	praat_addAction1 (classFormantPath, 0, U"To Matrix (stress)...", nullptr, 0,
+	praat_addAction1 (classFormantPath, 0, I18n_translate("menu.to_matrix_stress_formantpath"), U"Extract Formant", 0,
 			CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_stress);
-	praat_addAction1 (classFormantPath, 0, U"To Matrix (qsums)...", nullptr, 0,
+	praat_addAction1 (classFormantPath, 0, I18n_translate("menu.to_matrix_qsums_formantpath"), I18n_translate("menu.to_matrix_stress_formantpath"), 0,
 			CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_qsums);
-	praat_addAction1 (classFormantPath, 0, U"To Matrix (transition)...", nullptr, 0,
+	praat_addAction1 (classFormantPath, 0, I18n_translate("menu.to_matrix_transition_formantpath"), I18n_translate("menu.to_matrix_qsums_formantpath"), 0,
 			CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_transition);
-	praat_addAction1 (classFormantPath, 0, U"To Matrix (deltas)...", nullptr, 0,
+	praat_addAction1 (classFormantPath, 0, I18n_translate("menu.to_matrix_deltas_formantpath"), I18n_translate("menu.to_matrix_transition_formantpath"), 0,
 			CONVERT_EACH_TO_ONE__FormantPath_to_Matrix_deltas);
 	praat_addAction1 (classFormantPath, 0, U"Path finder...", nullptr, 0,
 			MODIFY_EACH__FormantPath_pathFinder);
@@ -1675,7 +1677,7 @@ void praat_uvafon_LPC_init () {
 	praat_addAction1 (classLFCC, 0, U"LFCC help", nullptr, 0,
 			HELP__LFCC_help);
 	praat_CC_init (classLFCC);
-	praat_addAction1 (classLFCC, 0, U"To LPC...", nullptr, 0,
+	praat_addAction1 (classLFCC, 0, I18n_translate("menu.to_lpc_lfcc"), U"LFCC help", 0,
 			CONVERT_EACH_TO_ONE__LFCC_to_LPC);
 
 	praat_addAction1 (classLineSpectralFrequencies, 0, U"LineSpectralFrequencies help", nullptr, 0,
@@ -1691,7 +1693,7 @@ void praat_uvafon_LPC_init () {
 		praat_addAction1 (classLineSpectralFrequencies, 1, U"List all frequencies", nullptr, 1,
 				QUERY_ONE_FOR_MATRIX__LineSpectralFrequencies_listAllFrequencies);
 
-	praat_addAction1 (classLineSpectralFrequencies, 0, U"To LPC", nullptr, 0,
+	praat_addAction1 (classLineSpectralFrequencies, 0, I18n_translate("menu.to_lpc_linespectralfrequencies"), U"Draw frequencies...", 0,
 			CONVERT_EACH_TO_ONE__LineSpectralFrequencies_to_LPC);
 
 	praat_addAction1 (classLPC, 0, U"LPC help", nullptr, 0, 
@@ -1722,30 +1724,30 @@ void praat_uvafon_LPC_init () {
 		praat_TimeFunction_modify_init (classLPC);
 	praat_addAction1 (classLPC, 0, U"Extract", nullptr, 0, nullptr);
 
-	praat_addAction1 (classLPC, 0, U"To Spectrum (slice)...", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, I18n_translate("menu.to_spectrum_slice_lpc"), U"Extract", 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_Spectrum_slice);
-	praat_addAction1 (classLPC, 0, U"To VocalTract (slice)...", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, I18n_translate("menu.to_vocaltract_slice_lpc"), I18n_translate("menu.to_spectrum_slice_lpc"), 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_VocalTract_slice);
-	praat_addAction1 (classLPC, 0, U"To VocalTract (slice, special)...", nullptr, 0,
+	praat_addAction1 (classLPC, 0, I18n_translate("menu.to_vocaltract_slice_special_lpc"), I18n_translate("menu.to_vocaltract_slice_lpc"), 0,
 			CONVERT_EACH_TO_ONE__LPC_to_VocalTract_slice_special);
-	praat_addAction1 (classLPC, 0, U"To Polynomial (slice)...", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"To Polynomial (slice)...", I18n_translate("menu.to_vocaltract_slice_special_lpc"), 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_Polynomial_slice);
-	praat_addAction1 (classLPC, 0, U"Down to Matrix (lpc)", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"Down to Matrix (lpc)", U"To Polynomial (slice)...", 0, 
 			CONVERT_EACH_TO_ONE__LPC_downto_Matrix_lpc);
-	praat_addAction1 (classLPC, 0, U"Down to Matrix (rc)", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classLPC, 0, U"Down to Matrix (rc)", U"Down to Matrix (lpc)", GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__LPC_downto_Matrix_rc);
-	praat_addAction1 (classLPC, 0, U"Down to Matrix (area)", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classLPC, 0, U"Down to Matrix (area)", U"Down to Matrix (rc)", GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__LPC_downto_Matrix_area);
-	praat_addAction1 (classLPC, 0, U"Analyse", nullptr, 0, nullptr);
-	praat_addAction1 (classLPC, 0, U"To Formant", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"Analyse", U"Down to Matrix (area)", 0, nullptr);
+	praat_addAction1 (classLPC, 0, U"To Formant", U"Analyse", 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_Formant);
-	praat_addAction1 (classLPC, 0, U"To Formant (keep all)", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"To Formant (keep all)", U"To Formant", 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_Formant_keep_all);
-	praat_addAction1 (classLPC, 0, U"To LFCC...", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"To LFCC...", U"To Formant (keep all)", 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_LFCC);
-	praat_addAction1 (classLPC, 0, U"To Spectrogram...", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"To Spectrogram...", U"To LFCC...", 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_Spectrogram);
-	praat_addAction1 (classLPC, 0, U"To LineSpectralFrequencies...", nullptr, 0, 
+	praat_addAction1 (classLPC, 0, U"To LineSpectralFrequencies...", U"To Spectrogram...", 0, 
 			CONVERT_EACH_TO_ONE__LPC_to_LineSpectralFrequencies);
 	
 	praat_addAction2 (classLPC, 1, classSound, 1, U"Analyse", nullptr, 0, nullptr);
@@ -1870,30 +1872,31 @@ void praat_uvafon_LPC_init () {
 	praat_addAction1 (classPowerCepstrogram, 0, U"To Matrix", nullptr, 0,
 			CONVERT_EACH_TO_ONE__PowerCepstrogram_to_Matrix);
 
-	praat_addAction1 (classSound, 0, U"To PowerCepstrogram...", U"To Harmonicity (gne)...", 1, 
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_powercepstrogram"), I18n_translate("menu.to_harmonicity_gne"), 1, 
 			CONVERT_EACH_TO_ONE__Sound_to_PowerCepstrogram);
-	praat_addAction1 (classSound, 0, U"To PowerCepstrogram (hillenbrand)...", U"To Harmonicity (gne)...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"To PowerCepstrogram (hillenbrand)...", I18n_translate("menu.to_harmonicity_gne"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_PowerCepstrogram_hillenbrand);
-	praat_addAction1 (classSound, 0, U"To Formant (robust)...", U"To Formant (sl)...", 2,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_formant_robust"), I18n_translate("menu.to_formant_sl"), 2,
 			CONVERT_EACH_TO_ONE__Sound_to_Formant_robust);
-	praat_addAction1 (classSound, 0, U"To FormantPath...", U"To Formant (robust)...", 2, 
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_formantpath"), I18n_translate("menu.to_formant_robust"), 2, 
 			CONVERT_EACH_TO_ONE__Sound_to_FormantPath);
-	praat_addAction1 (classSound, 0, U"To FormantPath (burg)...", U"To FormantPath...", 1, 
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_formantpath_burg"), I18n_translate("menu.to_formantpath"), 1, 
 			CONVERT_EACH_TO_ONE__Sound_to_FormantPath_burg);
-	praat_addAction1 (classSound, 0, U"To FormantPath (robust)...", U"To FormantPath (burg)...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, 
+	praat_addAction1 (classSound, 0, U"To FormantPath (robust)...", I18n_translate("menu.to_formantpath_burg"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN, 
 			CONVERT_EACH_TO_ONE__Sound_to_FormantPath_robust);
-	praat_addAction1 (classSound, 0, U"To LPC", U"To FormantPath...", 1, nullptr);
-	praat_addAction1 (classSound, 0, U"To LPC (autocorrelation)...", U"To LPC", 2,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_lpc"), I18n_translate("menu.to_formantpath"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_LPC_autocorrelation);
-	praat_addAction1 (classSound, 0, U"To LPC (covariance)...", U"To LPC (autocorrelation)...", 2, 
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_lpc_autocorrelation"), I18n_translate("menu.to_lpc"), 2,
+			CONVERT_EACH_TO_ONE__Sound_to_LPC_autocorrelation);
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_lpc_covariance"), I18n_translate("menu.to_lpc_autocorrelation"), 2, 
 			CONVERT_EACH_TO_ONE__Sound_to_LPC_covariance);
-	praat_addAction1 (classSound, 0, U"To LPC (burg)...", U"To LPC (covariance)...", 2,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_lpc_burg"), I18n_translate("menu.to_lpc_covariance"), 2,
 			CONVERT_EACH_TO_ONE__Sound_to_LPC_burg);
-	praat_addAction1 (classSound, 0, U"To LPC (marple)...", U"To LPC (burg)...", 2,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_lpc_marple"), I18n_translate("menu.to_lpc_burg"), 2,
 			CONVERT_EACH_TO_ONE__Sound_to_LPC_marple);
-	praat_addAction1 (classSound, 0, U"To LPC (robust)...", U"To LPC (marple)...", 2,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_lpc_robust"), I18n_translate("menu.to_lpc_marple"), 2,
 			CONVERT_EACH_TO_ONE__Sound_to_LPC_robust);
-	praat_addAction1 (classSound, 0, U"To MFCC...", U"To LPC (robust)...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_mfcc"), I18n_translate("menu.to_lpc_robust"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_MFCC);
 	praat_addAction2 (classSound, 1, classFormantPath, 1, U"View & Edit", nullptr,0,
 			EDITOR_ONE_WITH_ONE_Sound_FormantPath_createFormantPathEditor);
@@ -1908,7 +1911,7 @@ void praat_uvafon_LPC_init () {
 			QUERY_ONE_FOR_REAL__VocalTract_getLength);
 	praat_addAction1 (classVocalTract, 1, U"Set length", U"Formula...", 0,
 			MODIFY_EACH__VocalTract_setLength);
-	praat_addAction1 (classVocalTract, 0, U"To VocalTractTier...", U"To Spectrum...", 0, 
+	praat_addAction1 (classVocalTract, 0, U"To VocalTractTier...", I18n_translate("menu.to_spectrum_vocaltract"), 0, 
 			CONVERT_EACH_TO_ONE__VocalTract_to_VocalTractTier);
 	praat_addAction1 (classVocalTractTier, 0, U"VocalTractTier help", nullptr, 0, 
 			HELP__VocalTractTier_help);

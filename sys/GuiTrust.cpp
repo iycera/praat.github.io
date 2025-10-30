@@ -19,6 +19,7 @@
 #include "GuiTrust.h"
 #include "praatP.h"
 #include "Gui.h"
+#include "i18n_simple.h"
 
 GuiDialog GuiTrust_createDialog (GuiWindow optionalParent,
 	conststring32 message1, conststring32 message2, conststring32 message3, conststring32 message4, conststring32 message5,
@@ -52,7 +53,7 @@ GuiDialog GuiTrust_createDialog (GuiWindow optionalParent,
 	*/
 	int x = Gui_LEFT_DIALOG_SPACING, buttonWidth = DIALOG_WIDTH - x - Gui_RIGHT_DIALOG_SPACING;
 	GuiDialog me = GuiDialog_create (optionalParent, 150, 70, DIALOG_WIDTH, dialogHeight,
-			U"Praat Trust window: checking for security and safety", nullptr, nullptr, GuiDialog_Modality::BLOCKING);
+			I18n_translate("dialog.trust_window_title"), nullptr, nullptr, GuiDialog_Modality::BLOCKING);
 	/*
 		Add the labels.
 	*/
@@ -100,7 +101,7 @@ integer GuiTrust_get (GuiWindow optionalParent, Editor optionalTrustWindowOwning
 	const bool sheClickedOnCancel = ( clickedButtonId == 1 );
 	if (sheClickedOnClose || sheClickedOnCancel) {
 		Interpreter_stop (interpreter);
-		Melder_throw (U"You interrupted the script.");
+		Melder_throw (I18n_translate("error.script_interrupted"));
 	}
 	return clickedButtonId;
 }

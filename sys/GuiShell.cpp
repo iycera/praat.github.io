@@ -18,6 +18,7 @@
 
 #include "GuiP.h"
 #include "../kar/UnicodeData.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiShell, GuiForm, 0);
 
@@ -78,7 +79,7 @@ Thing_implement (GuiShell, GuiForm, 0);
 					structGuiMenuItemEvent event { nullptr, false, false, false };
 					theGuiEscapeMenuItemCallback (theGuiEscapeMenuItemBoss, & event);
 				} catch (MelderError) {
-					Melder_flushError (U"Cancelling not completely handled.");
+					Melder_flushError (I18n_translate (U"error.cancelling_not_completely_handled"));
 				}
 			}
 		}

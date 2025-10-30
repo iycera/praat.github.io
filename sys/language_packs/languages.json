@@ -1,0 +1,65 @@
+{
+  "languages": [
+    {
+      "code": "en-US",
+      "name": "English",
+      "file": "en-US.json"
+    },
+    {
+      "code": "zh-CN",
+      "name": "简体中文",
+      "file": "zh-CN.json"
+    },
+    {
+      "code": "zh-TW",
+      "name": "繁體中文",
+      "file": "zh-TW.json"
+    },
+    {
+      "code": "ja-JP",
+      "name": "日本語",
+      "file": "ja-JP.json"
+    },
+    {
+      "code": "ko-KR",
+      "name": "한국어",
+      "file": "ko-KR.json"
+    },
+    {
+      "code": "fr-FR",
+      "name": "Français",
+      "file": "fr-FR.json"
+    },
+    {
+      "code": "de-DE",
+      "name": "Deutsch",
+      "file": "de-DE.json"
+    },
+    {
+      "code": "es-ES",
+      "name": "Español",
+      "file": "es-ES.json"
+    },
+    {
+      "code": "ru-RU",
+      "name": "Русский",
+      "file": "ru-RU.json"
+    },
+    {
+      "code": "pt-PT",
+      "name": "Português",
+      "file": "pt-PT.json"
+    },
+    {
+      "code": "lk-CN",
+      "name": "Qǔei",
+      "file": "lk-CN.json"
+    },
+    {
+      "code": "it-IT",
+      "name": "Italiano",
+      "file": "it-IT.json"
+    }
+  ],
+  "default": "en-US"
+}

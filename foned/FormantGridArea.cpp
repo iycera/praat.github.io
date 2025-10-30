@@ -18,6 +18,7 @@
 
 #include "FormantGridArea.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 Thing_implement (FormantGridArea, RealTierArea, 0);
 
@@ -195,36 +196,36 @@ static void menu_cb_pitchSettings (FormantGridArea me, EDITOR_ARGS) {
 
 void structFormantGridArea :: v_createMenus () {
 	//FormantGridArea_Parent :: v_createMenus ();
-	EditorMenu menu = Editor_addMenu (our functionEditor(), U"Formant", 0);
-	our d_bandwidthsToggle = FunctionAreaMenu_addCommand (menu, U"Show bandwidths", GuiMenu_CHECKBUTTON,
+	EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.formant"), 0);
+	our d_bandwidthsToggle = FunctionAreaMenu_addCommand (menu, I18n_translate("menu.show_bandwidths"), GuiMenu_CHECKBUTTON,
 			menu_cb_showBandwidths, this);
-	FunctionAreaMenu_addCommand (menu, U"Set formant range...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.set_formant_range"), 0,
 			menu_cb_setFormantRange, this);
-	FunctionAreaMenu_addCommand (menu, U"Set bandwidth range...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.set_bandwidth_range"), 0,
 			menu_cb_setBandwidthRange, this);
-	FunctionAreaMenu_addCommand (menu, U"-- select formant --", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Select first",   '1', menu_cb_selectFirst,   this);
-	FunctionAreaMenu_addCommand (menu, U"Select second",  '2', menu_cb_selectSecond,  this);
-	FunctionAreaMenu_addCommand (menu, U"Select third",   '3', menu_cb_selectThird,   this);
-	FunctionAreaMenu_addCommand (menu, U"Select fourth",  '4', menu_cb_selectFourth,  this);
-	FunctionAreaMenu_addCommand (menu, U"Select fifth",   '5', menu_cb_selectFifth,   this);
-	FunctionAreaMenu_addCommand (menu, U"Select sixth",   '6', menu_cb_selectSixth,   this);
-	FunctionAreaMenu_addCommand (menu, U"Select seventh", '7', menu_cb_selectSeventh, this);
-	FunctionAreaMenu_addCommand (menu, U"Select eighth",  '8', menu_cb_selectEighth,  this);
-	FunctionAreaMenu_addCommand (menu, U"Select ninth",   '9', menu_cb_selectNinth,   this);
-	FunctionAreaMenu_addCommand (menu, U"Select formant or bandwidth...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_formant"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_first"),   '1', menu_cb_selectFirst,   this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_second"),  '2', menu_cb_selectSecond,  this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_third"),   '3', menu_cb_selectThird,   this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_fourth"),  '4', menu_cb_selectFourth,  this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_fifth"),   '5', menu_cb_selectFifth,   this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_sixth"),   '6', menu_cb_selectSixth,   this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_seventh"), '7', menu_cb_selectSeventh, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_eighth"),  '8', menu_cb_selectEighth,  this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_ninth"),   '9', menu_cb_selectNinth,   this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.select_formant_or_bandwidth"), 0,
 			menu_cb_selectFormantOrBandwidth, this);
-	menu = Editor_addMenu (our functionEditor(), U"Point", 0);
-	FunctionAreaMenu_addCommand (menu, U"Add point at cursor", 'T',
+	menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.point"), 0);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.add_point_at_cursor"), 'T',
 			menu_cb_addPointAtCursor, this);
-	FunctionAreaMenu_addCommand (menu, U"Add point at...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.add_point_at"), 0,
 			menu_cb_addPointAt, this);
-	FunctionAreaMenu_addCommand (menu, U"-- remove point --", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Remove point(s)", GuiMenu_OPTION | 'T',
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.remove_point"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.remove_points"), GuiMenu_OPTION | 'T',
 			menu_cb_removePoints, this);
 	if (our v_hasSourceMenu ()) {
-		menu = Editor_addMenu (our functionEditor(), U"Source", 0);
-		FunctionAreaMenu_addCommand (menu, U"Pitch settings...", 0,
+		menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.source"), 0);
+		FunctionAreaMenu_addCommand (menu, I18n_translate("menu.pitch_settings"), 0,
 				menu_cb_pitchSettings, this);
 		//FunctionAreaMenu_addCommand (menu, U"Phonation settings...", 0,
 		//		menu_cb_phonationSettings, this);

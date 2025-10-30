@@ -23,6 +23,7 @@
 #include "Pitch_to_PitchTier.h"
 #include "Pitch_to_PointProcess.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 
 
 #pragma mark - ManipPulsesArea
@@ -61,13 +62,13 @@ static void menu_cb_addPulseAt (ManipulationPulsesArea me, EDITOR_ARGS) {
 #pragma mark - ManipPulsesArea all menus
 
 void structManipulationPulsesArea :: v_createMenus () {
-	EditorMenu menu = Editor_addMenu (our functionEditor(), U"Pulse", 0);
-	FunctionAreaMenu_addCommand (menu, U"Add pulse at cursor", 'P',
+	EditorMenu menu = Editor_addMenu (our functionEditor(), I18n_translate("menu.pulse"), 0);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.add_pulse_at_cursor"), 'P',
 			menu_cb_addPulseAtCursor, this);
-	FunctionAreaMenu_addCommand (menu, U"Add pulse at...", 0,
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.add_pulse_at"), 0,
 			menu_cb_addPulseAt, this);
-	FunctionAreaMenu_addCommand (menu, U"-- remove pulses --", 0, nullptr, this);
-	FunctionAreaMenu_addCommand (menu, U"Remove pulse(s)", GuiMenu_OPTION | 'P',
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.remove_pulses"), 0, nullptr, this);
+	FunctionAreaMenu_addCommand (menu, I18n_translate("menu.remove_pulse_s"), GuiMenu_OPTION | 'P',
 			menu_cb_removePulses, this);
 }
 
@@ -486,37 +487,37 @@ menu_cb_Synth_common (menu_cb_Synth_Pitch_Lpc, Manipulation_PITCH_LPC)
 void structManipulationEditor :: v_createMenus () {
 	ManipulationEditor_Parent :: v_createMenus ();
 
-	Editor_addCommand (this, U"File", U"Extract original sound", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_original_sound"), 0,
 			CONVERT_DATA_TO_ONE__ExtractOriginalSound);
-	Editor_addCommand (this, U"File", U"Extract pulses", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_pulses"), 0,
 			CONVERT_DATA_TO_ONE__ExtractPulses);
-	Editor_addCommand (this, U"File", U"Extract pitch tier", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_pitch_tier"), 0,
 			CONVERT_DATA_TO_ONE__ExtractPitchTier);
-	Editor_addCommand (this, U"File", U"Extract duration tier", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.extract_duration_tier"), 0,
 			CONVERT_DATA_TO_ONE__ExtractDurationTier);
-	Editor_addCommand (this, U"File", U"Publish resynthesis", 0,
+	Editor_addCommand (this, U"File", I18n_translate("menu.publish_resynthesis"), 0,
 			CONVERT_DATA_TO_ONE__ExtractManipulatedSound);
-	Editor_addCommand (this, U"File", U"-- close --", 0, nullptr);
+	Editor_addCommand (this, U"File", I18n_translate("menu.close_separator"), 0, nullptr);
 
-	Editor_addMenu (this, U"Synth", 0);
-	our synthPulsesButton = Editor_addCommand (this, U"Synth", U"Pulses --", GuiMenu_RADIO_FIRST, menu_cb_Synth_Pulses);
-	our synthPulsesHumButton = Editor_addCommand (this, U"Synth", U"Pulses (hum) --", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_hum);
+	Editor_addMenu (this, I18n_translate("menu.synth"), 0);
+	our synthPulsesButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.synth_pulses"), GuiMenu_RADIO_FIRST, menu_cb_Synth_Pulses);
+	our synthPulsesHumButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.pulses_hum"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_hum);
 
-	our synthPulsesLpcButton = Editor_addCommand (this, U"Synth", U"Pulses & LPC -- (\"LPC resynthesis\")", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_Lpc);
-	Editor_addCommand (this, U"Synth", U"-- pitch resynth --", 0, nullptr);
-	our synthPitchButton = Editor_addCommand (this, U"Synth", U" -- Pitch", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pitch);
-	our synthPitchHumButton = Editor_addCommand (this, U"Synth", U" -- Pitch (hum)", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pitch_hum);
-	our synthPulsesPitchButton = Editor_addCommand (this, U"Synth", U"Pulses -- Pitch", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_Pitch);
-	our synthPulsesPitchHumButton = Editor_addCommand (this, U"Synth", U"Pulses -- Pitch (hum)", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_Pitch_hum);
-	Editor_addCommand (this, U"Synth", U"-- full resynth --", 0, nullptr);
-	our synthOverlapAddButton = Editor_addCommand (this, U"Synth", U"Sound & Pulses -- Pitch & Duration  (\"Overlap-add manipulation\")", GuiMenu_RADIO_NEXT | GuiMenu_TOGGLE_ON, menu_cb_Synth_OverlapAdd);
-	our synthPitchLpcButton = Editor_addCommand (this, U"Synth", U"LPC -- Pitch  (\"LPC pitch manipulation\")", GuiMenu_RADIO_NEXT, menu_cb_Synth_Pitch_Lpc);
+	our synthPulsesLpcButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.pulses_lpc"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_Lpc);
+	Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.pitch_resynth"), 0, nullptr);
+	our synthPitchButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.synth_pitch"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pitch);
+	our synthPitchHumButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.synth_pitch_hum"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pitch_hum);
+	our synthPulsesPitchButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.pulses_pitch"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_Pitch);
+	our synthPulsesPitchHumButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.pulses_pitch_hum"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pulses_Pitch_hum);
+	Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.full_resynth"), 0, nullptr);
+	our synthOverlapAddButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.sound_pulses_pitch_duration"), GuiMenu_RADIO_NEXT | GuiMenu_TOGGLE_ON, menu_cb_Synth_OverlapAdd);
+	our synthPitchLpcButton = Editor_addCommand (this, I18n_translate("menu.synth"), I18n_translate("menu.lpc_pitch"), GuiMenu_RADIO_NEXT, menu_cb_Synth_Pitch_Lpc);
 }
 
 void structManipulationEditor :: v_createMenuItems_help (EditorMenu menu) {
 	ManipulationEditor_Parent :: v_createMenuItems_help (menu);
-	EditorMenu_addCommand (menu, U"ManipulationEditor help", '?', menu_cb_ManipulationEditorHelp);
-	EditorMenu_addCommand (menu, U"Manipulation help", 0, menu_cb_ManipulationHelp);
+	EditorMenu_addCommand (menu, I18n_translate("menu.manipulation_editor_help"), '?', menu_cb_ManipulationEditorHelp);
+	EditorMenu_addCommand (menu, I18n_translate("menu.manipulation_help"), 0, menu_cb_ManipulationHelp);
 }
 
 /********** DRAWING AREA **********/

@@ -18,6 +18,7 @@
 
 #include "GuiP.h"
 #include <locale.h>
+#include "i18n_simple.h"
 #if motif
 	#include <shlobj.h>
 #endif
@@ -174,10 +175,10 @@ autostring32 GuiFileSelect_getOutfileName (GuiWindow optionalParent, conststring
 		if ([savePanel runModal] == NSFileHandlingPanelOKButton) {
 			NSString *path = [[savePanel URL] path];
 			if (path == nil)
-				Melder_throw (U"Don't understand where you want to save (1).");
+				Melder_throw (I18n_translate("error.dont_understand_save_location_1"));
 			const char *outfileName_utf8 = [path UTF8String];
 			if (! outfileName_utf8)
-				Melder_throw (U"Don't understand where you want to save (2).");
+				Melder_throw (I18n_translate("error.dont_understand_save_location_2"));
 			structMelderFile file { };
 			Melder_8bitFileRepresentationToStr32_inplace (outfileName_utf8, file. path);   // BUG: unsafe buffer
 			outfileName = Melder_dup (MelderFile_peekPath (& file));
@@ -193,7 +194,7 @@ autostring32 GuiFileSelect_getFolderName (GuiWindow optionalParent, conststring3
 	#if gtk
 		static structMelderFile file;
 		GuiObject dialog = gtk_file_chooser_dialog_new (Melder_peek32to8 (title), nullptr, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, "Choose", GTK_RESPONSE_ACCEPT, nullptr);
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, I18n_translate("button.choose"), GTK_RESPONSE_ACCEPT, nullptr);
 		if (optionalParent)
 			gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (optionalParent -> d_gtkWindow));
 		if (! MelderFile_isNull (& file))
@@ -232,7 +233,7 @@ autostring32 GuiFileSelect_getFolderName (GuiWindow optionalParent, conststring3
 		[openPanel setAllowsMultipleSelection: NO];
 		[openPanel setCanChooseDirectories: YES];
 		[openPanel setCanChooseFiles: NO];
-		[openPanel setPrompt: @"Choose"];
+		[openPanel setPrompt: I18n_translate("button.choose")];
 		if ([openPanel runModal] == NSFileHandlingPanelOKButton) {
 			for (NSURL *url in [openPanel URLs]) {
 				const char *folderName_utf8 = [[url path] UTF8String];

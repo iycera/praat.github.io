@@ -17,6 +17,7 @@
  */
 
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 
 #include "../fon/Photo.h"
 
@@ -49,7 +50,7 @@ static void _GraphicsScreen_cellArrayOrImage (GraphicsScreen me,
 	double dy = (double) (y2DC - y1DC) / (double) ny;   /* Vertical pixels per cell. Negative. */
 	double scale = 255.0 / (maximum - minimum), offset = 255.0 + minimum * scale;
 	if (x2DC <= x1DC || y1DC <= y2DC) return;
-	trace (U"scale ", scale);
+	trace (I18n_translate ("debug.scale"), scale);
 	/* Clip by the intersection of the world window and the outline of the cells. */
 	//Melder_casual (U"clipy1 ", clipy1, U" clipy2 ", clipy2);
 	if (clipx1 < x1DC) clipx1 = x1DC;
@@ -155,17 +156,17 @@ static void _GraphicsScreen_cellArrayOrImage (GraphicsScreen me,
 		#if cairo
 			integer arrayWidth = clipx2 - clipx1;
 			integer arrayHeight = clipy1 - clipy2;
-			trace (U"arrayWidth ", arrayWidth, U", arrayHeight ", arrayHeight);
+			trace (I18n_translate ("debug.array_width_array_height"), arrayWidth, U", arrayHeight ", arrayHeight);
 			cairo_surface_t *sfc = cairo_image_surface_create (CAIRO_FORMAT_RGB24, arrayWidth, arrayHeight);
 			unsigned char *bits = cairo_image_surface_get_data (sfc);
 			int scanLineLength = cairo_image_surface_get_stride (sfc);
 			unsigned char grey [256];
-			trace (
-				U"image surface address ", Melder_pointer (sfc),
-				U", bits address ", Melder_pointer (bits),
-				U", scanLineLength ", scanLineLength,
-				U", numberOfGreys ", sizeof (grey) / sizeof (*grey)
-			);
+		trace (
+			I18n_translate ("debug.image_surface_address"), Melder_pointer (sfc),
+			U", ", I18n_translate ("debug.bits_address"), Melder_pointer (bits),
+			U", ", I18n_translate ("debug.scan_line_length"), scanLineLength,
+			U", ", I18n_translate ("debug.number_of_greys"), sizeof (grey) / sizeof (*grey)
+		);
 			for (int igrey = 0; igrey < sizeof (grey) / sizeof (*grey); igrey++)
 				grey [igrey] = 255 - (unsigned char) (igrey * 255.0 / (sizeof (grey) / sizeof (*grey) - 1));
 		#elif gdi
@@ -395,7 +396,7 @@ static void _GraphicsScreen_cellArrayOrImage (GraphicsScreen me,
 			cairo_matrix_scale (& clip_trans, 1, -1);		// we painted in the reverse y-direction
 			cairo_matrix_translate (& clip_trans, - clipx1, - clipy1);
 			cairo_pattern_t *bitmap_pattern = cairo_pattern_create_for_surface (sfc);
-			trace (U"bitmap pattern ", Melder_pointer (bitmap_pattern));
+			trace (I18n_translate ("debug.bitmap_pattern"), Melder_pointer (bitmap_pattern));
 			if (cairo_status_t status = cairo_pattern_status (bitmap_pattern)) {
 				Melder_casual (U"bitmap pattern status: ", Melder_peek8to32 (cairo_status_to_string (status)));
 			} else {

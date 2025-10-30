@@ -18,6 +18,7 @@
 
 #include <stdarg.h>
 #include "GraphicsP.h"
+#include "i18n_simple.h"
 
 #include "enums_getText.h"
 #include "Graphics_enums.h"
@@ -34,7 +35,7 @@ Thing_implement (Graphics, Thing, 0);
 kGraphics_cjkFontStyle theGraphicsCjkFontStyle;
 
 void Graphics_prefs () {
-	Preferences_addEnum (U"Graphics.cjkFontStyle", & theGraphicsCjkFontStyle, kGraphics_cjkFontStyle, (int) kGraphics_cjkFontStyle::DEFAULT);
+	Preferences_addEnum (I18n_translate("preferences.graphics_cjk_font_style"), & theGraphicsCjkFontStyle, kGraphics_cjkFontStyle, (int) kGraphics_cjkFontStyle::DEFAULT);
 }
 
 void structGraphics :: v9_destroy () noexcept {
@@ -102,7 +103,7 @@ void Graphics_init (Graphics me, int resolution) {
 	} else if (resolution == 1200) {
 		my resolutionNumber = kGraphics_resolution::DPI_1200;
 	} else {
-		Melder_fatal (U"Unsupported resolution ", resolution, U" dpi.");
+		Melder_fatal (I18n_translate("error.unsupported_resolution"), U" ", resolution, U" ", I18n_translate("form.dpi"));
 	}
 	my d_x1DC = my d_x1DCmin = 0;
 	my d_x2DC = my d_x2DCmax = 32767;
@@ -144,9 +145,9 @@ void Graphics_setWsViewport (Graphics me,
 	integer x1DC, integer x2DC, integer y1DC, integer y2DC)
 {
 	if (x1DC < my d_x1DCmin || x2DC > my d_x2DCmax || y1DC < my d_y1DCmin || y2DC > my d_y2DCmax) {
-		Melder_warning (U"Graphics_setWsViewport: coordinates too large:\n",
+		Melder_warning (I18n_translate("warning.graphics_set_ws_viewport_coordinates_too_large"), U"\n",
 			x1DC, U"..", x2DC, U" x ", y1DC, U"..", y2DC,
-			U" goes outside ",
+			I18n_translate("warning.goes_outside"),
 			my d_x1DCmin, U"..", my d_x2DCmax, U" x ", my d_y1DCmin, U"..", my d_y2DCmax,
 			U"."
 		);

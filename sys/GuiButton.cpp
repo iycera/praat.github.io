@@ -18,6 +18,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiButton, GuiControl, 0);
 
@@ -32,7 +33,7 @@ Thing_implement (GuiButton, GuiControl, 0);
 #if gtk
 	static void _GuiGtkButton_destroyCallback (GuiObject /* widget */, gpointer userData) {
 		GuiButton me = (GuiButton) userData;
-		trace (U"destroying GuiButton ", Melder_pointer (me));
+		trace (I18n_translate("debug.destroying_guibutton"), U" ", Melder_pointer (me));
 		forget (me);
 	}
 	static void _GuiGtkButton_activateCallback (GuiObject widget, gpointer userData) {
@@ -42,7 +43,7 @@ Thing_implement (GuiButton, GuiControl, 0);
 			try {
 				my d_activateCallback (my d_activateBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your click on button \"", Melder_peek8to32 (gtk_widget_get_name (GTK_WIDGET (widget))), U"\" was not completely handled.");
+				Melder_flushError (I18n_translate("error.your_click_on_button_not_completely_handled"), U" \"", Melder_peek8to32 (gtk_widget_get_name (GTK_WIDGET (widget))), U"\"");
 			}
 		}
 	}
@@ -63,7 +64,7 @@ Thing_implement (GuiButton, GuiControl, 0);
 			try {
 				my d_activateCallback (my d_activateBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your click on button \"", widget -> name.get(), U"\" was not completely handled.");
+				Melder_flushError (I18n_translate("error.your_click_on_button_not_completely_handled"), U" \"", widget -> name.get(), U"\"");
 			}
 		}
 	}
@@ -74,7 +75,7 @@ Thing_implement (GuiButton, GuiControl, 0);
 			try {
 				my d_activateCallback (my d_activateBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your key click on button \"", widget -> name.get(), U"\" was not completely handled.");
+				Melder_flushError (I18n_translate("error.your_key_click_on_button_not_completely_handled"), U" \"", widget -> name.get(), U"\"");
 			}
 			return true;
 		}
@@ -87,7 +88,7 @@ Thing_implement (GuiButton, GuiControl, 0);
 	- (void) dealloc {   // override
 		GuiButton me = d_userData;
 		forget (me);
-		trace (U"deleting a button");
+		trace (I18n_translate("debug.deleting_a_button"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -105,7 +106,7 @@ Thing_implement (GuiButton, GuiControl, 0);
 			try {
 				my d_activateCallback (my d_activateBoss, & event);
 			} catch (MelderError) {
-				Melder_flushError (U"Your click on button \"", my name.get(), U"\" was not completely handled.");
+				Melder_flushError (I18n_translate("error.your_click_on_button_not_completely_handled"), U" \"", my name.get(), U"\"");
 			}
 		}
 	}

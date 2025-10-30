@@ -23,6 +23,7 @@
 #include "MultiSampledSpectrogram.h"
 #include "Sound_and_MultiSampledSpectrogram.h"
 #include "Spectrum_and_MultiSampledSpectrogram.h"
+#include "../sys/i18n_simple.h"
 
 DIRECT (CONVERT_EACH_TO_ONE__AnalyticSound_toIntensity) {
 	CONVERT_EACH_TO_ONE (AnalyticSound)
@@ -36,8 +37,8 @@ DIRECT (CONVERT_EACH_TO_ONE__AnalyticSound_toSound) {
 	CONVERT_EACH_TO_ONE_END (my name.get())
 }
 
-FORM (MODIFY_EACH_WEAK__MultiSampledSpectrogram_formula, U"MultiSampledSpectrogram: Formula", U"MultiSampledSpectrogram: Formula...") {
-	FORMULA (formula, U"Formula", U"2 * self")
+FORM (MODIFY_EACH_WEAK__MultiSampledSpectrogram_formula, I18n_translate("form.multisampledspectrogram_formula"), I18n_translate("form.multisampledspectrogram_formula_dialog")) {
+	FORMULA (formula, I18n_translate("form.formula"), U"2 * self")
 	OK
 DO
 	MODIFY_EACH_WEAK (MultiSampledSpectrogram)
@@ -45,12 +46,12 @@ DO
 	MODIFY_EACH_WEAK_END
 }
 
-FORM (MODIFY_EACH_WEAK__MultiSampledSpectrogram_formula_part, U"MultiSampledSpectrogram: Formula (part)", U"MultiSampledSpectrogram: Formula...") {
-	REAL (fromTime, U"From time", U"0.0")
-	REAL (toTime, U"To time", U"0.0 (= all)")
-	REAL (fromFrequency, U"From frequency (Hz)", U"100.0")
-	REAL (toFrequency, U"To Frequency (Hz)", U"200.0")
-	FORMULA (formula, U"Formula", U"2 * self")
+FORM (MODIFY_EACH_WEAK__MultiSampledSpectrogram_formula_part, I18n_translate("form.multisampledspectrogram_formula_part"), I18n_translate("form.multisampledspectrogram_formula_dialog")) {
+	REAL (fromTime, I18n_translate("form.from_time"), U"0.0")
+	REAL (toTime, I18n_translate("form.to_time"), U"0.0 (= all)")
+	REAL (fromFrequency, I18n_translate("form.from_frequency_hz"), U"100.0")
+	REAL (toFrequency, I18n_translate("form.to_frequency_hz"), U"200.0")
+	FORMULA (formula, I18n_translate("form.formula"), U"2 * self")
 	OK
 DO
 	MODIFY_EACH_WEAK (MultiSampledSpectrogram)
@@ -58,12 +59,12 @@ DO
 	MODIFY_EACH_WEAK_END
 }
 
-FORM (GRAPHICS_EACH__ConstantQLog2FSpectrogram_paint, U"ConstantQLog2FSpectrogram: Paint", nullptr) {
-	REAL (xmin, U"left Time range (s)", U"0.0")
-	REAL (xmax, U"right Time range (s)", U"0.0 (= all)")
-	REAL (ymin, U"left Frequency range (Hz)", U"0.0")
-	REAL (ymax, U"right Frequency range (Hz)", U"0.0 (= auto)")
-	POSITIVE (dBRange, U"Dynamic range (dB)", U"50.0")
+FORM (GRAPHICS_EACH__ConstantQLog2FSpectrogram_paint, I18n_translate("form.constantqlog2fspectrogram_paint"), nullptr) {
+	REAL (xmin, I18n_translate("form.left_time_range_s"), U"0.0")
+	REAL (xmax, I18n_translate("form.right_time_range_s"), U"0.0 (= all)")
+	REAL (ymin, I18n_translate("form.left_frequency_range_hz"), U"0.0")
+	REAL (ymax, I18n_translate("form.right_frequency_range_hz"), U"0.0 (= auto)")
+	POSITIVE (dBRange, I18n_translate("form.dynamic_range_db"), U"50.0")
 	BOOLEAN (garnish, U"Garnish", true);
 	OK
 DO
@@ -187,16 +188,16 @@ void praat_MultiSampledSpectrogram_init () {
 	praat_addAction1 (classConstantQLog2FSpectrogram, 0, U"Translate spectrum...", nullptr, 0,
 			CONVERT_EACH_TO_ONE__ConstantQLog2FSpectrogram_translateSpectrum);
 	
-	praat_addAction1 (classSound, 0, U"To ConstantQLog2FSpectrogram...", U"To ComplexSpectrogram...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"To ConstantQLog2FSpectrogram...", I18n_translate("menu.to_complexspectrogram"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_ConstantQLog2FSpectrogram);
-	praat_addAction1 (classSound, 0, U"To AnalyticSound", U"Resample...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"To AnalyticSound", I18n_translate("menu.resample"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_AnalyticSound);
 	
 	
 	praat_addAction1 (classGaborSpectrogram, 0, U"Paint...", nullptr, 0, 
 			GRAPHICS_EACH__GaborSpectrogram_paint);
 	praat_MultiSampledSpectrograms_generics (classGaborSpectrogram);
-	praat_addAction1 (classSound, 0, U"To GaborSpectrogram...", U"To ComplexSpectrogram...", GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
+	praat_addAction1 (classSound, 0, U"To GaborSpectrogram...", I18n_translate("menu.to_complexspectrogram"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__Sound_to_GaborSpectrogram);
 }
 

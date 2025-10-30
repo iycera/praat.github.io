@@ -18,6 +18,7 @@
 
 #include "../sys/praat.h"
 #include "main_Praat.h"
+#include "../sys/i18n_simple.h"
 
 static void logo (Graphics graphics) {
 	Graphics_setWindow (graphics, 0.0, 1.0, 0.0, 1.0);
@@ -33,9 +34,9 @@ static void logo (Graphics graphics) {
 	Graphics_text (graphics, 0.575, 0.89, U"\\s{A}");
 	Graphics_text (graphics, 0.628, 0.89, U"\\s{T}");
 	Graphics_setFontSize (graphics, 18.0);
-	Graphics_text (graphics, 0.5, 0.77, U"%%doing phonetics by computer");
+	Graphics_text (graphics, 0.5, 0.77, I18n_translate("app.tagline"));
 	Graphics_setFontSize (graphics, 14.0);
-	Graphics_text (graphics, 0.5, 0.62, Melder_cat (U"version ", Melder_appVersionSTR(),
+	Graphics_text (graphics, 0.5, 0.62, Melder_cat (I18n_translate("form.version"), U" ", Melder_appVersionSTR(),
 			U" (", Melder_appMonthSTR(), U" ", Melder_appDay(), U", ", Melder_appYear(), U")"));
 	Graphics_setFontSize (graphics, 12.0);
 	[[maybe_unused]] constexpr bool isArm64 =

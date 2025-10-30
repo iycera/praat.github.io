@@ -34,6 +34,7 @@
 #include "Sound_and_Spectrum.h"
 #include "machine.h"
 #include "EditorM.h"
+#include "../sys/i18n_simple.h"
 #if defined (macintosh)
 	#include "pa_mac_core.h"
 #endif
@@ -1002,16 +1003,16 @@ static void menu_cb_SoundRecorder_help (SoundRecorder, EDITOR_ARGS) { Melder_hel
 
 void structSoundRecorder :: v_createMenus () {
 	SoundRecorder_Parent :: v_createMenus ();
-	Editor_addCommand (this, U"File", U"Save as WAV file...", 0, menu_cb_writeWav);
-	Editor_addCommand (this, U"File", U"Save as AIFC file...", 0, menu_cb_writeAifc);
-	Editor_addCommand (this, U"File", U"Save as NeXT/Sun file...", 0, menu_cb_writeNextSun);
-	Editor_addCommand (this, U"File", U"Save as NIST file...", 0, menu_cb_writeNist);
-	Editor_addCommand (this, U"File", U"-- write --", 0, nullptr);
-	Editor_addMenu (this, U"Meter", 0);
+	Editor_addCommand (this, I18n_translate("menu.file"), I18n_translate("menu.save_as_wav_file"), 0, menu_cb_writeWav);
+	Editor_addCommand (this, I18n_translate("menu.file"), I18n_translate("menu.save_as_aifc_file"), 0, menu_cb_writeAifc);
+	Editor_addCommand (this, I18n_translate("menu.file"), I18n_translate("menu.save_as_next_sun_file"), 0, menu_cb_writeNextSun);
+	Editor_addCommand (this, I18n_translate("menu.file"), I18n_translate("menu.save_as_nist_file"), 0, menu_cb_writeNist);
+	Editor_addCommand (this, I18n_translate("menu.file"), I18n_translate("menu.write"), 0, nullptr);
+	Editor_addMenu (this, I18n_translate("menu.meter"), 0);
 	our meterIntensityButton =
-		Editor_addCommand (this, U"Meter", U"Intensity", GuiMenu_RADIO_FIRST, menu_cb_intensity);
+		Editor_addCommand (this, I18n_translate("menu.meter"), I18n_translate("menu.intensity"), GuiMenu_RADIO_FIRST, menu_cb_intensity);
 	our meterCentreOfGravityVersusIntensityButton =
-		Editor_addCommand (this, U"Meter", U"Centre of gravity ~ intensity", GuiMenu_RADIO_NEXT, menu_cb_centreOfGravityVersusIntensity);
+		Editor_addCommand (this, I18n_translate("menu.meter"), I18n_translate("menu.centre_of_gravity_intensity"), GuiMenu_RADIO_NEXT, menu_cb_centreOfGravityVersusIntensity);
 }
 
 void structSoundRecorder :: v_createMenuItems_help (EditorMenu menu) {

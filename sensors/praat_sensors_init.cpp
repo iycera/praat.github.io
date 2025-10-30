@@ -23,6 +23,7 @@
 #include "EMArawData.h"
 #include "praat_sensors_init.h"
 #include "Sound_extensions.h"
+#include "../sys/i18n_simple.h"
 
 static autoDaata CarstensEMA50xV3PosFileRecognizer (integer nread, const char *header, MelderFile file) {
 	if (nread > 69 && strnequ (header, "AG50xDATA_V00", 13) &&
@@ -148,7 +149,7 @@ void praat_uvafon_sensors_init () {
 	praat_addAction1 (classElectroglottogram, 0, U"To Sound", nullptr, 0, 
 			CONVERT_EACH_TO_ONE__Electroglottogram_to_Sound);
    
-	praat_addAction1 (classSound, 0, U"Extract Electroglottogram...", U"Extract part for overlap...", 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.extract_electroglottogram"), I18n_translate("menu.extract_part_for_overlap"), 1,
 			CONVERT_EACH_TO_ONE__Sound_extractElectroglottogram);
 
 }

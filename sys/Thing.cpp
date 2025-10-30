@@ -19,14 +19,15 @@
 #include <stdarg.h>
 #include <time.h>
 #include "Thing.h"
+#include "i18n_simple.h"
 
 std::atomic <integer> theTotalNumberOfThings;
 
 void structThing :: v1_info () {
-	MelderInfo_writeLine (U"Object type: ", Thing_className (this));
-	MelderInfo_writeLine (U"Object name: ", this -> name ? this -> name.get() : U"<no name>");
+	MelderInfo_writeLine (I18n_translate("form.object_type"), U": ", Thing_className (this));
+	MelderInfo_writeLine (I18n_translate("form.object_name"), U": ", this -> name ? this -> name.get() : I18n_translate("form.no_name"));
 	time_t today = time (nullptr);
-	MelderInfo_writeLine (U"Date: ", Melder_peek8to32 (ctime (& today)));   // includes a newline
+	MelderInfo_writeLine (I18n_translate("form.date"), U": ", Melder_peek8to32 (ctime (& today)));   // includes a newline
 }
 
 /*

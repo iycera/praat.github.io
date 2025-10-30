@@ -26,6 +26,7 @@
  */
 
 #include "GuiP.h"
+#include "i18n_simple.h"
 
 Thing_implement (GuiRadioButton, GuiControl, 0);
 
@@ -55,9 +56,9 @@ static int _GuiRadioButton_getPosition (GuiRadioButton me) {
 	}
 	static void _GuiGtkRadioButton_handleToggle (GuiObject widget, gpointer void_me) {
 		iam (GuiRadioButton);
-		trace (U"enter");
+		trace (I18n_translate("debug.enter"));
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-			trace (U"on");
+			trace (I18n_translate("debug.on"));
 			if (my d_valueChangedCallback && ! my d_blockValueChangedCallbacks) {
 				struct structGuiRadioButtonEvent event { me };
 				event. position = _GuiRadioButton_getPosition (me);
@@ -96,7 +97,7 @@ static int _GuiRadioButton_getPosition (GuiRadioButton me) {
 	- (void) dealloc {   // override
 		GuiRadioButton me = d_userData;
 		forget (me);
-		trace (U"deleting a radio button");
+		trace (I18n_translate("debug.deleting_a_radio_button"));
 		[super dealloc];
 	}
 	- (GuiThing) getUserData {
@@ -107,7 +108,7 @@ static int _GuiRadioButton_getPosition (GuiRadioButton me) {
 		d_userData = static_cast <GuiRadioButton> (userData);
 	}
 	- (void) _guiCocoaRadioButton_activateCallback: (id) widget {
-		trace (U"enter");
+		trace (I18n_translate("debug.enter"));
 		Melder_assert (self == widget);   // sender (widget) and receiver (self) happen to be the same object
 		GuiRadioButton me = d_userData;
 		/*
@@ -142,7 +143,7 @@ void GuiRadioGroup_end () {
 GuiRadioButton GuiRadioButton_create (GuiForm parent, int left, int right, int top, int bottom,
 	conststring32 buttonText, GuiRadioButtonCallback valueChangedCallback, Thing valueChangedBoss, uint32 flags)
 {
-	trace (U"begin: text %", buttonText);
+	trace (I18n_translate("debug.begin"), U": text %", buttonText);
 	autoGuiRadioButton me = Thing_new (GuiRadioButton);
 	my d_shell = parent -> d_shell;
 	my d_parent = parent;
@@ -233,7 +234,7 @@ GuiRadioButton GuiRadioButton_create (GuiForm parent, int left, int right, int t
 		my d_previous -> d_next = me.get();
 	}
 	latestRadioButton = me.get();
-	trace (U"end");
+	trace (I18n_translate("debug.end"));
 	return me.releaseToAmbiguousOwner();
 }
 
@@ -285,7 +286,7 @@ void GuiRadioButton_set (GuiRadioButton me) {
 			[sibling -> d_cocoaRadioButton   setState: NSOffState];
 		}
 	#endif
-	trace (U"exit");
+	trace (I18n_translate("debug.exit"));
 }
 
 /* End of file GuiRadioButton.cpp */
