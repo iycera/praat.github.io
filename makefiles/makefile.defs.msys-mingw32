@@ -18,7 +18,7 @@ CFLAGS = -std=gnu99 $(COMMONFLAGS)
 # gnu++17 instead of c++17 is necessary to define M_PI in external code
 CXXFLAGS = -std=gnu++17 $(COMMONFLAGS) -Wshadow
 
-EXECUTABLE = Praat.exe
+EXECUTABLE = Praat$(PRAAT_VERSION_NUM)i18n.exe
 
 LIBS = -lwinmm -lwsock32 -lcomctl32 -lole32 -lgdi32 -lgdiplus -lcomdlg32 -lwinspool -static-libgcc -static-libstdc++ -mwindows -static
 

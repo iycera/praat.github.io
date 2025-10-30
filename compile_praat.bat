@@ -1,11 +1,21 @@
 @echo off
 chcp 65001 >nul
-title Praat i18n 编译脚本
 
-echo ========================================
-echo    Praat i18n 编译脚本
-echo ========================================
-echo.
+REM === 自动提取 PRAAT_VERSION_NUM ===
+set PRAAT_VERSION_NUM=
+for /f "tokens=3" %%i in ('findstr /b /c:"#define PRAAT_VERSION_NUM" main\main_Praat.h') do set PRAAT_VERSION_NUM=%%i
+
+REM 输出自动检测到的版本号
+echo PRAAT_VERSION_NUM = %PRAAT_VERSION_NUM%
+
+REM 指定目标架构（默认64位。如需32位请修改下面这一行为32对应def文件）
+copy /y makefiles\makefile.defs.msys-mingw64 makefile.defs
+
+REM 清理历史产物
+del Praat.exe >nul 2>nul
+del Praat%PRAAT_VERSION_NUM%i18n.exe >nul 2>nul
+
+setlocal enabledelayedexpansion
 
 echo [1/4] 检查编译环境...
 where mingw32-make >nul 2>&1
@@ -26,27 +36,31 @@ if %errorlevel% neq 0 (
     echo ❌ 编译失败！请检查上面的错误信息
     echo.
     echo 常见问题解决方案:
-    echo 1. 确保没有 Praat.exe 进程在运行
+    echo 1. 确保没有 Praat.exe 或 Praat%PRAAT_VERSION_NUM%i18n.exe 进程在运行
     echo 2. 检查源代码是否有语法错误
     echo 3. 确保所有依赖库都已编译
     echo.
     pause
     exit /b 1
 )
-
 echo.
 echo [3/3] 编译完成！
-echo ✓ Praat.exe 已成功生成
+if exist Praat%PRAAT_VERSION_NUM%i18n.exe (
+    set "MAIN_PRAAT=Praat%PRAAT_VERSION_NUM%i18n.exe"
+) else (
+    set "MAIN_PRAAT=Praat.exe"
+)
+echo ✓ !MAIN_PRAAT! 已成功生成
 echo.
 
 echo ========================================
 echo   编译信息
 echo ========================================
 echo 编译时间: %date% %time%
-echo 输出文件: Praat.exe
-echo 文件大小: 
-if exist Praat.exe (
-    for %%A in (Praat.exe) do echo %%~zA 字节
+echo 输出文件: !MAIN_PRAAT!
+echo 文件大小:
+if exist !MAIN_PRAAT! (
+    for %%A in (!MAIN_PRAAT!) do echo %%~zA 字节
 ) else (
     echo 文件未找到
 )
@@ -59,16 +73,14 @@ if exist sys\language_packs\*.json (
 ) else (
     echo 语言包目录未找到
 )
-
 echo.
 echo ========================================
 echo   测试建议
 echo ========================================
-echo 1. 运行: .\Praat.exe
+echo 1. 运行: .\!MAIN_PRAAT!
 echo 2. 检查 i18n 菜单是否显示
 echo 3. 测试语言切换功能
 echo 4. 查看 debug_i18n_simple.txt 调试信息
 echo.
-
 echo 按任意键退出...
 pause >nul
