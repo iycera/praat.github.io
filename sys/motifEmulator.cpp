@@ -1827,12 +1827,12 @@ void GuiWin_initialize2 (unsigned int argc, char **argv)
 	windowClass. cbClsExtra = 0;
 	windowClass. cbWndExtra = 0;
 	windowClass. hInstance = theGui.instance;
-	windowClass. hIcon = NULL;
+	windowClass. hIcon = LoadIcon(theGui.instance, TEXT("application_icon"));
 	windowClass. hCursor = LoadCursor (NULL, IDC_ARROW);
 	windowClass. hbrBackground = theWinGuiBackgroundBrush ();
 	windowClass. lpszMenuName = NULL;
 	windowClass. lpszClassName = Melder_32toW (theWindowClassName).transfer();
-	windowClass. hIconSm = NULL;
+	windowClass. hIconSm = LoadIcon(theGui.instance, TEXT("application_icon"));
 	RegisterClassEx (& windowClass);
 	windowClass. hbrBackground = theWinGuiBackgroundBrush ();
 	windowClass. lpszClassName = Melder_32toW (theDrawingAreaClassName).transfer();
