@@ -2,6 +2,16 @@
 
 Praat supports multilingual UI, dynamic language switching and easy extension. This guide covers directory structure, adding new languages/translation, menu switching, python helper scripts, and sample configs.
 
+## Multilingual UI Screenshots
+
+Main window language menu example:
+
+![Main window language menu](./docs/pictures/mainwindow.png)
+
+Editor window in Simplified Chinese:
+
+![Editor window in Simplified Chinese](./docs/pictures/view&editor.png)
+
 ---
 
 ## 1. Directory Structure
@@ -103,3 +113,16 @@ sys/language_packs/
 - Submit as PR with full json and languages.json
 
 More scripting/automation/best practice: welcome to discuss via Issues!
+
+## Translation Progress Table
+
+Major languages automatic key count (using en-US as baseline):
+
+| Language     | Key Count | Coverage | Notes                       |
+|--------------|-----------|----------|-----------------------------|
+| English      | 1999      | 100%     | Baseline                    |
+| Simplified Chinese | 1999      | 99.9%+   | Fully translated UI         |
+| Other major  | 1800~1990 | ≥90%     | A few menus/help lines left |
+| Qǔei/lk-CN   | 1~1000    | DEMO     | Sample/incomplete           |
+
+> Note: Use compare_translations.py regularly to ensure 99%+ key coverage.
