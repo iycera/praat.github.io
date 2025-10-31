@@ -1834,12 +1834,7 @@ void praat_init (conststring32 title,
 	conststring32 firstPartOfEmailAddress, conststring32 secondPartOfEmailAddress,
 	int argc, char **argv
 ) {
-	// Debug: Add simple debug output
-	FILE* debugFile = fopen("debug_praat_init.txt", "w");
-	fprintf(debugFile, "praat_init: Starting\n");
-	fclose(debugFile);
-	
-	setThePraatLocale ();
+	// removed legacy debug file writes
 	Melder_init ();
 	const bool weWereStartedFromTheCommandLine = tryToAttachToTheCommandLine ();
 	MelderConsole_init ();
@@ -1871,11 +1866,6 @@ void praat_init (conststring32 title,
 	
 	// Initialize i18n system
 	I18n_init ();
-	
-	// Debug: Check if I18n_init completed
-	debugFile = fopen("debug_praat_init.txt", "a");
-	fprintf(debugFile, "praat_init: I18n_init completed\n");
-	fclose(debugFile);
 
 	theCurrentPraatApplication -> batch = Melder_batch;
 
@@ -1893,25 +1883,16 @@ void praat_init (conststring32 title,
 		NSApplication *theApp = [GuiCocoaApplication sharedApplication];   // initialize, so that our bundle identifier exists even if we started from outside Xcode
 	#elif defined (_WIN32)
 		// Debug: Before Windows GUI initialization
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: Before Windows GUI initialization\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		theWinApplicationWindow = GuiWin_initialize1 (Melder_upperCaseAppName());
 		
 		// Debug: After Windows GUI initialization
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: After Windows GUI initialization\n");
-		fclose(debugFile);
+		/* debug logging removed */
 	#endif
 	if (praatP.userWantsExistingInstance)
 		if (tryToSwitchToRunningPraat (praatP.userWantsToOpen, praatP.userWantsToSend, praatP.userWantsToSendOrForm))
 			exit (0);
-
-	// Debug: After existing instance check
-	debugFile = fopen("debug_praat_init.txt", "a");
-	fprintf(debugFile, "praat_init: After existing instance check\n");
-	fclose(debugFile);
 
 	#ifdef UNIX
 		if (! Melder_batch) {
@@ -1945,32 +1926,24 @@ void praat_init (conststring32 title,
 		trace (U"starting the GUI application");
 		
 		// Debug: Before Machine_initLookAndFeel
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: Before Machine_initLookAndFeel\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		Machine_initLookAndFeel (argc, argv);
 		
 		// Debug: After Machine_initLookAndFeel
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: After Machine_initLookAndFeel\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		#if gtk
 			trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 			g_set_application_name (Melder_peek32to8 (title));
 			trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		#elif motif
 			// Debug: Before GuiWin_initialize2
-			debugFile = fopen("debug_praat_init.txt", "a");
-			fprintf(debugFile, "praat_init: Before GuiWin_initialize2\n");
-			fclose(debugFile);
+			/* debug logging removed */
 			
 			GuiWin_initialize2 (argc, argv);
 			
 			// Debug: After GuiWin_initialize2
-			debugFile = fopen("debug_praat_init.txt", "a");
-			fprintf(debugFile, "praat_init: After GuiWin_initialize2\n");
-			fclose(debugFile);
+			/* debug logging removed */
 		#elif cocoa
 			/*
 				We want to get rid of the Search field in the help menu.
@@ -1992,17 +1965,13 @@ void praat_init (conststring32 title,
 		trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		
 		// Debug: Before GuiWindow_create
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: Before GuiWindow_create\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		theCurrentPraatApplication -> topShell = raam = GuiWindow_create (x + 10, y, WINDOW_WIDTH, WINDOW_HEIGHT, 450, 250,
 				objectWindowTitle, gui_cb_quit, nullptr, 0);
 		
 		// Debug: After GuiWindow_create
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: After GuiWindow_create\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		trace (U"locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		#if motif
@@ -2011,16 +1980,12 @@ void praat_init (conststring32 title,
 		trace (U"before objects window shows locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 		
 		// Debug: Before GuiThing_show
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: Before GuiThing_show\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		GuiThing_show (raam);
 		
 		// Debug: After GuiThing_show
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: After GuiThing_show\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		trace (U"after objects window shows locale ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 	}
@@ -2043,16 +2008,12 @@ void praat_init (conststring32 title,
 		praatP.menuBar = raam;
 		
 		// Debug: Before praat_addMenus
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: Before praat_addMenus\n");
-		fclose(debugFile);
+		/* debug logging removed */
 		
 		praat_addMenus (praatP.menuBar);
 		
 		// Debug: After praat_addMenus
-		debugFile = fopen("debug_praat_init.txt", "a");
-		fprintf(debugFile, "praat_init: After praat_addMenus\n");
-		fclose(debugFile);
+		/* debug logging removed */
 
 		trace (U"creating the object list in the Objects window");
 		GuiLabel_createShown (raam, 3, -250, Machine_getMenuBarBottom () + 5, Machine_getMenuBarBottom () + 5 + Gui_LABEL_HEIGHT, U"Objects:", 0);
@@ -2085,9 +2046,7 @@ void praat_init (conststring32 title,
 	trace (U"after picture window shows: locale is ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 	
 	// Debug: Check if praat_init completed
-	debugFile = fopen("debug_praat_init.txt", "a");
-	fprintf(debugFile, "praat_init: Completed successfully\n");
-	fclose(debugFile);
+	/* debug logging removed */
 }
 
 static void executeStartUpFile (MelderFolder startUpDirectory, conststring32 fileNameHead, conststring32 fileNameTail) {
@@ -2149,41 +2108,26 @@ static void executeStartUpFile (MelderFolder startUpDirectory, conststring32 fil
 #endif
 
 void praat_run () {
-	// Debug: Add simple debug output
-	FILE* debugFile = fopen("debug_praat_run.txt", "w");
-	fprintf(debugFile, "praat_run: Starting\n");
-	fclose(debugFile);
+	// removed legacy debug file writes
 	
 	trace (U"adding menus, second round");
 	
-	// Debug: Add debug output before praat_addMenus2
-	debugFile = fopen("debug_praat_run.txt", "a");
-	fprintf(debugFile, "praat_run: Before praat_addMenus2\n");
-	fclose(debugFile);
+	// removed legacy debug file writes
 	
-	praat_addMenus2 ();
-	
-	// Debug: Add debug output after praat_addMenus2
-	debugFile = fopen("debug_praat_run.txt", "a");
-	fprintf(debugFile, "praat_run: After praat_addMenus2\n");
-	fclose(debugFile);
 	trace (U"locale is ", Melder_peek8to32 (setlocale (LC_ALL, nullptr)));
 
 	trace (U"adding the Quit command");
 	
-	// Debug: Add debug output before Quit command
-	debugFile = fopen("debug_praat_run.txt", "a");
-	fprintf(debugFile, "praat_run: Before Quit command\n");
-	fclose(debugFile);
+	// removed legacy debug file writes
 	
 	praat_addMenuCommand (U"Objects", U"Praat", I18n_translate("menu.separator_quit"), nullptr, 0, nullptr);
 	praat_addMenuCommand (U"Objects", U"Praat", I18n_translate("menu.quit"), nullptr, GuiMenu_UNHIDABLE | 'Q' | GuiMenu_NO_API, DO_Quit);
 
-	// Debug: Add debug output after Quit command
-	debugFile = fopen("debug_praat_run.txt", "a");
-	fprintf(debugFile, "praat_run: After Quit command\n");
-	fclose(debugFile);
-
+	// removed legacy debug file writes
+	
+	trace (U"adding menus, final round");
+	praat_addMenus2 ();   // Add final Help menu items (Go to manual page, Search manual, About Praat)
+	
 	trace (U"read the preferences file, and notify those who want to be notified of this");
 	/* ...namely, those who already have a window (namely, the Picture window),
 	 * and those that regard the start of a new session as a meaningful event

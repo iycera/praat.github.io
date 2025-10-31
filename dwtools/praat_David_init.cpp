@@ -9872,7 +9872,7 @@ void praat_David_init () {
 			CONVERT_EACH_TO_ONE__MFCC_to_TableOfReal);
 	praat_addAction1 (classMFCC, 0, U"To Matrix (features)...", nullptr, GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__MFCC_to_Matrix_features);
-	praat_addAction1 (classMFCC, 0, U"To Sound", nullptr, GuiMenu_HIDDEN,
+	praat_addAction1 (classMFCC, 0, I18n_translate("menu.to_sound_mfcc"), nullptr, GuiMenu_HIDDEN,
 			CONVERT_EACH_TO_ONE__MFCC_to_Sound);
 	praat_addAction1 (classMFCC, 2, U"Cross-correlate...", nullptr, 0,
 			CONVERT_TWO_TO_ONE__MFCCs_crossCorrelate);
@@ -10217,7 +10217,7 @@ void praat_David_init () {
     praat_addAction1 (classSound, 2, I18n_translate("menu.to_polygon_enclosed"), nullptr, GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			CONVERT_TWO_TO_ONE__Sounds_to_Polygon_enclosed);
 
-    praat_addAction1 (classSound, 2, I18n_translate("menu.to_dtw"), I18n_translate("menu.convert"), 1,
+    praat_addAction1 (classSound, 2, I18n_translate("menu.to_dtw"), I18n_translate("menu.convert_with_submenu"), 1,
 			CONVERT_TWO_TO_ONE__Sounds_to_DTW);
 
 	praat_addAction1 (classSound, 1, I18n_translate("menu.filter_gammatone"), I18n_translate("menu.filter"), 1,
@@ -10226,7 +10226,7 @@ void praat_David_init () {
 			CONVERT_EACH_TO_ONE__Sound_removeNoise);
 	praat_addAction1 (classSound, 0, I18n_translate("menu.reduce_noise"), I18n_translate("menu.filter_gammatone"), 1,
 			CONVERT_EACH_TO_ONE__Sound_reduceNoise);
-	praat_addAction1 (classSound, 0, I18n_translate("menu.to_sound_derivative"), I18n_translate("menu.convert"), 1,
+	praat_addAction1 (classSound, 0, I18n_translate("menu.to_sound_derivative"), I18n_translate("menu.convert_with_submenu"), 1,
 			CONVERT_EACH_TO_ONE__Sound_to_Sound_derivative);
 
 	praat_addAction1 (classSound, 0, I18n_translate("menu.change_gender"), I18n_translate("menu.deepen_band_modulation"), 1,
@@ -10259,7 +10259,7 @@ void praat_David_init () {
 	praat_addAction1 (classSpectrogram, 0, U"Get long-term spectral flatness...", nullptr, GuiMenu_HIDDEN | GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Spectrogram_getLongtermSpectralFlatness);
 
-	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_sound_resampled"), I18n_translate("menu.to_sound_mfcc"), GuiMenu_DEPTH_1,
+	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_sound_resampled"), I18n_translate("menu.to_sound_spectrum"), GuiMenu_DEPTH_1,
 			CONVERT_EACH_TO_ONE__Spectrum_to_Sound_resampled);
 	praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.draw_phases"), I18n_translate("spectrum.draw_log_freq"), GuiMenu_DEPTH_1 | GuiMenu_HIDDEN,
 			GRAPHICS_EACH__Spectrum_drawPhases);

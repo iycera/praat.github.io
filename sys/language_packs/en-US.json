@@ -993,7 +993,7 @@
   "error.manpage_link_too_long": "(ManPage_Paragraph_extractLink:) Link starting with \"@@\" is too long:",
   "error.manpage_link_with_pipes_too_long": "(ManPage_Paragraph_extractLink:) Link starting with \"@@\" and containing \"||\" is too long:",
   "app.tagline": "%%doing phonetics by computer",
-  "form.version": "version",
+  "form.version": "Version",
   "error.you_interrupted": "You interrupted ",
   "error.user_interrupt": "User interrupt: ",
   "error.error": "Error: ",

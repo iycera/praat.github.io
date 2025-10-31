@@ -3590,7 +3590,7 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 	praat_addAction1 (classPitch, 0, U"Analyse -", nullptr, 0, nullptr);
 		praat_addAction1 (classPitch, 0, I18n_translate("menu.to_pointprocess_pitch"),
 				nullptr, 1, NEW_Pitch_to_PointProcess);
-	praat_addAction1 (classPitch, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
+praat_addAction1 (classPitch, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classPitch, 0, U"Interpolate",
 				nullptr, 1, NEW_Pitch_interpolate);
 		praat_addAction1 (classPitch, 0, U"Smooth...",
@@ -3743,7 +3743,7 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 				nullptr, 1, NEW_Spectrum_to_Ltas_1to1);
 		praat_addAction1 (classSpectrum, 0, I18n_translate("menu.to_spectrogram_spectrum"),
 				nullptr, 1, NEW_Spectrum_to_Spectrogram);
-	praat_addAction1 (classSpectrum, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
+praat_addAction1 (classSpectrum, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.cepstral_smoothing"),
 				nullptr, 1, NEW_Spectrum_cepstralSmoothing);
 		praat_addAction1 (classSpectrum, 0, I18n_translate("spectrum.lpc_smoothing"),
@@ -3785,7 +3785,7 @@ praat_addAction1 (classParamCurve, 0, U"Draw", nullptr, 0, nullptr);
 				nullptr, 1, MODIFY_Strings_genericize);   // alternative GuiMenu_DEPRECATED_2016
 		praat_addAction1 (classStrings, 0, U"Convert to Unicode || Nativize",
 				nullptr, 1, MODIFY_Strings_nativize);
-	praat_addAction1 (classStrings, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
+praat_addAction1 (classStrings, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classStrings, 0, U"Replace all...",
 				nullptr, 1, NEW_Strings_replaceAll);
 	praat_addAction1 (classStrings, 0, U"Analyze", nullptr, 0, nullptr);

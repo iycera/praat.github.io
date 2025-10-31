@@ -28,14 +28,22 @@ static void logo (Graphics graphics) {
 	Graphics_setFont (graphics, kGraphics_font::TIMES);
 	Graphics_setFontSize (graphics, 45.0);
 	Graphics_setColour (graphics, Melder_MAROON);
-	Graphics_text (graphics, 0.385, 0.89, U"P");
-	Graphics_text (graphics, 0.448, 0.89, U"\\s{R}");
-	Graphics_text (graphics, 0.510, 0.89, U"\\s{A}");
-	Graphics_text (graphics, 0.575, 0.89, U"\\s{A}");
-	Graphics_text (graphics, 0.628, 0.89, U"\\s{T}");
-	Graphics_setFontSize (graphics, 18.0);
+	Graphics_text (graphics, 0.370, 0.89, U"P");
+	Graphics_text (graphics, 0.433, 0.89, U"\\s{R}");
+	Graphics_text (graphics, 0.495, 0.89, U"\\s{A}");
+	Graphics_text (graphics, 0.560, 0.89, U"\\s{A}");
+	Graphics_text (graphics, 0.613, 0.89, U"\\s{T}");
+	// i18n corner mark (small-sized, top-right)
+	Graphics_setTextAlignment (graphics, Graphics_RIGHT, Graphics_TOP);	
+	Graphics_setFontSize (graphics, 20.0);
+	Graphics_text (graphics, 0.720, 0.911, U"\\s{I18N}");
+	// restore defaults for subsequent text
+	Graphics_setFontSize (graphics, 16.0);
+	Graphics_setTextAlignment (graphics, Graphics_CENTRE, Graphics_HALF);
 	Graphics_text (graphics, 0.5, 0.77, I18n_translate("app.tagline"));
-	Graphics_setFontSize (graphics, 14.0);
+	// version text
+	Graphics_setFontSize (graphics, 12.0);
+	Graphics_setFont (graphics, kGraphics_font::PALATINO);
 	Graphics_text (graphics, 0.5, 0.62, Melder_cat (I18n_translate("form.version"), U" ", Melder_appVersionSTR(),
 			U" (", Melder_appMonthSTR(), U" ", Melder_appDay(), U", ", Melder_appYear(), U")"));
 	Graphics_setFontSize (graphics, 12.0);
@@ -66,18 +74,20 @@ static void logo (Graphics graphics) {
 	Graphics_setColour (graphics, Melder_BLACK);
 	Graphics_setFont (graphics, kGraphics_font::HELVETICA);
 	Graphics_setFontSize (graphics, 10.0);
-	Graphics_text (graphics, 0.5, 0.37, Melder_cat (U"Copyright © 1992–", Melder_appYear(), U" by Paul Boersma and David Weenink"));
+	Graphics_text (graphics, 0.5, 0.40, Melder_cat (U"Copyright © 1992–", Melder_appYear(), U" by Paul Boersma and David Weenink"));
 	Graphics_setFontSize (graphics, 10.0);
 	Graphics_setTextAlignment (graphics, Graphics_RIGHT, Graphics_HALF);
-	Graphics_text (graphics, 0.34, 0.28, U"Download sites:");
-	Graphics_text (graphics, 0.27, 0.14, U"Source code:");
-	Graphics_text (graphics, 0.32, 0.065, U"Praat Users List:");
+	Graphics_text (graphics, 0.28, 0.32, U"Download sites:");
+	Graphics_text (graphics, 0.28, 0.20, U"Source code:");
+	Graphics_text (graphics, 0.28, 0.14, U"i18n repo:");
+	Graphics_text (graphics, 0.28, 0.08, U"Praat Users List:");
 	Graphics_setTextAlignment (graphics, Graphics_LEFT, Graphics_HALF);
 	Graphics_setFont (graphics, kGraphics_font::COURIER);
-	Graphics_text (graphics, 0.36, 0.28, U"https://praat.org");
-	Graphics_text (graphics, 0.36, 0.22, U"https://www.fon.hum.uva.nl/praat");
-	Graphics_text (graphics, 0.28, 0.14, U"https://github.com/praat/praat.github.io");
-	Graphics_text (graphics, 0.33, 0.065, U"https://groups.io/g/Praat-Users-List");
+	Graphics_text (graphics, 0.30, 0.32, U"https://praat.org");
+	Graphics_text (graphics, 0.30, 0.26, U"https://www.fon.hum.uva.nl/praat");
+	Graphics_text (graphics, 0.30, 0.20, U"https://github.com/praat/praat.github.io");
+	Graphics_text (graphics, 0.30, 0.14, U"https://github.com/iycera/praat.i18n");
+	Graphics_text (graphics, 0.30, 0.08, U"https://groups.io/g/Praat-Users-List");
 }
 
 int main (int argc, char *argv []) {

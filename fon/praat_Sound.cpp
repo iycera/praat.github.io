@@ -2583,7 +2583,7 @@ void praat_Sound_init () {
 	praat_addAction1 (classSound, 0, I18n_translate("menu.manipulate"), nullptr, 0, nullptr);
 		praat_addAction1 (classSound, 0, I18n_translate("menu.to_manipulation"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_to_Manipulation);
-	praat_addAction1 (classSound, 0, I18n_translate("menu.convert"), nullptr, 0, nullptr);
+	praat_addAction1 (classSound, 0, I18n_translate("menu.convert_with_submenu"), nullptr, 0, nullptr);
 		praat_addAction1 (classSound, 0, I18n_translate("menu.convert_to_mono"), nullptr, 1,
 				CONVERT_EACH_TO_ONE__Sound_convertToMono);
 		praat_addAction1 (classSound, 0, I18n_translate("menu.convert_to_stereo"), nullptr, 1,

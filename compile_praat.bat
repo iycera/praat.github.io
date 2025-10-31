@@ -11,7 +11,9 @@ echo PRAAT_VERSION_NUM = %PRAAT_VERSION_NUM%
 REM 指定目标架构（默认64位。如需32位请修改下面这一行为32对应def文件）
 copy /y makefiles\makefile.defs.msys-mingw64 makefile.defs
 
-REM 清理历史产物
+REM 清理历史产物（先结束正在运行的进程，再删除旧文件）
+taskkill /IM Praat%PRAAT_VERSION_NUM%i18n.exe /F >nul 2>&1
+taskkill /IM Praat.exe /F >nul 2>&1
 del Praat.exe >nul 2>nul
 del Praat%PRAAT_VERSION_NUM%i18n.exe >nul 2>nul
 

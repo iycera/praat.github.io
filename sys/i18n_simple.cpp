@@ -40,11 +40,6 @@ SimpleI18nManager::~SimpleI18nManager() {
 void SimpleI18nManager::init() {
     if (isInitialized) return;
     
-    // Debug output
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "w");
-    fprintf(debugFile, "SimpleI18nManager::init: Starting initialization\n");
-    fclose(debugFile);
-    
     // Load language index
     loadLanguageIndex();
     
@@ -61,10 +56,6 @@ void SimpleI18nManager::init() {
     updateAllMenus();
     
     isInitialized = true;
-    
-    debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::init: Initialization completed\n");
-    fclose(debugFile);
 }
 
 void SimpleI18nManager::exit() {
@@ -88,13 +79,6 @@ void SimpleI18nManager::updateLanguageMenuCheckmarks() {
         
         // Update checkmark state
         GuiMenuItem_check(menuItem, isCurrentLanguage);
-        
-        // Debug output
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "Updated checkmark for %s: %s\n", 
-            langCode.c_str(), 
-            isCurrentLanguage ? "CHECKED" : "UNCHECKED");
-        fclose(debugFile);
     }
 }
 
@@ -132,10 +116,6 @@ void SimpleI18nManager::loadLanguagePack(const std::string& languageCode) {
     }
     
     if (!file.is_open()) {
-        // Debug output
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "SimpleI18nManager::loadLanguagePack: Failed to open %s\n", fileName.c_str());
-        fclose(debugFile);
         return;
     }
     
@@ -164,12 +144,6 @@ void SimpleI18nManager::loadLanguagePack(const std::string& languageCode) {
     }
     
     file.close();
-    
-    // Debug output
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::loadLanguagePack: Loaded %zu translations for %s\n", 
-            translations.size(), languageCode.c_str());
-    fclose(debugFile);
 }
 
 void SimpleI18nManager::setLanguage(const std::string& languageCode) {
@@ -186,11 +160,6 @@ void SimpleI18nManager::setLanguage(const std::string& languageCode) {
     
     // Update language menu checkmarks
     updateLanguageMenuCheckmarks();
-    
-    // Debug output
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::setLanguage: Language set to %s\n", languageCode.c_str());
-    fclose(debugFile);
 }
 
 std::string SimpleI18nManager::getCurrentLanguage() const {
@@ -285,9 +254,6 @@ void SimpleI18nManager::loadLanguageIndex() {
         registerLanguage("zh-TW", "Chinese Traditional", "zh-TW.json");
         registerLanguage("ja-JP", "Japanese", "ja-JP.json");
         
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "SimpleI18nManager::loadLanguageIndex: Using fallback languages\n");
-        fclose(debugFile);
         return;
     }
     
@@ -350,11 +316,6 @@ void SimpleI18nManager::loadLanguageIndex() {
     }
     
     file.close();
-    
-    // Debug output
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::loadLanguageIndex: Loaded %zu languages\n", availableLanguages.size());
-    fclose(debugFile);
 }
 
 std::vector<SimpleLanguage> SimpleI18nManager::getAvailableLanguages() const {
@@ -435,131 +396,83 @@ const char32* I18n_translateWithPlaceholdersMap(const char* key, const char* pla
 // Static callback functions for each language
 static void switchToEnglish(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToEnglish: Switching to English\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("en-US");
     }
 }
 
 static void switchToChineseSimplified(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToChineseSimplified: Switching to Chinese Simplified\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("zh-CN");
     }
 }
 
 static void switchToChineseTraditional(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToChineseTraditional: Switching to Chinese Traditional\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("zh-TW");
     }
 }
 
 static void switchToJapanese(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToJapanese: Switching to Japanese\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("ja-JP");
     }
 }
 
 static void switchToKorean(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToKorean: Switching to Korean\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("ko-KR");
     }
 }
 
 static void switchToFrench(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToFrench: Switching to French\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("fr-FR");
     }
 }
 
 static void switchToGerman(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToGerman: Switching to German\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("de-DE");
     }
 }
 
 static void switchToSpanish(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToSpanish: Switching to Spanish\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("es-ES");
     }
 }
 
 static void switchToRussian(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToRussian: Switching to Russian\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("ru-RU");
     }
 }
 
 static void switchToPortuguese(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToPortuguese: Switching to Portuguese\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("pt-PT");
     }
 }
 
 static void switchToLkCn(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToLkCn: Switching to LkCn\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("lk-CN");
     }
 }
 
 static void switchToItalian(Thing, GuiMenuItemEvent event) {
     if (g_i18nManager) {
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "switchToItalian: Switching to Italian\n");
-        fclose(debugFile);
         g_i18nManager->setLanguage("it-IT");
     }
 }
 
 void SimpleI18nManager::createMenu(GuiWindow window) {
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::createMenu: Menu creation called with window\n");
-    fprintf(debugFile, "SimpleI18nManager::createMenu: availableLanguages.size() = %zu\n", availableLanguages.size());
-    fclose(debugFile);
     
     // Create the i18n menu
     GuiMenu i18nMenuRef = GuiMenu_createInWindow(window, U"i18n", 0);
     
     // Create language submenu
     GuiMenu languageSubmenu = GuiMenu_createInMenu(i18nMenuRef, I18n_translate("menu.language"), 0);
-    
-    // Debug: List all available languages
-    debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "Available languages:\n");
-    for (size_t i = 0; i < availableLanguages.size(); i++) {
-        fprintf(debugFile, "  [%zu] %s (%s)\n", i, availableLanguages[i].name.c_str(), availableLanguages[i].code.c_str());
-    }
-    fclose(debugFile);
     
     // Add language options dynamically from availableLanguages
     for (const auto& lang : availableLanguages) {
@@ -611,34 +524,14 @@ void SimpleI18nManager::createMenu(GuiWindow window) {
             
             // Set initial checkmark state
             GuiMenuItem_check(menuItem, isCurrentLanguage);
-            
-            // Debug: Log each menu item creation
-            debugFile = fopen("debug_i18n_simple.txt", "a");
-            fprintf(debugFile, "Added menu item: %s (%s)%s\n", 
-                lang.name.c_str(), 
-                lang.code.c_str(),
-                isCurrentLanguage ? " [CURRENT - CHECKED]" : "");
-            fclose(debugFile);
-        } else {
-            // Debug: Log when callback is null
-            debugFile = fopen("debug_i18n_simple.txt", "a");
-            fprintf(debugFile, "No callback for language: %s (%s)\n", lang.name.c_str(), lang.code.c_str());
-            fclose(debugFile);
         }
     }
     
     // Update checkmarks after all menu items are created
     updateLanguageMenuCheckmarks();
-    
-    debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::createMenu: Menu creation completed with %zu languages\n", availableLanguages.size());
-    fclose(debugFile);
 }
 
 void SimpleI18nManager::updateAllMenus() {
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::updateAllMenus: Updating menus for language %s\n", currentLanguage.c_str());
-    fprintf(debugFile, "SimpleI18nManager::updateAllMenus: Available translations: %zu\n", translations.size());
     
     // Log some key translations for debugging
     std::vector<std::string> keyTranslations = {
@@ -652,13 +545,9 @@ void SimpleI18nManager::updateAllMenus() {
         if (it != translations.end()) {
             // Convert UTF-32 value back to UTF-8 for debug output
             autostring8 utf8Value = Melder_32to8(it->second.c_str());
-            fprintf(debugFile, "  %s -> %s\n", key.c_str(), utf8Value.get());
         } else {
-            fprintf(debugFile, "  %s -> (not found)\n", key.c_str());
         }
     }
-    
-    fclose(debugFile);
     
     // Recreate menus with new translations
     recreateMenus();
@@ -674,10 +563,6 @@ void SimpleI18nManager::setMenuReferences(GuiWindow window, GuiMenu newMenuRef, 
 void SimpleI18nManager::recreateMenus() {
     if (!mainWindow) return;
     
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::recreateMenus: Recreating menus for language %s\n", currentLanguage.c_str());
-    fclose(debugFile);
-    
     // Recreate the i18n menu with updated checkmarks
     recreateI18nMenu();
     
@@ -690,13 +575,6 @@ void SimpleI18nManager::recreateMenus() {
     // 4. Re-adding all menu items with their callbacks
     
     // For demonstration, we'll just log that we would update the menus
-    debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::recreateMenus: Would update menu titles to:\n");
-    fprintf(debugFile, "  New -> %s\n", translate("menu.new").c_str());
-    fprintf(debugFile, "  Open -> %s\n", translate("menu.open").c_str());
-    fprintf(debugFile, "  Help -> %s\n", translate("menu.help").c_str());
-    fclose(debugFile);
-    
     // For now, we'll implement a simple approach:
     // We'll show a message to the user that the language has changed
     // and they need to restart the application for the changes to take effect
@@ -708,10 +586,6 @@ void SimpleI18nManager::recreateMenus() {
 void SimpleI18nManager::recreateI18nMenu() {
     if (!mainWindow) return;
     
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::recreateI18nMenu: Recreating i18n menu for language %s\n", currentLanguage.c_str());
-    fclose(debugFile);
-    
     // Note: In Praat's GUI system, we cannot easily destroy and recreate menus
     // The menu items are already created and cannot be modified after creation
     // For a proper implementation, we would need to:
@@ -721,9 +595,6 @@ void SimpleI18nManager::recreateI18nMenu() {
     // 4. Re-add all menu items with their callbacks
     
     // For now, we'll just log that we would recreate the menu
-    debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::recreateI18nMenu: Would recreate i18n menu with current language: %s\n", currentLanguage.c_str());
-    fclose(debugFile);
 }
 
 void SimpleI18nManager::preferences() {
@@ -731,30 +602,16 @@ void SimpleI18nManager::preferences() {
 }
 
 void SimpleI18nManager::saveLanguagePreference(const std::string& languageCode) {
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::saveLanguagePreference: Saving language preference: %s\n", languageCode.c_str());
-    fclose(debugFile);
     
     // Save to a simple text file
     FILE* prefFile = fopen("praat_language_preference.txt", "w");
     if (prefFile) {
         fprintf(prefFile, "%s", languageCode.c_str());
         fclose(prefFile);
-        
-        debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "SimpleI18nManager::saveLanguagePreference: Language preference saved to file\n");
-        fclose(debugFile);
-    } else {
-        debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "SimpleI18nManager::saveLanguagePreference: Failed to save language preference\n");
-        fclose(debugFile);
     }
 }
 
 std::string SimpleI18nManager::loadLanguagePreference() {
-    FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::loadLanguagePreference: Loading language preference\n");
-    fclose(debugFile);
     
     // Load from the preference file using binary mode to handle encoding
     FILE* prefFile = fopen("praat_language_preference.txt", "rb");
@@ -795,18 +652,10 @@ std::string SimpleI18nManager::loadLanguagePreference() {
             delete[] buffer;
             fclose(prefFile);
             
-            debugFile = fopen("debug_i18n_simple.txt", "a");
-            fprintf(debugFile, "SimpleI18nManager::loadLanguagePreference: Loaded language preference: %s\n", languageCode.c_str());
-            fclose(debugFile);
-            
             return languageCode;
         }
         fclose(prefFile);
     }
-    
-    debugFile = fopen("debug_i18n_simple.txt", "a");
-    fprintf(debugFile, "SimpleI18nManager::loadLanguagePreference: No preference file found, using default\n");
-    fclose(debugFile);
     
     return "en-US"; // Default language
 }
@@ -825,13 +674,6 @@ extern "C" {
             // Force CJK font style to Chinese for better Chinese character rendering
             extern kGraphics_cjkFontStyle theGraphicsCjkFontStyle;
             theGraphicsCjkFontStyle = kGraphics_cjkFontStyle::CHINESE;
-            
-            // Debug: Log CJK font style setting
-            FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-            if (debugFile) {
-                fprintf(debugFile, "I18n_init: Set CJK font style to CHINESE\n");
-                fclose(debugFile);
-            }
         }
     }
     
@@ -884,9 +726,6 @@ extern "C" {
     
     void I18n_createMenu() {
         // This function is deprecated - use I18n_addToMenuBar(window) instead
-        FILE* debugFile = fopen("debug_i18n_simple.txt", "a");
-        fprintf(debugFile, "I18n_createMenu: This function is deprecated\n");
-        fclose(debugFile);
     }
     
     void I18n_updateAllMenus() {

@@ -130,11 +130,8 @@ GuiMenu praat_objects_resolveMenu (conststring32 menu) {
 		str32equ (menu, U"Goodies") || str32equ (menu, I18n_translate("menu.goodies")) ? goodiesMenu :
 		str32equ (menu, U"Settings") || str32equ (menu, I18n_translate("menu.settings")) || str32equ (menu, I18n_translate("menu.preferences")) ? preferencesMenu :
 		str32equ (menu, U"Technical") || str32equ (menu, I18n_translate("menu.technical")) ? technicalMenu :
-		#ifdef macintosh
-			str32equ (menu, U"ApplicationHelp") || str32equ (menu, I18n_translate("menu.application_help")) ? applicationHelpMenu :
-		#else
-			str32equ (menu, U"ApplicationHelp") || str32equ (menu, I18n_translate("menu.application_help")) ? helpMenu :
-		#endif
+		// Always map ApplicationHelp entries into the Help menu so the tail items appear consistently
+		str32equ (menu, U"ApplicationHelp") || str32equ (menu, I18n_translate("menu.application_help")) ? helpMenu :
 		newMenu;   // default
 }
 
@@ -679,11 +676,12 @@ void praat_show () {
 	/*
 		(De)sensitivize the fixed buttons as appropriate for the current selection.
 	*/
-	praat_sensitivizeFixedButtonCommand (I18n_translate("button.remove"), theCurrentPraatObjects -> totalSelection != 0);
-	praat_sensitivizeFixedButtonCommand (I18n_translate("button.rename"), theCurrentPraatObjects -> totalSelection == 1);
-	praat_sensitivizeFixedButtonCommand (I18n_translate("button.copy"), theCurrentPraatObjects -> totalSelection == 1);
-	praat_sensitivizeFixedButtonCommand (I18n_translate("button.info"), theCurrentPraatObjects -> totalSelection == 1);
-	praat_sensitivizeFixedButtonCommand (I18n_translate("button.inspect"), theCurrentPraatObjects -> totalSelection != 0);
+    // Use stable callback identifiers so i18n title changes don't break lookup
+    praat_sensitivizeFixedButtonByCallback (U"PRAAT_Remove", theCurrentPraatObjects -> totalSelection != 0);
+    praat_sensitivizeFixedButtonByCallback (U"MODIFY_Rename", theCurrentPraatObjects -> totalSelection == 1);
+    praat_sensitivizeFixedButtonByCallback (U"NEW1_Copy", theCurrentPraatObjects -> totalSelection == 1);
+    praat_sensitivizeFixedButtonByCallback (U"INFO_Info", theCurrentPraatObjects -> totalSelection == 1);
+    praat_sensitivizeFixedButtonByCallback (U"PRAAT__Inspect", theCurrentPraatObjects -> totalSelection != 0);
 	praat_actions_show ();
 	if (theCurrentPraatApplication == & theForegroundPraatApplication && theReferenceToTheOnlyButtonEditor)
 		Editor_dataChanged (theReferenceToTheOnlyButtonEditor, nullptr);
@@ -938,14 +936,14 @@ void praat_addMenus (GuiWindow window) {
 }
 
 void praat_addMenus2 () {
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.separator_manual"), nullptr, 0, nullptr);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.go_to_manual_page"),
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.separator_manual"), nullptr, 0, nullptr);
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.go_to_manual_page"),
 			nullptr, 0, PRAAT__GoToManualPage);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.save_manual_to_html"),
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.save_manual_to_html"),
 			nullptr, GuiMenu_HIDDEN, HELP_SaveManualToHtmlFolder);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", I18n_translate("menu.search_manual"),
+	praat_addMenuCommand (U"Objects", U"Help", I18n_translate("menu.search_manual"),
 			nullptr, 'M' | GuiMenu_NO_API, PRAAT__SearchManual);
-	praat_addMenuCommand (U"Objects", U"ApplicationHelp", itemTitle_about.string,
+	praat_addMenuCommand (U"Objects", U"Help", itemTitle_about.string,
 			nullptr, GuiMenu_UNHIDABLE, PRAAT__About);
 
 	#if defined (macintosh)

@@ -461,6 +461,23 @@ void praat_sensitivizeFixedButtonCommand (conststring32 title, bool sensitive) {
 		GuiThing_setSensitive (commandFound -> button, sensitive);
 }
 
+// New: prefer stable lookup by callback name to survive i18n title changes
+void praat_sensitivizeFixedButtonByCallback (conststring32 nameOfCallback, bool sensitive) {
+    Praat_Command commandFound = nullptr;
+    for (integer i = 1; i <= theCommands.size; i ++) {
+        Praat_Command command = theCommands.at [i];
+        if (str32equ (command -> nameOfCallback, nameOfCallback)) {
+            commandFound = command;
+            break;
+        }
+    }
+    if (! commandFound)
+        return; // no fatal: avoid crash when not present
+    commandFound -> executable = sensitive;
+    if (! theCurrentPraatApplication -> batch && ! Melder_backgrounding)
+        GuiThing_setSensitive (commandFound -> button, sensitive);
+}
+
 int praat_doMenuCommand (conststring32 title, conststring32 arguments, Interpreter interpreter) {
 	Praat_Command commandFound = nullptr;
 	for (integer i = 1; i <= theCommands.size; i ++) {

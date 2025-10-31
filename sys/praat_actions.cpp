@@ -91,11 +91,25 @@ static integer lookUpMatchingAction (ClassInfo class1, ClassInfo class2, ClassIn
 	Precondition:
 		class1, class2, and class3 must be in sorted order.
 */
+	if (! title)
+		return 0;
+	// Extract the first part before " || " if present, as that's what's actually stored by praat_addAction4_
+	const char32 *pSeparator = str32str (title, U" || ");
+	conststring32 titleToMatch = title;
+	integer titleLength = Melder_length (title);
+	if (pSeparator) {
+		titleLength = (integer)(pSeparator - title);
+		// Create a temporary string with just the first part
+		static MelderString firstPart;
+		MelderString_ncopy (& firstPart, title, titleLength);
+		titleToMatch = firstPart.string;
+	}
+	
 	for (integer i = 1; i <= theActions.size; i ++) {
 		Praat_Command action = theActions.at [i];
 		if (class1 == action -> class1 && class2 == action -> class2 &&
 			class3 == action -> class3 && class4 == action -> class4 &&
-			title && action -> title && str32equ (action -> title.get(), title)
+			action -> title && str32equ (action -> title.get(), titleToMatch)
 		)
 			return i;
 	}

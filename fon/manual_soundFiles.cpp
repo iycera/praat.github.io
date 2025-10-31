@@ -281,7 +281,7 @@ LIST_ITEM (U"• @@Save as NIST file...@ (16-bit little-endian)")
 LIST_ITEM (U"• @@Save as FLAC file...@ (16-bit)")
 MAN_END
 
-MAN_BEGIN (U"Save as WAV file..1", U"ppgb", 20110129)
+MAN_BEGIN (U"Save as WAV file...", U"ppgb", 20110129)
 INTRO (U"With this command, you save one or more selected @Sound and/or @LongSound objects "
 	"as a single 16-bit little-endian WAV file on disk. See the @@Sound files@ tutorial for more information.")
 MAN_END
