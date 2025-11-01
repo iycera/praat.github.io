@@ -1,1 +1,1 @@
-zh-CN
+builtin:ko-KR

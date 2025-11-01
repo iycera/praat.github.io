@@ -24,7 +24,7 @@ OBJECTS = Thing.o Data.o Simple.o Collection.o Strings.o \
    GuiMenu.o GuiMenuItem.o GuiButton.o GuiLabel.o GuiCheckButton.o GuiRadioButton.o \
    GuiDialog.o GuiList.o GuiTrust.o GuiFileSelect.o GuiScale.o GuiScrollBar.o GuiScrolledWindow.o \
    GuiControl.o GuiForm.o GuiOptionMenu.o GuiProgressBar.o GuiShell.o GuiThing.o Gui_messages.o \
-   i18n_simple.o
+   i18n_simple.o i18n_embedded_packs.o
 
 .PHONY: all clean
 
@@ -39,5 +39,9 @@ libsys.a: $(OBJECTS)
 	rm libsys.a
 	$(AR) cq libsys.a $(OBJECTS)
 	$(RANLIB) libsys.a
+
+# Dependencies for i18n embedded packs (auto-generated)
+i18n_embedded_packs.o: i18n_embedded_packs.cpp i18n_embedded_packs.h
+i18n_simple.o: i18n_simple.cpp i18n_simple.h i18n_embedded_packs.h
 
 $(OBJECTS): *.h ../kar/*.h ../melder/*.h ../dwsys/*.h

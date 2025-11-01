@@ -8,8 +8,17 @@ for /f "tokens=3" %%i in ('findstr /b /c:"#define PRAAT_VERSION_NUM" main\main_P
 REM 输出自动检测到的版本号
 echo PRAAT_VERSION_NUM = %PRAAT_VERSION_NUM%
 
-REM 指定目标架构（默认64位。如需32位请修改下面这一行为32对应def文件）
-copy /y makefiles\makefile.defs.msys-mingw64 makefile.defs
+REM 指定目标架构（默认32位，避免UTF-8乱码问题。如需64位请修改下一行）
+REM 将 makefile.defs.msys-mingw32 改为 makefile.defs.msys-mingw64
+copy /y makefiles\makefile.defs.msys-mingw32 makefile.defs
+
+REM 生成嵌入语言包（每次编译前自动更新）
+echo [0/5] 生成嵌入语言包...
+python sys\generate_embedded_packs.py
+if %errorlevel% neq 0 (
+    echo 警告: 生成嵌入语言包失败，将继续使用现有文件
+    echo 如果遇到乱码问题，请手动运行: python sys\generate_embedded_packs.py
+)
 
 REM 清理历史产物（先结束正在运行的进程，再删除旧文件）
 taskkill /IM Praat%PRAAT_VERSION_NUM%i18n.exe /F >nul 2>&1
@@ -19,7 +28,7 @@ del Praat%PRAAT_VERSION_NUM%i18n.exe >nul 2>nul
 
 setlocal enabledelayedexpansion
 
-echo [1/4] 检查编译环境...
+echo [1/5] 检查编译环境...
 where mingw32-make >nul 2>&1
 if %errorlevel% neq 0 (
     echo 错误: 未找到 mingw32-make，请确保 MinGW 已安装并添加到 PATH
@@ -29,7 +38,7 @@ if %errorlevel% neq 0 (
 echo ✓ MinGW 环境检查通过
 
 echo.
-echo [2/3] 开始编译 Praat...
+echo [2/5] 开始编译 Praat...
 echo 使用多线程编译 (4 线程)
 mingw32-make -j4
 
@@ -46,7 +55,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 echo.
-echo [3/3] 编译完成！
+echo [3/5] 编译完成！
 if exist Praat%PRAAT_VERSION_NUM%i18n.exe (
     set "MAIN_PRAAT=Praat%PRAAT_VERSION_NUM%i18n.exe"
 ) else (

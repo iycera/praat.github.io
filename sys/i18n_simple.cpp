@@ -20,17 +20,35 @@
 #include "praatP.h"
 #include "Gui.h"
 #include "GraphicsP.h"
+#include "i18n_embedded_packs.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <cstdarg>
+#include <utility>  // for std::pair
+#if defined (_WIN32)
+#include <windows.h>
+#elif defined (__linux__) || defined (__unix__)
+#include <unistd.h>
+#include <limits.h>
+#endif
 
 // Global instance
 SimpleI18nManager* g_i18nManager = nullptr;
 
+// Generic callback function for language switching
+// Uses closure to store language code and isBuiltin flag
+struct LanguageSwitchClosure {
+    std::string languageCode;
+    bool isBuiltin;
+};
+
+// Store closures for language switching (will be cleaned up in exit)
+static std::vector<LanguageSwitchClosure*> g_languageClosures;
+
 // SimpleI18nManager implementation
 SimpleI18nManager::SimpleI18nManager() 
-    : currentLanguage("en-US"), isInitialized(false) {
+    : currentLanguage("en-US"), currentLanguageIsBuiltin(true), isInitialized(false) {
 }
 
 SimpleI18nManager::~SimpleI18nManager() {
@@ -40,17 +58,61 @@ SimpleI18nManager::~SimpleI18nManager() {
 void SimpleI18nManager::init() {
     if (isInitialized) return;
     
-    // Load language index
+    // Initialize external language pack path (exe directory/praat_i18n)
+    // Try to get executable directory
+    #if defined (_WIN32)
+        char exePath[MAX_PATH];
+        GetModuleFileNameA(nullptr, exePath, MAX_PATH);
+        std::string exeDir(exePath);
+        size_t lastSlash = exeDir.find_last_of("\\/");
+        if (lastSlash != std::string::npos) {
+            exeDir = exeDir.substr(0, lastSlash + 1);
+        }
+        externalLanguagePackPath = exeDir + "praat_i18n";
+        // Normalize path separators for Windows
+        for (size_t i = 0; i < externalLanguagePackPath.length(); i++) {
+            if (externalLanguagePackPath[i] == '/') {
+                externalLanguagePackPath[i] = '\\';
+            }
+        }
+    #elif defined (macintosh)
+        // For macOS, we might need to get bundle path
+        // For now, use current directory as fallback
+        externalLanguagePackPath = "./praat_i18n";
+    #else  // Unix/Linux
+        // Try to get executable path from /proc/self/exe or use argv[0] if available
+        char exePath[1024];
+        ssize_t len = readlink("/proc/self/exe", exePath, sizeof(exePath) - 1);
+        if (len != -1) {
+            exePath[len] = '\0';
+            std::string exeDir(exePath);
+            size_t lastSlash = exeDir.find_last_of("/");
+            if (lastSlash != std::string::npos) {
+                exeDir = exeDir.substr(0, lastSlash + 1);
+            }
+            externalLanguagePackPath = exeDir + "praat_i18n";
+        } else {
+            externalLanguagePackPath = "./praat_i18n";
+        }
+    #endif
+    
+    // Load language index (both builtin and external)
     loadLanguageIndex();
     
     // Load saved language preference
-    std::string savedLanguage = loadLanguagePreference();
+    auto savedPref = loadLanguagePreference();
+    currentLanguage = savedPref.first;
+    currentLanguageIsBuiltin = savedPref.second;
     
-    // Set the current language
-    currentLanguage = savedLanguage;
+    // Verify that the saved language pack is still available
+    // If not, fallback to English (which is always available)
+    if (!isLanguagePackAvailable(currentLanguage, currentLanguageIsBuiltin)) {
+        currentLanguage = "en-US";
+        currentLanguageIsBuiltin = true;
+    }
     
-    // Load the language pack
-    loadLanguagePack(currentLanguage);
+    // Load the language pack (builtin first, then external as supplement)
+    loadLanguagePack(currentLanguage, currentLanguageIsBuiltin);
     
     // Update all menus and UI elements
     updateAllMenus();
@@ -61,6 +123,12 @@ void SimpleI18nManager::init() {
 void SimpleI18nManager::exit() {
     if (!isInitialized) return;
     
+    // Cleanup language closures
+    for (auto* closure : g_languageClosures) {
+        delete closure;
+    }
+    g_languageClosures.clear();
+    
     // Cleanup
     availableLanguages.clear();
     translations.clear();
@@ -70,90 +138,227 @@ void SimpleI18nManager::exit() {
 
 void SimpleI18nManager::updateLanguageMenuCheckmarks() {
     // Update checkmarks for all language menu items
+    // Format: "builtin:langCode" or "external:langCode"
     for (const auto& pair : languageMenuItems) {
-        const std::string& langCode = pair.first;
+        const std::string& langKey = pair.first;  // format: "builtin:langCode" or "external:langCode"
         GuiMenuItem menuItem = pair.second;
         
+        // Extract isBuiltin and langCode from key
+        size_t colonPos = langKey.find(':');
+        if (colonPos != std::string::npos) {
+            bool itemIsBuiltin = (langKey.substr(0, colonPos) == "builtin");
+            std::string itemLangCode = langKey.substr(colonPos + 1);
+        
         // Check if this is the current language
-        bool isCurrentLanguage = (langCode == currentLanguage);
+            bool isCurrentLanguage = (itemLangCode == currentLanguage && 
+                                     itemIsBuiltin == currentLanguageIsBuiltin);
         
         // Update checkmark state
         GuiMenuItem_check(menuItem, isCurrentLanguage);
     }
+    }
 }
 
-void SimpleI18nManager::loadLanguagePack(const std::string& languageCode) {
-    // Find the language file name
-    std::string fileName;
-    for (const auto& lang : availableLanguages) {
-        if (lang.code == languageCode) {
-            fileName = lang.file;
-            break;
-        }
+// Helper function to load translations from a JSON string
+static void loadTranslationsFromString(const std::string& content, std::map<std::u32string, std::u32string>& translations, bool overwrite) {
+    if (content.empty()) {
+        return;
     }
     
-    if (fileName.empty()) {
-        // Use fallback
-        fileName = languageCode + ".json";
-    }
-    
-    // Load the language pack file
-    std::string filePath = "sys/language_packs/" + fileName;
-    std::ifstream file(filePath);
-    
-    if (!file.is_open()) {
-        // Try alternative paths
-        std::vector<std::string> paths = {
-            "language_packs/" + fileName,
-            "../sys/language_packs/" + fileName,
-            "../../sys/language_packs/" + fileName
-        };
+    // Parse JSON string and store as UTF-32
+    // Improved parsing to handle multi-line and proper JSON structure
+    size_t pos = 0;
+    while (pos < content.length()) {
+        // Find the next key - look for "key":
+        size_t keyStart = content.find('"', pos);
+        if (keyStart == std::string::npos) break;
         
-        for (const auto& path : paths) {
-            file.open(path);
-            if (file.is_open()) break;
+        size_t keyEnd = content.find('"', keyStart + 1);
+        if (keyEnd == std::string::npos) break;
+        
+        std::string key = content.substr(keyStart + 1, keyEnd - keyStart - 1);
+        
+        // Find the colon after the key
+        size_t colonPos = content.find(':', keyEnd);
+        if (colonPos == std::string::npos) {
+            pos = keyEnd + 1;
+            continue;
+        }
+        
+        // Find the value - look for "value"
+        size_t valueStart = content.find('"', colonPos);
+        if (valueStart == std::string::npos) {
+            pos = colonPos + 1;
+            continue;
+        }
+        
+        size_t valueEnd = content.find('"', valueStart + 1);
+        if (valueEnd == std::string::npos) {
+            pos = valueStart + 1;
+            continue;
+        }
+        
+        // Extract value (may contain escaped characters, but we'll handle basic cases)
+        std::string value = content.substr(valueStart + 1, valueEnd - valueStart - 1);
+        
+        // Handle escaped characters (basic support)
+        size_t escapePos = 0;
+        while ((escapePos = value.find("\\\"", escapePos)) != std::string::npos) {
+            value.replace(escapePos, 2, "\"");
+            escapePos += 1;
+        }
+        while ((escapePos = value.find("\\\\", escapePos)) != std::string::npos) {
+            value.replace(escapePos, 2, "\\");
+            escapePos += 1;
+        }
+        while ((escapePos = value.find("\\n", escapePos)) != std::string::npos) {
+            value.replace(escapePos, 2, "\n");
+            escapePos += 1;
+        }
+        
+        if (!key.empty() && !value.empty()) {
+            // Convert both key and value to UTF-32 for storage
+            autostring32 utf32Key = Melder_8to32(key.c_str());
+            autostring32 utf32Value = Melder_8to32(value.c_str());
+            
+            // If overwrite is false (external), only add if key doesn't exist (supplement mode)
+            if (overwrite || translations.find(utf32Key.get()) == translations.end()) {
+                translations[utf32Key.get()] = utf32Value.get();
+            }
+        }
+        
+        // Move to next potential entry (after the closing quote and comma)
+        pos = valueEnd + 1;
+        // Skip comma if present
+        while (pos < content.length() && (content[pos] == ',' || content[pos] == ' ' || content[pos] == '\t' || content[pos] == '\n' || content[pos] == '\r')) {
+            pos++;
         }
     }
-    
+}
+
+// Helper function to load translations from a JSON file
+static void loadTranslationsFromFile(const std::string& filePath, std::map<std::u32string, std::u32string>& translations, bool overwrite) {
+    std::ifstream file(filePath);
     if (!file.is_open()) {
         return;
     }
     
-    // Parse JSON file and store as UTF-32
-    std::string line;
-    while (std::getline(file, line)) {
-        // Simple JSON parsing - look for "key": "value" patterns
-        size_t colonPos = line.find(':');
-        if (colonPos != std::string::npos) {
-            std::string key = line.substr(0, colonPos);
-            std::string value = line.substr(colonPos + 1);
-            
-            // Remove quotes and whitespace
-            key.erase(0, key.find_first_not_of(" \t\""));
-            key.erase(key.find_last_not_of(" \t\"") + 1);
-            value.erase(0, value.find_first_not_of(" \t\""));
-            value.erase(value.find_last_not_of(" \t\",") + 1);
-            
-            if (!key.empty() && !value.empty()) {
-                // Convert both key and value to UTF-32 for storage
-                autostring32 utf32Key = Melder_8to32(key.c_str());
-                autostring32 utf32Value = Melder_8to32(value.c_str());
-                translations[utf32Key.get()] = utf32Value.get();
+    // Read entire file content
+    std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    file.close();
+    
+    // Load from string
+    loadTranslationsFromString(content, translations, overwrite);
+}
+
+void SimpleI18nManager::loadLanguagePack(const std::string& languageCode, bool isBuiltin) {
+    // Clear existing translations
+    translations.clear();
+    
+    std::string builtinFileName;
+    std::string externalFileName;
+    
+    // Find file names from available languages
+    for (const auto& lang : availableLanguages) {
+        if (lang.code == languageCode) {
+            if (lang.isBuiltin) {
+                builtinFileName = lang.file;
+            } else {
+                externalFileName = lang.file;
             }
         }
     }
     
-    file.close();
+    // Use fallback if not found
+    if (builtinFileName.empty()) {
+        builtinFileName = languageCode + ".json";
+    }
+    if (externalFileName.empty()) {
+        externalFileName = languageCode + ".json";
+    }
+    
+    // Strategy: Always load builtin first (if exists), then external as supplement
+    // This way, external can supplement builtin even when builtin is selected
+    bool builtinLoaded = false;
+    
+    // First, try to load from embedded language pack (always available if embedded)
+    if (isLanguagePackEmbedded(languageCode)) {
+        std::string embeddedContent = getEmbeddedLanguagePack(languageCode);
+        if (!embeddedContent.empty()) {
+            loadTranslationsFromString(embeddedContent, translations, true);  // overwrite mode
+            if (!translations.empty()) {
+                builtinLoaded = true;
+            }
+        }
+    }
+    
+    // Always try to load from file system (for development/testing, can override/supplement embedded)
+    // This allows file system version to add new keys or override existing ones
+    std::vector<std::string> builtinPaths = {
+        "sys/language_packs/" + builtinFileName,
+        "language_packs/" + builtinFileName,
+        "../sys/language_packs/" + builtinFileName,
+        "../../sys/language_packs/" + builtinFileName
+    };
+    
+    for (const auto& path : builtinPaths) {
+        // Load file system version in overwrite mode to allow new keys to be added
+        loadTranslationsFromFile(path, translations, true);  // overwrite mode - allows file system to supplement embedded
+        if (!builtinLoaded && !translations.empty()) {
+            builtinLoaded = true;
+            break;
+        }
+        // If embedded was loaded, file system version supplements it (same overwrite mode)
+        if (!translations.empty()) {
+            break;  // Found and loaded file system version
+        }
+    }
+    
+    // Final fallback: minimal embedded English (only if nothing else worked)
+    if (!builtinLoaded && languageCode == "en-US") {
+        // Minimal embedded English translations (critical items only)
+        static const char* MINIMAL_EN_US = R"({
+  "menu.praat": "Praat",
+  "menu.new": "New",
+  "menu.open": "Open",
+  "menu.save": "Save",
+  "menu.help": "Help",
+  "menu.i18n": "i18n",
+  "menu.language": "Language",
+  "menu.about": "About",
+  "menu.quit": "Quit",
+  "menu.preferences": "Preferences"
+})";
+        loadTranslationsFromString(std::string(MINIMAL_EN_US), translations, true);
+        builtinLoaded = !translations.empty();
+    }
+    
+    // Then, try to load external language pack as supplement (non-overwrite mode)
+    // This allows external to supplement builtin
+    // Use appropriate path separator
+    std::string separator = "/";
+    #if defined (_WIN32)
+        separator = "\\";
+    #endif
+    std::string externalPath = externalLanguagePackPath + separator + externalFileName;
+    loadTranslationsFromFile(externalPath, translations, false);  // supplement mode (non-overwrite)
+    
+    // If external was requested but no builtin was loaded, try external-only mode
+    if (!isBuiltin && !builtinLoaded && translations.empty()) {
+        // Try external-only (overwrite mode since translations is empty)
+        loadTranslationsFromFile(externalPath, translations, true);
+    }
 }
 
-void SimpleI18nManager::setLanguage(const std::string& languageCode) {
+void SimpleI18nManager::setLanguage(const std::string& languageCode, bool isBuiltin) {
     currentLanguage = languageCode;
+    currentLanguageIsBuiltin = isBuiltin;
     
-    // Load the language pack
-    loadLanguagePack(languageCode);
+    // Load the language pack (builtin first, then external as supplement)
+    loadLanguagePack(languageCode, isBuiltin);
     
     // Save the language preference
-    saveLanguagePreference(languageCode);
+    saveLanguagePreference(languageCode, isBuiltin);
     
     // Update all menus and UI elements
     updateAllMenus();
@@ -164,6 +369,14 @@ void SimpleI18nManager::setLanguage(const std::string& languageCode) {
 
 std::string SimpleI18nManager::getCurrentLanguage() const {
     return currentLanguage;
+}
+
+bool SimpleI18nManager::getCurrentLanguageIsBuiltin() const {
+    return currentLanguageIsBuiltin;
+}
+
+std::string SimpleI18nManager::getExternalLanguagePackPath() const {
+    return externalLanguagePackPath;
 }
 
 std::string SimpleI18nManager::translate(const std::string& key) const {
@@ -224,102 +437,283 @@ std::string SimpleI18nManager::replacePlaceholders(const std::string& text, cons
     return result;
 }
 
-void SimpleI18nManager::registerLanguage(const std::string& code, const std::string& name, const std::string& file) {
-    availableLanguages.emplace_back(code, name, file);
+void SimpleI18nManager::registerLanguage(const std::string& code, const std::string& name, const std::string& file, bool isBuiltin) {
+    availableLanguages.emplace_back(code, name, file, isBuiltin);
 }
 
-void SimpleI18nManager::loadLanguageIndex() {
-    // Load languages.json
-    std::string filePath = "sys/language_packs/languages.json";
-    std::ifstream file(filePath);
+// Embedded builtin languages.json content (compiled into exe)
+static const char* EMBEDDED_LANGUAGES_JSON = R"({
+  "languages": [
+    {
+      "code": "en-US",
+      "name": "English",
+      "file": "en-US.json"
+    },
+    {
+      "code": "zh-CN",
+      "name": "简体中文",
+      "file": "zh-CN.json"
+    },
+    {
+      "code": "zh-TW",
+      "name": "繁體中文",
+      "file": "zh-TW.json"
+    },
+    {
+      "code": "ja-JP",
+      "name": "日本語",
+      "file": "ja-JP.json"
+    },
+    {
+      "code": "ko-KR",
+      "name": "한국어",
+      "file": "ko-KR.json"
+    },
+    {
+      "code": "fr-FR",
+      "name": "Français",
+      "file": "fr-FR.json"
+    },
+    {
+      "code": "de-DE",
+      "name": "Deutsch",
+      "file": "de-DE.json"
+    },
+    {
+      "code": "es-ES",
+      "name": "Español",
+      "file": "es-ES.json"
+    },
+    {
+      "code": "ru-RU",
+      "name": "Русский",
+      "file": "ru-RU.json"
+    },
+    {
+      "code": "pt-PT",
+      "name": "Português",
+      "file": "pt-PT.json"
+    },
+    {
+      "code": "lk-CN",
+      "name": "Qǔei",
+      "file": "lk-CN.json"
+    },
+    {
+      "code": "it-IT",
+      "name": "Italiano",
+      "file": "it-IT.json"
+    }
+  ],
+  "default": "en-US"
+})";
+
+// Helper function to parse languages.json from string content
+static void parseLanguagesJsonFromString(const std::string& content, std::vector<SimpleLanguage>& languages, bool isBuiltin) {
+    if (content.empty()) {
+        return;
+    }
     
+    // Parse JSON file - look for language objects
+    std::string currentCode, currentName, currentFile;
+    size_t pos = 0;
+    
+    while ((pos = content.find("\"code\"", pos)) != std::string::npos) {
+            // Find the colon after "code"
+        size_t colonPos = content.find(':', pos);
+            if (colonPos != std::string::npos) {
+                // Find the first quote after the colon
+            size_t start = content.find('"', colonPos);
+                if (start != std::string::npos) {
+                    // Find the closing quote
+                size_t end = content.find('"', start + 1);
+                    if (end != std::string::npos) {
+                    currentCode = content.substr(start + 1, end - start - 1);
+                }
+            }
+        }
+        
+        // Find "name" field (should be after "code" in same object)
+        size_t namePos = content.find("\"name\"", pos);
+        if (namePos != std::string::npos && namePos < pos + 200) {  // within reasonable distance
+            size_t nameColon = content.find(':', namePos);
+            if (nameColon != std::string::npos) {
+                size_t nameStart = content.find('"', nameColon);
+                if (nameStart != std::string::npos) {
+                    size_t nameEnd = content.find('"', nameStart + 1);
+                    if (nameEnd != std::string::npos) {
+                        currentName = content.substr(nameStart + 1, nameEnd - nameStart - 1);
+                    }
+                }
+            }
+        }
+        
+        // Find "file" field (should be after "name" in same object)
+        size_t filePos = content.find("\"file\"", pos);
+        if (filePos != std::string::npos && filePos < pos + 300) {  // within reasonable distance
+            size_t fileColon = content.find(':', filePos);
+            if (fileColon != std::string::npos) {
+                size_t fileStart = content.find('"', fileColon);
+                if (fileStart != std::string::npos) {
+                    size_t fileEnd = content.find('"', fileStart + 1);
+                    if (fileEnd != std::string::npos) {
+                        currentFile = content.substr(fileStart + 1, fileEnd - fileStart - 1);
+                    }
+                }
+            }
+        }
+        
+        // If we have all three fields, add the language
+        if (!currentCode.empty() && !currentName.empty() && !currentFile.empty()) {
+            languages.emplace_back(currentCode, currentName, currentFile, isBuiltin);
+            currentCode.clear();
+            currentName.clear();
+            currentFile.clear();
+        }
+        
+        // Move to next potential language entry
+        pos += 7;  // length of "code"
+    }
+}
+
+// Helper function to parse languages.json file
+static void parseLanguagesJson(const std::string& filePath, std::vector<SimpleLanguage>& languages, bool isBuiltin) {
+    std::ifstream file(filePath);
     if (!file.is_open()) {
-        // Try alternative paths
+        return;
+    }
+    
+    // Read entire file content
+    std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    file.close();
+    
+    // Parse from string
+    parseLanguagesJsonFromString(content, languages, isBuiltin);
+}
+
+void SimpleI18nManager::loadBuiltinLanguageIndex() {
+    // First try to load from embedded content (always available)
+    int beforeSize = availableLanguages.size();
+    parseLanguagesJsonFromString(std::string(EMBEDDED_LANGUAGES_JSON), availableLanguages, true);
+    int afterSize = availableLanguages.size();
+    int languagesLoaded = afterSize - beforeSize;
+    
+    // If embedded content didn't work, try to load from file system (for development)
+    if (languagesLoaded == 0) {
         std::vector<std::string> paths = {
+            "sys/language_packs/languages.json",
             "language_packs/languages.json",
             "../sys/language_packs/languages.json",
             "../../sys/language_packs/languages.json"
         };
         
         for (const auto& path : paths) {
-            file.open(path);
-            if (file.is_open()) break;
+            beforeSize = availableLanguages.size();
+            parseLanguagesJson(path, availableLanguages, true);  // isBuiltin = true
+            afterSize = availableLanguages.size();
+            languagesLoaded = afterSize - beforeSize;
+            if (languagesLoaded > 0) {
+                break;
+            }
         }
     }
     
-    if (!file.is_open()) {
-        // Add fallback languages
-        registerLanguage("en-US", "English", "en-US.json");
-        registerLanguage("zh-CN", "Chinese Simplified", "zh-CN.json");
-        registerLanguage("zh-TW", "Chinese Traditional", "zh-TW.json");
-        registerLanguage("ja-JP", "Japanese", "ja-JP.json");
-        
-        return;
+    // Final fallback: hardcoded languages
+    if (languagesLoaded == 0) {
+        // Add fallback languages (builtin) - but use proper native names from languages.json
+        registerLanguage("en-US", "English", "en-US.json", true);
+        registerLanguage("zh-CN", "简体中文", "zh-CN.json", true);
+        registerLanguage("zh-TW", "繁體中文", "zh-TW.json", true);
+        registerLanguage("ja-JP", "日本語", "ja-JP.json", true);
+        registerLanguage("ko-KR", "한국어", "ko-KR.json", true);
+        registerLanguage("fr-FR", "Français", "fr-FR.json", true);
+        registerLanguage("de-DE", "Deutsch", "de-DE.json", true);
+        registerLanguage("es-ES", "Español", "es-ES.json", true);
+        registerLanguage("ru-RU", "Русский", "ru-RU.json", true);
+        registerLanguage("pt-PT", "Português", "pt-PT.json", true);
+        registerLanguage("lk-CN", "Qǔei", "lk-CN.json", true);
+        registerLanguage("it-IT", "Italiano", "it-IT.json", true);
     }
+}
+
+void SimpleI18nManager::loadExternalLanguageIndex() {
+    // Load external languages.json from praat_i18n directory
+    // Use appropriate path separator
+    std::string separator = "/";
+    #if defined (_WIN32)
+        separator = "\\";
+    #endif
+    std::string externalPath = externalLanguagePackPath + separator + "languages.json";
+    parseLanguagesJson(externalPath, availableLanguages, false);  // isBuiltin = false
+}
+
+void SimpleI18nManager::loadLanguageIndex() {
+    // Load builtin languages first
+    loadBuiltinLanguageIndex();
     
-    // Parse JSON file
-    std::string line;
-    std::string currentCode, currentName, currentFile;
-    bool inLanguage = false;
-    
-    while (std::getline(file, line)) {
-        // Simple JSON parsing - look for "field": "value" pattern
-        if (line.find("\"code\"") != std::string::npos) {
-            // Find the colon after "code"
-            size_t colonPos = line.find(':', line.find("\"code\""));
-            if (colonPos != std::string::npos) {
-                // Find the first quote after the colon
-                size_t start = line.find('"', colonPos);
-                if (start != std::string::npos) {
-                    // Find the closing quote
-                    size_t end = line.find('"', start + 1);
-                    if (end != std::string::npos) {
-                        currentCode = line.substr(start + 1, end - start - 1);
-                    }
-                }
-            }
-        } else if (line.find("\"name\"") != std::string::npos) {
-            // Find the colon after "name"
-            size_t colonPos = line.find(':', line.find("\"name\""));
-            if (colonPos != std::string::npos) {
-                // Find the first quote after the colon
-                size_t start = line.find('"', colonPos);
-                if (start != std::string::npos) {
-                    // Find the closing quote
-                    size_t end = line.find('"', start + 1);
-                    if (end != std::string::npos) {
-                        currentName = line.substr(start + 1, end - start - 1);
-                    }
-                }
-            }
-        } else if (line.find("\"file\"") != std::string::npos) {
-            // Find the colon after "file"
-            size_t colonPos = line.find(':', line.find("\"file\""));
-            if (colonPos != std::string::npos) {
-                // Find the first quote after the colon
-                size_t start = line.find('"', colonPos);
-                if (start != std::string::npos) {
-                    // Find the closing quote
-                    size_t end = line.find('"', start + 1);
-                    if (end != std::string::npos) {
-                        currentFile = line.substr(start + 1, end - start - 1);
-                    }
-                }
-            }
-        } else if (line.find('}') != std::string::npos && !currentCode.empty()) {
-            // End of language object
-            registerLanguage(currentCode, currentName, currentFile);
-            currentCode.clear();
-            currentName.clear();
-            currentFile.clear();
-        }
-    }
-    
-    file.close();
+    // Then load external languages (they can have same codes)
+    loadExternalLanguageIndex();
 }
 
 std::vector<SimpleLanguage> SimpleI18nManager::getAvailableLanguages() const {
     return availableLanguages;
+}
+
+bool SimpleI18nManager::isLanguagePackAvailable(const std::string& languageCode, bool isBuiltin) const {
+    // Check if embedded version exists (always available)
+    if (isBuiltin && isLanguagePackEmbedded(languageCode)) {
+        return true;
+    }
+    
+    // English is always available (has minimal embedded fallback)
+    if (languageCode == "en-US" && isBuiltin) {
+        return true;
+    }
+    
+    std::string fileName;
+    // Find file name from available languages
+    for (const auto& lang : availableLanguages) {
+        if (lang.code == languageCode && lang.isBuiltin == isBuiltin) {
+            fileName = lang.file;
+            break;
+        }
+    }
+    
+    if (fileName.empty()) {
+        fileName = languageCode + ".json";
+    }
+    
+    if (isBuiltin) {
+        // Check if builtin language pack file exists
+        std::vector<std::string> builtinPaths = {
+            "sys/language_packs/" + fileName,
+            "language_packs/" + fileName,
+            "../sys/language_packs/" + fileName,
+            "../../sys/language_packs/" + fileName
+        };
+        
+        for (const auto& path : builtinPaths) {
+            std::ifstream file(path);
+            if (file.is_open()) {
+                file.close();
+                return true;
+            }
+        }
+    } else {
+        // Check if external language pack file exists
+        std::string separator = "/";
+        #if defined (_WIN32)
+            separator = "\\";
+        #endif
+        std::string externalPath = externalLanguagePackPath + separator + fileName;
+        std::ifstream file(externalPath);
+        if (file.is_open()) {
+            file.close();
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 // Global translation function for use by other parts of Praat
@@ -393,76 +787,10 @@ const char32* I18n_translateWithPlaceholdersMap(const char* key, const char* pla
     return g_i18nManager->translateUTF32WithPlaceholders(key, placeholderMap);
 }
 
-// Static callback functions for each language
-static void switchToEnglish(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("en-US");
-    }
-}
-
-static void switchToChineseSimplified(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("zh-CN");
-    }
-}
-
-static void switchToChineseTraditional(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("zh-TW");
-    }
-}
-
-static void switchToJapanese(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("ja-JP");
-    }
-}
-
-static void switchToKorean(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("ko-KR");
-    }
-}
-
-static void switchToFrench(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("fr-FR");
-    }
-}
-
-static void switchToGerman(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("de-DE");
-    }
-}
-
-static void switchToSpanish(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("es-ES");
-    }
-}
-
-static void switchToRussian(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("ru-RU");
-    }
-}
-
-static void switchToPortuguese(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("pt-PT");
-    }
-}
-
-static void switchToLkCn(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("lk-CN");
-    }
-}
-
-static void switchToItalian(Thing, GuiMenuItemEvent event) {
-    if (g_i18nManager) {
-        g_i18nManager->setLanguage("it-IT");
+static void switchLanguageCallback(Thing closure, GuiMenuItemEvent event) {
+    LanguageSwitchClosure* data = reinterpret_cast<LanguageSwitchClosure*>(closure);
+    if (g_i18nManager && data) {
+        g_i18nManager->setLanguage(data->languageCode, data->isBuiltin);
     }
 }
 
@@ -470,61 +798,77 @@ void SimpleI18nManager::createMenu(GuiWindow window) {
     
     // Create the i18n menu
     GuiMenu i18nMenuRef = GuiMenu_createInWindow(window, U"i18n", 0);
+    this->i18nMenu = i18nMenuRef;
+    this->mainWindow = window;
     
-    // Create language submenu
-    GuiMenu languageSubmenu = GuiMenu_createInMenu(i18nMenuRef, I18n_translate("menu.language"), 0);
+    // Create builtin language submenu (use translation key via I18n_translate for consistency)
+    const char32* builtinMenuName32 = I18n_translate("menu.i18n.builtin");
+    GuiMenu builtinSubmenu = GuiMenu_createInMenu(i18nMenuRef, builtinMenuName32, 0);
+    
+    // Create external language submenu (use translation key via I18n_translate for consistency)
+    const char32* externalMenuName32 = I18n_translate("menu.i18n.external");
+    GuiMenu externalSubmenu = GuiMenu_createInMenu(i18nMenuRef, externalMenuName32, 0);
+    
+    // Add separator
+    GuiMenu_addSeparator(i18nMenuRef);
+    
+    // Add current language display (third menu item) - use translation key via I18n_translate
+    // Find current language name from availableLanguages
+    std::string currentLangDisplay = currentLanguage;
+    for (const auto& lang : availableLanguages) {
+        if (lang.code == currentLanguage && lang.isBuiltin == currentLanguageIsBuiltin) {
+            currentLangDisplay = lang.name;
+            break;
+        }
+    }
+    // Add suffix based on builtin/external status
+    currentLangDisplay += " ";
+    // Convert I18n_translate result (char32*) to UTF-8 string for concatenation
+    autostring8 suffix8 = Melder_32to8(currentLanguageIsBuiltin ? 
+                                        I18n_translate("menu.i18n.current.builtin") : 
+                                        I18n_translate("menu.i18n.current.external"));
+    currentLangDisplay += std::string(suffix8.get());
+    autostring32 currentLangDisplay32 = Melder_8to32(currentLangDisplay.c_str());
+    GuiMenu_addItem(i18nMenuRef, currentLangDisplay32.get(), GuiMenu_INSENSITIVE, nullptr, nullptr);
     
     // Add language options dynamically from availableLanguages
+    // Only show languages that have available language packs
     for (const auto& lang : availableLanguages) {
+        // Check if language pack is available before adding to menu
+        if (!isLanguagePackAvailable(lang.code, lang.isBuiltin)) {
+            continue;  // Skip languages without available packs
+        }
+        
         // Convert std::string to char32_t*
         autostring32 langName = Melder_8to32(lang.name.c_str());
         
-        // Map language codes to specific static callbacks
-        GuiMenuItemCallback callback = nullptr;
+        // Select the appropriate submenu
+        GuiMenu targetSubmenu = lang.isBuiltin ? builtinSubmenu : externalSubmenu;
         
-        if (lang.code == "en-US") {
-            callback = GuiMenuItemCallback(switchToEnglish);
-        } else if (lang.code == "zh-CN") {
-            callback = GuiMenuItemCallback(switchToChineseSimplified);
-        } else if (lang.code == "zh-TW") {
-            callback = GuiMenuItemCallback(switchToChineseTraditional);
-        } else if (lang.code == "ja-JP") {
-            callback = GuiMenuItemCallback(switchToJapanese);
-        } else if (lang.code == "ko-KR") {
-            callback = GuiMenuItemCallback(switchToKorean);
-        } else if (lang.code == "fr-FR") {
-            callback = GuiMenuItemCallback(switchToFrench);
-        } else if (lang.code == "de-DE") {
-            callback = GuiMenuItemCallback(switchToGerman);
-        } else if (lang.code == "es-ES") {
-            callback = GuiMenuItemCallback(switchToSpanish);
-        } else if (lang.code == "ru-RU") {
-            callback = GuiMenuItemCallback(switchToRussian);
-        } else if (lang.code == "pt-PT") {
-            callback = GuiMenuItemCallback(switchToPortuguese);
-        } else if (lang.code == "lk-CN") {
-            callback = GuiMenuItemCallback(switchToLkCn);
-        } else if (lang.code == "it-IT") {
-            callback = GuiMenuItemCallback(switchToItalian);
-        }
+        // Create closure for callback
+        LanguageSwitchClosure* closure = new LanguageSwitchClosure();
+        closure->languageCode = lang.code;
+        closure->isBuiltin = lang.isBuiltin;
+        g_languageClosures.push_back(closure);
         
-        if (callback) {
-            // Check if this is the current language
-            bool isCurrentLanguage = (lang.code == currentLanguage);
-            
-            // Use original language name
-            autostring32 displayName = Melder_8to32(Melder_32to8(langName.get()).get());
-            
-            // Add menu item with callback and CHECKBUTTON flag
-            uint32 flags = GuiMenu_CHECKBUTTON;
-            GuiMenuItem menuItem = GuiMenu_addItem(languageSubmenu, displayName.get(), flags, callback, nullptr);
+        // Check if this is the current language
+        bool isCurrentLanguage = (lang.code == currentLanguage && lang.isBuiltin == currentLanguageIsBuiltin);
+        
+        // Use original language name directly (already converted to UTF-32)
+        // Note: langName is autostring32, use .get() directly, don't copy
+        
+        // Add menu item with callback and CHECKBUTTON flag
+        uint32 flags = GuiMenu_CHECKBUTTON;
+        GuiMenuItem menuItem = GuiMenu_addItem(targetSubmenu, langName.get(), flags,
+                                               switchLanguageCallback, reinterpret_cast<Thing>(closure));
             
             // Store menu item reference for later updates
-            languageMenuItems[lang.code] = menuItem;
-            
-            // Set initial checkmark state
-            GuiMenuItem_check(menuItem, isCurrentLanguage);
-        }
+        // Format: "builtin:langCode" or "external:langCode"
+        std::string langKey = (lang.isBuiltin ? "builtin:" : "external:") + lang.code;
+        languageMenuItems[langKey] = menuItem;
+        
+        // Set initial checkmark state
+        GuiMenuItem_check(menuItem, isCurrentLanguage);
     }
     
     // Update checkmarks after all menu items are created
@@ -601,19 +945,20 @@ void SimpleI18nManager::preferences() {
     // This will be implemented later
 }
 
-void SimpleI18nManager::saveLanguagePreference(const std::string& languageCode) {
-    
+void SimpleI18nManager::saveLanguagePreference(const std::string& languageCode, bool isBuiltin) {
     // Save to a simple text file
+    // Format: "builtin:en-US" or "external:en-US"
     FILE* prefFile = fopen("praat_language_preference.txt", "w");
     if (prefFile) {
-        fprintf(prefFile, "%s", languageCode.c_str());
+        std::string pref = (isBuiltin ? "builtin:" : "external:") + languageCode;
+        fprintf(prefFile, "%s", pref.c_str());
         fclose(prefFile);
     }
 }
 
-std::string SimpleI18nManager::loadLanguagePreference() {
-    
+std::pair<std::string, bool> SimpleI18nManager::loadLanguagePreference() {
     // Load from the preference file using binary mode to handle encoding
+    // Returns (languageCode, isBuiltin)
     FILE* prefFile = fopen("praat_language_preference.txt", "rb");
     if (prefFile) {
         // Read the file content
@@ -621,43 +966,53 @@ std::string SimpleI18nManager::loadLanguagePreference() {
         long fileSize = ftell(prefFile);
         fseek(prefFile, 0, SEEK_SET);
         
-        if (fileSize > 0 && fileSize < 100) {
+        if (fileSize > 0 && fileSize < 200) {
             char* buffer = new char[fileSize + 1];
             fread(buffer, 1, fileSize, prefFile);
             buffer[fileSize] = '\0';
             
-            std::string languageCode;
+            std::string pref;
             
             // Check for UTF-16 BOM
             if (fileSize >= 2 && buffer[0] == (char)0xFF && buffer[1] == (char)0xFE) {
                 // UTF-16 LE encoding - extract ASCII characters
                 for (int i = 2; i < fileSize; i += 2) {
                     if (buffer[i] != '\0' && buffer[i] != '\r' && buffer[i] != '\n') {
-                        languageCode += buffer[i];
+                        pref += buffer[i];
                     }
                 }
             } else {
                 // Regular ASCII/UTF-8 encoding
-                languageCode = buffer;
+                pref = buffer;
                 // Remove newline if present
-                size_t len = languageCode.length();
-                if (len > 0 && languageCode[len-1] == '\n') {
-                    languageCode.erase(len-1);
+                size_t len = pref.length();
+                if (len > 0 && pref[len-1] == '\n') {
+                    pref.erase(len-1);
                 }
-                if (len > 1 && languageCode[len-2] == '\r') {
-                    languageCode.erase(len-2);
+                if (len > 1 && pref[len-2] == '\r') {
+                    pref.erase(len-2);
                 }
             }
             
             delete[] buffer;
             fclose(prefFile);
             
-            return languageCode;
+            // Parse format: "builtin:en-US" or "external:en-US"
+            size_t colonPos = pref.find(':');
+            if (colonPos != std::string::npos) {
+                std::string type = pref.substr(0, colonPos);
+                std::string langCode = pref.substr(colonPos + 1);
+                bool isBuiltin = (type == "builtin");
+                return std::make_pair(langCode, isBuiltin);
+            } else {
+                // Old format (no prefix) - assume builtin
+                return std::make_pair(pref, true);
+            }
         }
         fclose(prefFile);
     }
     
-    return "en-US"; // Default language
+    return std::make_pair("en-US", true); // Default language (builtin)
 }
 
 void SimpleI18nManager::preferencesChanged() {
@@ -687,13 +1042,15 @@ extern "C" {
     
     void I18n_loadLanguagePack(const char* languageCode) {
         if (g_i18nManager) {
-            g_i18nManager->loadLanguagePack(std::string(languageCode));
+            // Default to builtin for backward compatibility
+            g_i18nManager->loadLanguagePack(std::string(languageCode), true);
         }
     }
     
     void I18n_setLanguage(const char* languageCode) {
         if (g_i18nManager) {
-            g_i18nManager->setLanguage(std::string(languageCode));
+            // Default to builtin for backward compatibility
+            g_i18nManager->setLanguage(std::string(languageCode), true);
         }
     }
     
@@ -708,7 +1065,8 @@ extern "C" {
     
     void I18n_registerLanguage(const char* code, const char* name, const char* file) {
         if (g_i18nManager) {
-            g_i18nManager->registerLanguage(std::string(code), std::string(name), std::string(file));
+            // Default to builtin for backward compatibility
+            g_i18nManager->registerLanguage(std::string(code), std::string(name), std::string(file), true);
         }
     }
     

@@ -8,8 +8,11 @@ for /f "tokens=3" %%i in ('findstr /b /c:"#define PRAAT_VERSION_NUM" main\main_P
 REM 输出自动检测到的版本号
 echo PRAAT_VERSION_NUM = %PRAAT_VERSION_NUM%
 
-REM 指定目标架构（默认64位。如需32位请修改下一行）
-copy /y makefiles\makefile.defs.msys-mingw64 makefile.defs
+REM 指定目标架构（默认32位，避免UTF-8乱码问题。如需64位请修改下一行）
+copy /y makefiles\makefile.defs.msys-mingw32 makefile.defs
+
+REM 生成嵌入语言包（每次编译前自动更新）
+python sys\generate_embedded_packs.py >nul 2>&1
 
 REM 清理和关闭历史产物
 taskkill /IM Praat%PRAAT_VERSION_NUM%i18n.exe /F >nul 2>&1

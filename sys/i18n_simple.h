@@ -47,10 +47,11 @@ struct SimpleLanguage {
     std::string name;
     std::string file;
     bool isLoaded;
+    bool isBuiltin;  // true for builtin, false for external
     
-    SimpleLanguage() : isLoaded(false) {}
-    SimpleLanguage(const std::string& c, const std::string& n, const std::string& f) 
-        : code(c), name(n), file(f), isLoaded(false) {}
+    SimpleLanguage() : isLoaded(false), isBuiltin(true) {}
+    SimpleLanguage(const std::string& c, const std::string& n, const std::string& f, bool builtin = true) 
+        : code(c), name(n), file(f), isLoaded(false), isBuiltin(builtin) {}
 };
 
 // Simple translation structure
@@ -67,9 +68,13 @@ struct SimpleTranslation {
 class SimpleI18nManager {
 private:
     std::string currentLanguage;
+    bool currentLanguageIsBuiltin;  // true for builtin, false for external
     std::vector<SimpleLanguage> availableLanguages;
     std::map<std::u32string, std::u32string> translations;  // UTF-32存储
     bool isInitialized;
+    
+    // External language pack path (exe directory/praat_i18n)
+    std::string externalLanguagePackPath;
     
     // Menu references for updating
     GuiWindow mainWindow;
@@ -91,9 +96,10 @@ public:
     
     // Menu update functions
     void updateLanguageMenuCheckmarks();
-    void loadLanguagePack(const std::string& languageCode);
-    void setLanguage(const std::string& languageCode);
+    void loadLanguagePack(const std::string& languageCode, bool isBuiltin);
+    void setLanguage(const std::string& languageCode, bool isBuiltin);
     std::string getCurrentLanguage() const;
+    bool getCurrentLanguageIsBuiltin() const;
     std::string translate(const std::string& key) const;
     const char32* translateUTF32(const char* key) const;  // UTF-32翻译函数
     
@@ -103,9 +109,13 @@ public:
     std::string replacePlaceholders(const std::string& text, const std::map<std::string, std::string>& placeholders) const;
     
     // Language management
-    void registerLanguage(const std::string& code, const std::string& name, const std::string& file);
+    void registerLanguage(const std::string& code, const std::string& name, const std::string& file, bool isBuiltin = true);
     void loadLanguageIndex();
+    void loadBuiltinLanguageIndex();
+    void loadExternalLanguageIndex();
     std::vector<SimpleLanguage> getAvailableLanguages() const;
+    std::string getExternalLanguagePackPath() const;
+    bool isLanguagePackAvailable(const std::string& languageCode, bool isBuiltin) const;
     
     // Menu functions
     void createMenu(GuiWindow window);
@@ -119,8 +129,8 @@ public:
     // Preferences
     void preferences();
     void preferencesChanged();
-    void saveLanguagePreference(const std::string& languageCode);
-    std::string loadLanguagePreference();
+    void saveLanguagePreference(const std::string& languageCode, bool isBuiltin);
+    std::pair<std::string, bool> loadLanguagePreference();  // returns (languageCode, isBuiltin)
 };
 
 // Global instance
